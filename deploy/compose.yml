@@ -1,0 +1,145 @@
+services:
+  # DUCKDNS EN CASO DE NO TENER DOMINIO PROPIO, DE ESTA MANERA PODEMOS TENER UNO GRATUITO. SI NO SE REQUIERE, ELIMINAR ESTE CONTENEDOR
+  duckdns:
+    container_name: duckdns
+    image: lscr.io/linuxserver/duckdns:latest
+    environment:
+      - PUID=1000 
+      - PGID=1000 
+      - TZ=Europe/Madrid
+      - SUBDOMAINS=${subdomain}
+      - TOKEN=${token}
+      - UPDATE_IP=ipv4
+      - LOG_FILE=false
+    restart: unless-stopped
+
+  # CADDY COMO PROXY INVERSO QUE PROTEGE NUESTRA APLICACIÓN PROPORCIONANDO SOLO ACCESO POR EL PUERTO 443 O EL 80. PROVEÉ CERTIFICADO SSL
+  caddy:
+    container_name: caddy
+    image: lucaslorentz/caddy-docker-proxy:ci-alpine
+    ports:
+      - 80:80
+      - 443:443/tcp
+      - 443:443/udp
+    environment:
+      - CADDY_INGRESS_NETWORKS=internal
+    networks:
+      - internal
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - caddy_data:/data
+    restart: unless-stopped
+
+  # NGINX SIRVE EL FRONTEND GENERADO POR ANGULAR DE LA APLICACIÓN Y SE EXPONE A INTERNET A TRAVÉS DE CADDY.
+  nginx:
+    build: ../src/front
+    container_name: frontend
+    restart: unless-stopped
+    labels:
+      caddy: ${FQDN}
+      caddy.reverse_proxy: "frontend:80"
+    networks:
+      - internal
+#    ports:          #LOCAL TESTING  (COMENTAR PARA DEPLOY EN NUBE)
+#      - 50000:80       #LOCAL TESTING  (COMENTAR PARA DEPLOY EN NUBE)
+
+  # ZOOKEEPER ES NECESARIO PARA LA COORDINACIÓN Y GESTIÓN DE KAFKA
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - internal
+    restart: unless-stopped
+
+  # KAFKA ES EL BROKER DE MENSAJES PARA EVENTOS ASINCRÓNICOS ENTRE MICROSERVICIOS
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_INTERNAL://kafka:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT_INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+    networks:
+      - internal
+    restart: unless-stopped
+
+  # API-GATEWAY QUE SIRVE COMO PUNTO DE ENTRADA AL BACKEND. REDIRECCIONA A LOS MICROSERVICIOS, ENCAPSULANDOLOS
+#  gateway:
+#    build: ../src/back/api-gateway
+#    container_name: gateway
+#    restart: unless-stopped
+#    expose:
+#      - "${PORT_GATEWAY}"
+#    environment:
+#      - PORT_GATEWAY=${PORT_GATEWAY}
+#      - JWT_SECRET=${JWT_SECRET}
+#      - JWT_EXPIRATION=${JWT_EXPIRATION}
+#    labels:
+#      caddy: ${BACK_FQDN}
+#      caddy.reverse_proxy: "gateway:${PORT_GATEWAY}"
+#    depends_on:
+#      - auth-service
+#      - board-service
+#      - admin-service
+#    ports:          #LOCAL TESTING  (COMENTAR PARA DEPLOY EN NUBE)
+#      - 50001:8080       #LOCAL TESTING  (COMENTAR PARA DEPLOY EN NUBE)
+#    networks:
+#      - internal
+
+  # AUTH-SERVICE PROPORCIONA UN MICROSERVICIO DE LOGIN-REGISTER DE USUARIOS. PROVEE TOKENS
+#  auth-service:
+#    build: ../src/back/auth-service
+#    container_name: auth-service
+#    expose:
+#      - "8081"
+#    networks:
+#      - internal
+
+  # BOARD-SERVICE OFRECE UN MICROSERVICIO DE GESTION DE TABLERO (CORE DE LA APP)
+#  board-service:
+#    build: ../src/back/board-service
+#    container_name: board-service
+#    expose:
+#      - "8082"
+#    networks:#
+#      - internal
+
+  # ADMIN-SERVICE BRINDA UN MICROSERVICIO PARA LOS ADMINS Y SUS GESTIONES
+#  admin-service:
+#    build: ../src/back/admin-service
+#    container_name: admin-service
+#    expose:
+#      - "8083"
+#    networks:
+#      - internal
+
+  # POSTGRESQL COMO BASE DE DATOS PARA LOS MICROSERVICIOS
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db-init:/docker-entrypoint-initdb.d
+    networks:
+      - internal
+    restart: unless-stopped
+
+networks:
+  internal:
+    driver: bridge
+
+volumes:
+  caddy_data: {}
+  postgres_data: {}
