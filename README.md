@@ -151,8 +151,8 @@ comunikit/
 ## Ubicación de la app
 
 La aplicación estará disponible en:
-- **Frontend**: https://juanjo-rivero.duckdns.org:4200 (pendiente de cambio de dominio)
-- **API Gateway**: https://back.juanjo-rivero.duckdns.org:8080 (pendiente de cambio de dominio)
+- **Frontend**: https://comunikit.duckdns.org
+- **API Gateway**: https://back.comunikit.duckdns.org
 
 ---
 

@@ -65,8 +65,8 @@ Al finalizar este Sprint, debería tener:
 ## Tareas de Infraestructura
 
 ### Docker & DevOps
-- [✓] **I1**: Crear `docker-compose.yml`  
-- [✓] **I2**: Crear archivo `.env.example` 
+- [x] **I1**: Crear `docker-compose.yml`  
+- [x] **I2**: Crear archivo `.env.example` 
 - [ ] **I3**: Configurar estructura de carpetas `/src`
 
 ### API Gateway
@@ -76,7 +76,7 @@ Al finalizar este Sprint, debería tener:
 
 ### Documentación
 - [ ] **D1**: Configurar Swagger/OpenAPI en auth-service
-- [✓] **D2**: Crear README.md del proyecto
+- [x] **D2**: Crear README.md del proyecto
 - [ ] **D3**: Documentar endpoints en Swagger
 
 ---
@@ -84,14 +84,14 @@ Al finalizar este Sprint, debería tener:
 ## Diseño y Accesibilidad
 
 ### Guía de Estilo
-- [✓] **DS1**: Definir paleta de colores con contraste AA
+- [x] **DS1**: Definir paleta de colores con contraste AA
   - Primario: #3B82F6 (azul)
   - Secundario: #10B981 (verde)
   - Error: #EF4444 (rojo)
   - Fondo: #FFFFFF
   - Texto: #1F2937
   
-- [✓] **DS2**: Definir tipografía
+- [x] **DS2**: Definir tipografía
   - Fuente: Inter (Google Fonts)
   - Tamaños: 14px (body), 16px (inputs), 24px (h1)
   
@@ -120,6 +120,9 @@ Una historia se considera DONE cuando:
 - Creación de la primera base de datos para auth-service
 
 **Día 2 (13/11)**:
+- Creación de subdominio duckdns para la aplicación
+- Montaje de servidor Ubuntu Server para hostear la aplicación mediante Docker
+- Test de funcionamiento del despliegue
 
 **Día 3 (14/11)**: 
 

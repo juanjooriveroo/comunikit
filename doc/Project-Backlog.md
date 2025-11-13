@@ -50,7 +50,7 @@
 - HU01: Registro de Tutor
 - HU02: Creación de Usuario final
 - Sistema JWT
-- Gestión de roles (USUARIO, TUTOR, EDUCADOR, ADMIN, INVITADO)
+- Gestión de roles (USUARIO, TUTOR, ADMIN, INVITADO)
 
 ---
 
