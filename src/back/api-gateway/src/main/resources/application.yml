@@ -1,0 +1,58 @@
+server:
+  port: ${PORT_GATEWAY}
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: auth-service
+              uri: http://auth-service:${PORT_AUTH}
+              predicates:
+                - Path=/auth/**
+            - id: board-service
+              uri: http://board-service:${PORT_BOARD}
+              predicates:
+                - Path=/board/**
+            - id: admin-service
+              uri: http://admin-service:${PORT_ADMIN}
+              predicates:
+                - Path=/admin/**
+app:
+  fqdn: ${FQDN}
+  jwt:
+    secret: ${JWT_SECRET}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api-docs
+  swagger-ui:
+    enabled: true
+    path: /documentacion
+    urls:
+      - name: Auth Service
+        url: /api-docs/auth
+      - name: Board Service
+        url: /api-docs/board
+      - name: Admin Service
+        url: /api-docs/admin
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty.http.client: DEBUG
+    org.springframework.security: INFO

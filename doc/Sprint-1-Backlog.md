@@ -67,12 +67,12 @@ Al finalizar este Sprint, debería tener:
 ### Docker & DevOps
 - [x] **I1**: Crear `docker-compose.yml`  
 - [x] **I2**: Crear archivo `.env.example` 
-- [ ] **I3**: Configurar estructura de carpetas `/src`
+- [x] **I3**: Configurar estructura de carpetas `/src`
 
 ### API Gateway
-- [ ] **I4**: Crear proyecto Spring Cloud Gateway `api-gateway`  
-- [ ] **I5**: Configurar routing en `application.yml`
-- [ ] **I6**: Configurar CORS en Gateway
+- [x] **I4**: Crear proyecto Spring Cloud Gateway `api-gateway`  
+- [x] **I5**: Configurar routing en `application.yml`
+- [x] **I6**: Configurar CORS en Gateway
 
 ### Documentación
 - [ ] **D1**: Configurar Swagger/OpenAPI en auth-service
@@ -125,6 +125,13 @@ Una historia se considera DONE cuando:
 - Test de funcionamiento del despliegue
 
 **Día 3 (14/11)**: 
+- Creación del Gateway de microservicios
+- Modificación del compost.yml y .env para desplegarlo junto a sus parámetros de entorno
+- Lectura y validación de tokens y redirección a microservicios específicos
+- Implementación completa de Swagger para documentación de endpoints
+- Inyección de datos de token por cabecera para enviar a los microservicios información
+- Tests para validar el funcionamiento de validación de tokens y redirección
+- Configuración de CORS habilitados únicamente para la página a desarrollar
 
 **Día 4 (15/11)**: 
 

@@ -73,27 +73,30 @@ services:
     restart: unless-stopped
 
   # API-GATEWAY QUE SIRVE COMO PUNTO DE ENTRADA AL BACKEND. REDIRECCIONA A LOS MICROSERVICIOS, ENCAPSULANDOLOS
-#  gateway:
-#    build: ../src/back/api-gateway
-#    container_name: gateway
-#    restart: unless-stopped
-#    expose:
-#      - "${PORT_GATEWAY}"
-#    environment:
-#      - PORT_GATEWAY=${PORT_GATEWAY}
-#      - JWT_SECRET=${JWT_SECRET}
-#      - JWT_EXPIRATION=${JWT_EXPIRATION}
-#    labels:
-#      caddy: ${BACK_FQDN}
-#      caddy.reverse_proxy: "gateway:${PORT_GATEWAY}"
+  gateway:
+    build: ../src/back/api-gateway
+    container_name: gateway
+    restart: unless-stopped
+    expose:
+      - "${PORT_GATEWAY}"
+    environment:
+      - PORT_GATEWAY=${PORT_GATEWAY}
+      - PORT_AUTH=${PORT_AUTH}
+      - PORT_BOARD=${PORT_BOARD}
+      - PORT_ADMIN=${PORT_ADMIN}
+      - JWT_SECRET=${JWT_SECRET}
+      - FQDN=${FQDN}
+    labels:
+      caddy: ${BACK_FQDN}
+      caddy.reverse_proxy: "gateway:${PORT_GATEWAY}"
 #    depends_on:
 #      - auth-service
 #      - board-service
 #      - admin-service
 #    ports:          #LOCAL TESTING  (COMENTAR PARA DEPLOY EN NUBE)
 #      - 50001:8080       #LOCAL TESTING  (COMENTAR PARA DEPLOY EN NUBE)
-#    networks:
-#      - internal
+    networks:
+      - internal
 
   # AUTH-SERVICE PROPORCIONA UN MICROSERVICIO DE LOGIN-REGISTER DE USUARIOS. PROVEE TOKENS
 #  auth-service:
@@ -101,6 +104,15 @@ services:
 #    container_name: auth-service
 #    expose:
 #      - "8081"
+#    environment:
+#      - PORT_AUTH=${PORT_AUTH}
+#      - JWT_SECRET=${JWT_SECRET}
+#      - JWT_EXPIRATION=${JWT_EXPIRATION}
+#      - DB_HOST=postgres
+#      - DB_PORT=5432
+#      - DB_NAME=auth_service
+#      - DB_USER=${POSTGRES_USER}
+#      - DB_PASSWORD=${POSTGRES_PASSWORD}
 #    networks:
 #      - internal
 
