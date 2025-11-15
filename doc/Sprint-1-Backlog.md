@@ -134,6 +134,18 @@ Una historia se considera DONE cuando:
 - Configuración de CORS habilitados únicamente para la página a desarrollar
 
 **Día 4 (15/11)**: 
+- Creacion del microservicio auth-service que:
+  - Gestiona usuarios (registro, login, recuperacion de cuenta, cambiar contraseña y activar cuenta)
+  - Activa cuentas mediante email con el microservicio notification-service gracias a Kafka
+  - Generación de tokens
+  - Documentado con Swagger y testeado mediante JUnit Tests con Mock
+  - Excepciones personalizadas para un mantenimiento más correcto
+- Creacion del microservicio notification-service que:
+  - Gestiona el envio automático de emails a los usuarios
+  - Emails de activación y recuperación de cuenta
+  - Testeado mediante JUnit Tests con Mock
+- Modifico el compose.yml para funcionamiento del despliegue
+- Modifico el application.yml del gateway para funcionamiento del despliegue
 
 **Día 5 (16/11)**:
 

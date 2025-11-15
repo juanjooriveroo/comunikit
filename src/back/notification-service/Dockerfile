@@ -1,0 +1,34 @@
+FROM eclipse-temurin:21-jdk AS builder
+
+WORKDIR /app
+
+COPY mvnw .
+COPY .mvn .mvn
+COPY pom.xml .
+
+RUN ./mvnw dependency:go-offline -B
+
+COPY src src
+
+RUN ./mvnw clean package -DskipTests
+
+FROM eclipse-temurin:21-jre-alpine
+
+ENV PORT_NOTIFICATION=${PORT_NOTIFICATION}
+ENV KAFKA_BOOTSTRAP_SERVERS=${KAFKA_BOOTSTRAP_SERVERS}
+ENV KAFKA_CONSUMER_GROUP=${KAFKA_CONSUMER_GROUP}
+ENV MAIL_HOST=${MAIL_HOST}
+ENV MAIL_PORT=${MAIL_PORT}
+ENV MAIL_USERNAME=${MAIL_USERNAME}
+ENV MAIL_PASSWORD=${MAIL_PASSWORD}
+ENV MAIL_SMTP_AUTH=${MAIL_SMTP_AUTH}
+ENV MAIL_SMTP_STARTTLS=${MAIL_SMTP_STARTTLS}
+ENV FQDN=${FQDN}
+
+WORKDIR /app
+
+COPY --from=builder /app/target/*.jar app.jar
+
+EXPOSE ${PORT_NOTIFICATION}
+
+ENTRYPOINT ["java", "-jar", "app.jar"]

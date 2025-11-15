@@ -1,35 +1,35 @@
 CREATE DATABASE auth_service;
-\connect auth_service
+\connect auth_service;
 
-CREATE TABLE rol (
+CREATE TABLE role (
     id SERIAL PRIMARY KEY,
-    nombre VARCHAR(50) UNIQUE NOT NULL
+    name VARCHAR(50) UNIQUE NOT NULL
 );
 
-INSERT INTO rol (nombre) VALUES
-('USUARIO'),
+INSERT INTO role (name) VALUES
+('USER'),
 ('TUTOR'),
-('ADMIN'),
-('INVITADO');
+('ADMIN');
 
-CREATE TABLE idioma (
+CREATE TABLE language (
     code CHAR(2) PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL
+    name VARCHAR(50) NOT NULL
 );
 
-INSERT INTO idioma (code, nombre) VALUES
-('es', 'Español'),
+INSERT INTO language (code, name) VALUES
+('es', 'Spanish'),
 ('en', 'English'),
-('fr', 'Français'),
-('de', 'Deutsch'),
-('pt', 'Portugués');
+('fr', 'French'),
+('de', 'German'),
+('pt', 'Portuguese');
 
 CREATE TABLE users (
     id UUID PRIMARY KEY,
-    nombre VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    rol_id INT REFERENCES rol(id),
-    idioma_code CHAR(2) REFERENCES idioma(code),
-    storage_used BIGINT DEFAULT 0
+    role_id INT NOT NULL REFERENCES role(id),
+    language_code CHAR(2) NOT NULL REFERENCES language(code),
+    storage_used FLOAT DEFAULT 0,
+    activated BOOLEAN NOT NULL
 );

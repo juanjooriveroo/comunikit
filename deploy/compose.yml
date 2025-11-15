@@ -89,8 +89,9 @@ services:
     labels:
       caddy: ${BACK_FQDN}
       caddy.reverse_proxy: "gateway:${PORT_GATEWAY}"
-#    depends_on:
-#      - auth-service
+    depends_on:
+      - auth-service
+      - notification-service
 #      - board-service
 #      - admin-service
 #    ports:          #LOCAL TESTING  (COMENTAR PARA DEPLOY EN NUBE)
@@ -99,22 +100,28 @@ services:
       - internal
 
   # AUTH-SERVICE PROPORCIONA UN MICROSERVICIO DE LOGIN-REGISTER DE USUARIOS. PROVEE TOKENS
-#  auth-service:
-#    build: ../src/back/auth-service
-#    container_name: auth-service
-#    expose:
-#      - "8081"
-#    environment:
-#      - PORT_AUTH=${PORT_AUTH}
-#      - JWT_SECRET=${JWT_SECRET}
-#      - JWT_EXPIRATION=${JWT_EXPIRATION}
-#      - DB_HOST=postgres
-#      - DB_PORT=5432
-#      - DB_NAME=auth_service
-#      - DB_USER=${POSTGRES_USER}
-#      - DB_PASSWORD=${POSTGRES_PASSWORD}
-#    networks:
-#      - internal
+  auth-service:
+    build: ../src/back/auth-service
+    container_name: auth-service
+    expose:
+      - "8081"
+    environment:
+      - PORT_AUTH=${PORT_AUTH}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRATION=${JWT_EXPIRATION}
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=auth_service
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - KAFKA_CONSUMER_GROUP=notification-group
+      - FQDN=${FQDN}
+    depends_on:
+      - kafka
+      - postgres
+    networks:
+      - internal
 
   # BOARD-SERVICE OFRECE UN MICROSERVICIO DE GESTION DE TABLERO (CORE DE LA APP)
 #  board-service:
@@ -133,6 +140,28 @@ services:
 #      - "8083"
 #    networks:
 #      - internal
+
+  # NOTIFICATION-SERVICE ENVÍA EMAILS DE CONFIRMACIÓN
+  notification-service:
+    build: ../src/back/notification-service
+    container_name: notification-service
+    expose:
+      - "${PORT_NOTIFICATION}"
+    environment:
+      - PORT_NOTIFICATION=${PORT_NOTIFICATION}
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - KAFKA_CONSUMER_GROUP=notification-group
+      - MAIL_HOST=${MAIL_HOST}
+      - MAIL_PORT=${MAIL_PORT}
+      - MAIL_USERNAME=${MAIL_USERNAME}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+      - MAIL_SMTP_AUTH=${MAIL_SMTP_AUTH}
+      - MAIL_SMTP_STARTTLS=${MAIL_SMTP_STARTTLS}
+      - FQDN=${FQDN}
+    depends_on:
+      - kafka
+    networks:
+      - internal
 
   # POSTGRESQL COMO BASE DE DATOS PARA LOS MICROSERVICIOS
   postgres:

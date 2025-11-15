@@ -45,11 +45,11 @@ springdoc:
     path: /documentacion
     urls:
       - name: Auth Service
-        url: /api-docs/auth
+        url: auth/api-docs/auth
       - name: Board Service
-        url: /api-docs/board
+        url: board/api-docs/board
       - name: Admin Service
-        url: /api-docs/admin
+        url: admin/api-docs/admin
 
 logging:
   level:

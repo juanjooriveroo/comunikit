@@ -1,0 +1,39 @@
+server:
+  port: ${PORT_NOTIFICATION}
+
+spring:
+  application:
+    name: notification-service
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    consumer:
+      group-id: ${KAFKA_CONSUMER_GROUP}
+      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring:
+          deserializer:
+            key:
+              delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+            value:
+              delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+          json:
+            trusted.packages: "*"
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: ${MAIL_SMTP_AUTH}
+          starttls:
+            enable: ${MAIL_SMTP_STARTTLS}
+  thymeleaf:
+    check-template-location: false
+
+app:
+  frontend:
+    fqdn: ${FQDN}

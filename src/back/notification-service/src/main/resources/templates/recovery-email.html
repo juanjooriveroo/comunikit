@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar contraseña - ComuniKIT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #FFFFFF;
+            color: #1F2937;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #FFFFFF;
+            border-radius: 16px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: #EF4444;
+            color: #FFFFFF;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 30px;
+            text-align: center;
+        }
+        .welcome {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+        .message {
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        .recover-button {
+            background: #3B82F6;
+            color: #FFFFFF;
+            border: none;
+            padding: 16px 40px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        .recover-button:hover {
+            background: #2563EB;
+            transform: translateY(-2px);
+        }
+        .expiry-warning {
+            background: #FEF3C7;
+            border: 1px solid #FCD34D;
+            color: #92400E;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        .security-info {
+            background: #F3F4F6;
+            border-left: 4px solid #3B82F6;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            text-align: left;
+        }
+        .security-info h3 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+        }
+        .security-info ul {
+            font-size: 14px;
+            padding-left: 20px;
+            margin: 10px 0 0 0;
+        }
+        .security-info li {
+            margin: 5px 0;
+        }
+        .footer {
+            background: #F3F4F6;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #6B7280;
+        }
+        .footer strong {
+            color: #1F2937;
+        }
+        .alternative-link {
+            background: #E5E7EB;
+            padding: 12px;
+            margin: 20px 0;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #374151;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <h1>🔐 ComuniKIT</h1>
+        <p>Recuperación de contraseña</p>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        <div class="welcome">
+            ¡Hola <span th:text="${username}">Usuario</span>! 👋
+        </div>
+
+        <div class="message">
+            Hemos recibido una solicitud para restablecer la contraseña de tu cuenta en <strong>ComuniKIT</strong>.<br><br>
+            Si fuiste tú quien solicitó este cambio, haz clic en el botón de abajo para crear una nueva contraseña.
+        </div>
+
+        <a th:href="${frontendUrl} + '/auth/reset-password/' + ${userId}" class="recover-button">
+            🔑 Restablecer mi contraseña
+        </a>
+
+        <div class="expiry-warning">
+            ⏰ <strong>Importante:</strong> Este enlace expira en 24 horas por seguridad.
+        </div>
+
+        <!-- Security Information -->
+        <div class="security-info">
+            <h3>🛡️ Seguridad de la cuenta</h3>
+            <p><strong>¿No solicitaste este cambio?</strong></p>
+            <ul>
+                <li>Puedes ignorar este email de forma segura</li>
+                <li>Tu contraseña actual seguirá siendo válida</li>
+                <li>Considera revisar la seguridad de tu cuenta</li>
+                <li>Si tienes dudas, contacta con nuestro soporte</li>
+            </ul>
+        </div>
+
+        <!-- Alternative access -->
+        <div class="alternative-link">
+            <strong>¿Problemas con el botón?</strong><br>
+            Copia y pega este enlace en tu navegador:<br>
+            <code th:text="${frontendUrl} + '/auth/reset-password/' + ${userId}"></code>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        Este email fue enviado porque solicitaste restablecer tu contraseña en ComuniKIT.<br>
+        Si no hiciste esta solicitud, puedes ignorar este mensaje.<br><br>
+        <strong>ComuniKIT Team</strong> 💚
+    </div>
+</div>
+</body>
+</html>
