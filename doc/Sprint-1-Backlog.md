@@ -30,15 +30,15 @@ Al finalizar este Sprint, debería tener:
 **Para** poder gestionar usuarios y tableros asociados
 
 #### Criterios de Aceptación
-- [ ] **AC1**: Existe un formulario de registro con campos: nombre, email, idioma, contraseña
-- [ ] **AC2**: El email debe ser único en el sistema (validación backend)
-- [ ] **AC3**: La contraseña debe tener mínimo 8 caracteres (validación frontend y backend)
-- [ ] **AC4**: La contraseña se cifra con BCrypt antes de guardar
-- [ ] **AC5**: Al registrarse, se crea automáticamente un token JWT
-- [ ] **AC6**: El usuario es redirigido automáticamente a su panel tras registro exitoso
-- [ ] **AC7**: Se muestra mensaje de error si el email ya existe
-- [ ] **AC8**: El formulario cumple WCAG 2.1 AA
-- [ ] **AC9**: Se debe de confirmar cuenta por email
+- [x] **AC1**: Existe un formulario de registro con campos: nombre, email, idioma, contraseña
+- [x] **AC2**: El email debe ser único en el sistema (validación backend)
+- [x] **AC3**: La contraseña debe tener mínimo 8 caracteres (validación frontend y backend)
+- [x] **AC4**: La contraseña se cifra con BCrypt antes de guardar
+- [x] **AC5**: Al registrarse, se crea automáticamente un token JWT
+- [x] **AC6**: El usuario es redirigido automáticamente a su panel tras registro exitoso
+- [x] **AC7**: Se muestra mensaje de error si el email ya existe
+- [x] **AC8**: El formulario cumple WCAG 2.1 AA
+- [x] **AC9**: Se debe de confirmar cuenta por email
 
 ---
 
@@ -51,14 +51,14 @@ Al finalizar este Sprint, debería tener:
 **Para** que pueda comunicarse mediante pictogramas
 
 #### Criterios de Aceptación
-- [ ] **AC1**: Existe un formulario de creación con campos: nombre, idioma
+- [x] **AC1**: Existe un formulario de creación con campos: nombre, idioma
 - [ ] **AC2**: El sistema genera automáticamente una contraseña segura
 - [ ] **AC3**: Se crea un tablero personal asociado al usuario
 - [ ] **AC4**: El tablero se clona del tablero público del idioma seleccionado
-- [ ] **AC5**: El tutor/educador que crea el usuario queda asignado automáticamente
+- [ ] **AC5**: El tutor que crea el usuario queda asignado automáticamente
 - [ ] **AC6**: Se asigna un límite de 50MB de almacenamiento (campo `storage_used` inicializado a 0)
-- [ ] **AC7**: Solo usuarios con rol TUTOR pueden acceder a este endpoint
-- [ ] **AC8**: El formulario cumple WCAG 2.1 AA
+- [x] **AC7**: Solo usuarios con rol TUTOR pueden acceder a este endpoint
+- [x] **AC8**: El formulario cumple WCAG 2.1 AA
 
 ---
 
@@ -75,9 +75,9 @@ Al finalizar este Sprint, debería tener:
 - [x] **I6**: Configurar CORS en Gateway
 
 ### Documentación
-- [ ] **D1**: Configurar Swagger/OpenAPI en auth-service
+- [x] **D1**: Configurar Swagger/OpenAPI en auth-service
 - [x] **D2**: Crear README.md del proyecto
-- [ ] **D3**: Documentar endpoints en Swagger
+- [x] **D3**: Documentar endpoints en Swagger
 
 ---
 
@@ -148,6 +148,24 @@ Una historia se considera DONE cuando:
 - Modifico el application.yml del gateway para funcionamiento del despliegue
 
 **Día 5 (16/11)**:
+- Creacion del frontend:
+  - Configurado el Angular@15
+  - Creación de environment en angular (modificar manualmente)
+  - Creación de rutas
+  - Creación de componentes
+    - Login
+    - Register
+    - Activate
+    - Recovery
+    - Reset Password
+    - User Create (plantilla, en el sprint2 al crear el board-service se desarrollará)
+    - Home
+    - Navbar
+  - Creación del modelo de usuario
+  - Creación de guards, interceptores y servicios para la gestión de tokens y usuarios
+  - Tipificado el estilo de la página (se sobreescribe alguna clase de Bootstrap con ajustes personalizados)
+- Modificación de gestión de CORS en auth-service (duplicada la cabecera de CORS permitidas)
+- Modificación de importación por variable de entorno del FQDN del front permitido en CORS en api-gateway
 
 ### Semana 2 (12/11 - 18/11)
 **Día 6 (17/11)**:

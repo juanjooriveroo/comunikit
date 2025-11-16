@@ -1,0 +1,28 @@
+<div class="home-container">
+  <div class="welcome-section" *ngIf="!isAuthenticated">
+    <h1>Bienvenido a ComuniKIT</h1>
+    <p class="tagline">La plataforma de comunicación para educadores</p>
+    <p class="description">ComuniKIT es una herramienta moderna para que los tutores se comuniquen de manera efectiva con sus estudiantes y familias.</p>
+
+    <div class="cta-buttons">
+      <button class="btn btn-primary" (click)="navigateToRegister()">
+        Registrarse
+      </button>
+      <a routerLink="/login" class="btn btn-secondary">
+        Ya tengo cuenta
+      </a>
+    </div>
+  </div>
+
+  <div class="welcome-section" *ngIf="isAuthenticated">
+    <h1>¡Hola, {{ currentUserName }}!</h1>
+    <p class="tagline">Bienvenido a ComuniKIT</p>
+    <p class="description">Accede al dashboard para ver tus clases y comunicaciones.</p>
+
+    <div class="cta-buttons">
+      <button class="btn btn-primary" (click)="navigateToDashboard()">
+        Ir al Dashboard
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,88 @@
+<div class="row justify-content-center mt-5">
+  <div class="col-md-6 col-lg-5">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <h1 class="card-title text-center mb-4 h3">Recuperar Contraseña</h1>
+        <p class="text-center text-muted mb-4">Introduce tu email para recibir instrucciones</p>
+
+        <div *ngIf="recoverySuccess" class="alert alert-success alert-dismissible fade show" role="alert">
+          <div class="text-center">
+            <h4 class="alert-heading mb-3">¡Email enviado!</h4>
+            <p class="mb-0">{{ successMessage }}</p>
+            <div class="mt-4">
+              <a routerLink="/login" class="btn btn-primary">Volver al Login</a>
+              <button
+                type="button"
+                class="btn btn-link ms-2"
+                (click)="recoverySuccess = false; submitted = false">
+                Recuperar otro email
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div
+          *ngIf="errorMessage"
+          class="alert alert-danger"
+          role="alert"
+          aria-live="polite">
+          <strong>Error:</strong> {{ errorMessage }}
+        </div>
+
+        <form
+          [formGroup]="recoveryForm"
+          (ngSubmit)="onSubmit()"
+          novalidate
+          *ngIf="!recoverySuccess">
+
+          <div class="mb-3">
+            <label for="email" class="form-label">
+              Correo electrónico <span class="text-danger" aria-label="obligatorio">*</span>
+            </label>
+            <input
+              type="email"
+              id="email"
+              class="form-control form-control-lg"
+              [class.is-invalid]="submitted && f['email'].errors"
+              formControlName="email"
+              placeholder="tu@email.com"
+              aria-required="true"
+              aria-describedby="emailError"
+              autocomplete="email">
+
+            <div
+              id="emailError"
+              *ngIf="submitted && f['email'].errors"
+              class="invalid-feedback"
+              role="alert">
+              <div *ngIf="f['email'].errors['required']">El email es obligatorio</div>
+              <div *ngIf="f['email'].errors['email']">Introduce un email válido</div>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            class="btn btn-primary btn-lg w-100 mt-3"
+            [disabled]="loading"
+            [attr.aria-busy]="loading">
+            <span *ngIf="!loading">Enviar Email de Recuperación</span>
+            <span *ngIf="loading">
+              <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              Enviando...
+            </span>
+          </button>
+
+        </form>
+
+        <div class="text-center mt-4" *ngIf="!recoverySuccess">
+          <p class="text-muted">
+            ¿Recuerdas tu contraseña?
+            <a routerLink="/login" class="text-primary fw-bold">Inicia sesión aquí</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

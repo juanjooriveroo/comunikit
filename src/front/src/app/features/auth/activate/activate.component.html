@@ -1,0 +1,54 @@
+<div class="row justify-content-center mt-5">
+  <div class="col-md-6 col-lg-5">
+    <div class="card shadow-sm">
+      <div class="card-body p-4 text-center">
+
+        <div *ngIf="loading">
+          <div class="spinner-border text-primary mb-3" role="status">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
+          <h1 class="card-title h3 mb-2">Activando cuenta...</h1>
+          <p class="text-muted">Por favor, espera mientras activamos tu cuenta.</p>
+        </div>
+
+        <div *ngIf="!loading && successMessage">
+          <div class="mb-3">
+            <i class="fas fa-check-circle text-success" style="font-size: 3rem;"></i>
+          </div>
+          <h1 class="card-title h3 mb-2">¡Cuenta Verificada!</h1>
+          <div class="alert alert-success" role="alert" aria-live="polite">
+            <strong>{{ successMessage }}</strong>
+          </div>
+          <button
+            type="button"
+            class="btn btn-primary btn-lg w-100"
+            (click)="goToLogin()">
+            Ir al Login
+          </button>
+        </div>
+
+        <div *ngIf="!loading && errorMessage">
+          <div class="mb-3">
+            <i class="fas fa-times-circle text-danger" style="font-size: 3rem;"></i>
+          </div>
+          <h1 class="card-title h3 mb-2">Error al activar</h1>
+          <div class="alert alert-danger" role="alert" aria-live="polite">
+            <strong>{{ errorMessage }}</strong>
+          </div>
+
+          <button
+            type="button"
+            class="btn btn-primary me-2"
+            (click)="retry()">
+            Reintentar
+          </button>
+          <a routerLink="/login" class="btn btn-secondary">
+            Ir al login
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

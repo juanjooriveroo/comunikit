@@ -1,0 +1,140 @@
+<div class="row justify-content-center mt-5">
+  <div class="col-md-8 col-lg-6">
+
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+
+        <h1 class="card-title text-center mb-3 h3">Crear Usuario Final</h1>
+        <p class="text-center text-muted mb-4">
+          Crea un nuevo usuario con necesidades de comunicación
+        </p>
+
+        <div
+          *ngIf="errorMessage"
+          class="alert alert-danger"
+          role="alert"
+          aria-live="polite">
+          <strong>Error:</strong> {{ errorMessage }}
+        </div>
+
+        <div
+          *ngIf="successMessage"
+          class="alert alert-success"
+          role="alert"
+          aria-live="polite">
+          <h4 class="alert-heading">¡Usuario creado exitosamente!</h4>
+          <p>{{ successMessage }}</p>
+          <hr>
+          <p class="mb-0">
+            <strong>Contraseña generada:</strong>
+          </p>
+          <div class="input-group mt-2">
+            <input
+              type="text"
+              class="form-control form-control-lg"
+              [value]="generatedPassword"
+              readonly
+              aria-label="Contraseña generada">
+          </div>
+          <p class="mt-3 text-warning">
+            <strong>⚠️ Importante:</strong> Guarda esta contraseña, no se volverá a mostrar.
+          </p>
+          <button
+            type="button"
+            class="btn btn-success w-100 mt-2"
+            (click)="createAnother()">
+            Crear otro usuario
+          </button>
+        </div>
+
+        <form
+          *ngIf="!successMessage"
+          [formGroup]="userForm"
+          (ngSubmit)="onSubmit()"
+          novalidate>
+
+          <div class="mb-3">
+            <label for="name" class="form-label">
+              Nombre del usuario <span class="text-danger" aria-label="obligatorio">*</span>
+            </label>
+            <input
+              type="text"
+              id="name"
+              class="form-control form-control-lg"
+              [class.is-invalid]="submitted && f['name'].errors"
+              formControlName="name"
+              placeholder="Ej: María García"
+              aria-required="true"
+              aria-describedby="nameError nameHelp"
+              autocomplete="name">
+
+            <div id="nameHelp" class="form-text">
+              Nombre completo de la persona que usará el tablero
+            </div>
+
+            <div
+              id="nameError"
+              *ngIf="submitted && f['name'].errors"
+              class="invalid-feedback"
+              role="alert">
+              <div *ngIf="f['name'].errors['required']">El nombre es obligatorio</div>
+              <div *ngIf="f['name'].errors['minlength']">
+                El nombre debe tener al menos 3 caracteres
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="language" class="form-label">
+              Idioma del tablero <span class="text-danger" aria-label="obligatorio">*</span>
+            </label>
+            <select
+              id="language"
+              class="form-select form-select-lg"
+              formControlName="language"
+              aria-required="true"
+              aria-describedby="languageHelp">
+              <option *ngFor="let lang of languages" [value]="lang.code">
+                {{ lang.name }}
+              </option>
+            </select>
+            <div id="languageHelp" class="form-text">
+              Se creará un tablero con pictogramas en este idioma
+            </div>
+          </div>
+
+          <div class="alert alert-info" role="status">
+            <h5 class="alert-heading">ℹ️ Información</h5>
+            <ul class="mb-0">
+              <li>Se generará automáticamente una contraseña segura</li>
+              <li>Se creará un tablero personal con pictogramas básicos</li>
+              <li>El usuario tendrá 50MB de almacenamiento</li>
+              <li>Quedarás asignado como tutor del usuario</li>
+            </ul>
+          </div>
+
+          <button
+            type="submit"
+            class="btn btn-primary btn-lg w-100 mt-3"
+            [disabled]="loading"
+            [attr.aria-busy]="loading">
+            <span *ngIf="!loading">Crear Usuario</span>
+            <span *ngIf="loading">
+              <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              Creando usuario...
+            </span>
+          </button>
+
+        </form>
+
+        <div class="text-center mt-4">
+          <a routerLink="/dashboard" class="btn btn-link">
+            ← Volver al panel
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

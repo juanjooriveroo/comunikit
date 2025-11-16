@@ -1,0 +1,86 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary" role="navigation" aria-label="Navegación principal">
+  <div class="container-fluid">
+    <a class="navbar-brand d-flex align-items-center" routerLink="/" aria-label="Inicio - ComuniKIT">
+      <img src="../../../../assets/logo.png" alt="Logo" style="max-height: 7dvh;">
+    </a>
+
+    <button
+      class="navbar-toggler"
+      type="button"
+      (click)="toggleMenu()"
+      [attr.aria-expanded]="isMenuOpen"
+      aria-controls="navbarContent"
+      aria-label="Abrir menú de navegación">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div
+      class="collapse navbar-collapse"
+      id="navbarContent"
+      [class.show]="isMenuOpen">
+
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+
+        <ng-container *ngIf="!isAuthenticated">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/login" routerLinkActive="active" aria-current="page">
+              Iniciar Sesión
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/register" routerLinkActive="active">
+              Registrarse
+            </a>
+          </li>
+        </ng-container>
+
+        <ng-container *ngIf="isAuthenticated">
+
+          <li class="nav-item" *ngIf="canManageUsers">
+            <a class="nav-link" routerLink="/create-user" routerLinkActive="active">
+              Crear Usuario
+            </a>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle user-dropdown"
+              href="#"
+              id="userDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              [attr.aria-label]="'Menú de ' + currentUser?.name">
+              <span class="user-avatar" *ngIf="currentUser">
+                {{ userInitials }}
+              </span>
+              <span class="ms-2">{{ currentUser?.name }}</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li class="dropdown-header">
+                <div class="user-info">
+                  <div class="user-email">{{ currentUser?.email }}</div>
+                  <div class="user-role">{{ currentUser?.role }}</div>
+                </div>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <span class="dropdown-item disabled">
+                  <small class="text-muted">Próximamente...</small>
+                </span>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <button class="dropdown-item text-danger" type="button" (click)="logout()">
+                  <i class="fa fa-sign-out-alt me-2"></i>
+                  Cerrar Sesión
+                </button>
+              </li>
+            </ul>
+          </li>
+        </ng-container>
+
+      </ul>
+    </div>
+  </div>
+</nav>

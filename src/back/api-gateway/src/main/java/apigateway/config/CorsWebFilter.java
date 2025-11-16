@@ -37,9 +37,7 @@ public class CorsWebFilter implements WebFilter {
 
         String origin = request.getHeaders().getOrigin();
 
-        String allowedOrigin = front.startsWith("http") ? front : "https://".concat(front);
-
-        if (allowedOrigin.equals(origin)) {
+        if (origin != null && origin.contains(front)) {
             headers.add("Access-Control-Allow-Origin", origin);
             headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
             headers.add("Access-Control-Allow-Headers", "*");

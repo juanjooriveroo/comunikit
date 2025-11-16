@@ -1,0 +1,68 @@
+.recovery-container {
+  padding: 40px 0;
+}
+
+.card {
+  border: none;
+  border-radius: 12px;
+}
+
+.card-body {
+  border-radius: 12px;
+}
+
+.card-title {
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.form-control-lg,
+.btn-lg {
+  padding: 12px 16px;
+  font-size: 1rem;
+}
+
+.btn-primary {
+  background-color: #10B981;
+  border-color: #10B981;
+}
+
+.btn-primary:hover {
+  background-color: #059669;
+  border-color: #059669;
+}
+
+.btn-link {
+  color: #10B981;
+  text-decoration: none;
+}
+
+.btn-link:hover {
+  color: #059669;
+}
+
+.text-muted {
+  color: #7f8c8d;
+}
+
+.alert {
+  border-radius: 8px;
+  border: none;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+@media (max-width: 768px) {
+  .card-body {
+    padding: 20px;
+  }
+}

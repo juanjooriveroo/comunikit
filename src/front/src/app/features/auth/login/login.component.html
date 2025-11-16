@@ -1,0 +1,119 @@
+<div class="row justify-content-center mt-5">
+  <div class="col-md-6 col-lg-5">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <h1 class="card-title text-center mb-4 h3">Iniciar Sesión</h1>
+        <p class="text-center text-muted mb-4">Accede a tu cuenta de ComuniKIT</p>
+
+        <div
+          *ngIf="successMessage"
+          class="alert alert-success"
+          role="alert"
+          aria-live="polite">
+          <strong>¡Éxito!</strong> {{ successMessage }}
+        </div>
+
+        <div
+          *ngIf="errorMessage"
+          class="alert alert-danger"
+          role="alert"
+          aria-live="polite">
+          <strong>Error:</strong> {{ errorMessage }}
+        </div>
+
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+          <div class="mb-3">
+            <label for="email" class="form-label">
+              Correo electrónico <span class="text-danger" aria-label="obligatorio">*</span>
+            </label>
+            <input
+              type="email"
+              id="email"
+              class="form-control form-control-lg"
+              [class.is-invalid]="submitted && f['email'].errors"
+              formControlName="email"
+              placeholder="tu@email.com"
+              aria-required="true"
+              aria-describedby="emailError"
+              autocomplete="email">
+
+            <div
+              id="emailError"
+              *ngIf="submitted && f['email'].errors"
+              class="invalid-feedback"
+              role="alert">
+              <div *ngIf="f['email'].errors['required']">El email es obligatorio</div>
+              <div *ngIf="f['email'].errors['email']">Introduce un email válido</div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">
+              Contraseña <span class="text-danger" aria-label="obligatorio">*</span>
+            </label>
+            <div class="input-group">
+              <input
+                [type]="showPassword ? 'text' : 'password'"
+                id="password"
+                class="form-control form-control-lg"
+                [class.is-invalid]="submitted && f['password'].errors"
+                formControlName="password"
+                placeholder="Mínimo 8 caracteres"
+                aria-required="true"
+                aria-describedby="passwordError"
+                autocomplete="current-password">
+
+              <button
+                class="btn btn-outline-secondary"
+                type="button"
+                (click)="togglePasswordVisibility()"
+                [attr.aria-label]="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+                <span *ngIf="!showPassword"><fa-icon [icon]="faEyeSlash"></fa-icon></span>
+                <span *ngIf="showPassword"><fa-icon [icon]="faEye"></fa-icon></span>
+              </button>
+            </div>
+
+            <div
+              id="passwordError"
+              *ngIf="submitted && f['password'].errors"
+              class="invalid-feedback d-block"
+              role="alert">
+              <div *ngIf="f['password'].errors['required']">La contraseña es obligatoria</div>
+              <div *ngIf="f['password'].errors['minlength']">
+                La contraseña debe tener al menos 8 caracteres
+              </div>
+            </div>
+
+            <div class="mt-2 text-end">
+              <a routerLink="/auth/recovery" class="text-primary small fw-bold text-decoration-none">
+                ¿Olvidaste tu contraseña?
+              </a>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            class="btn btn-primary btn-lg w-100 mt-3"
+            [disabled]="loading"
+            [attr.aria-busy]="loading">
+            <span *ngIf="!loading">Iniciar Sesión</span>
+            <span *ngIf="loading">
+              <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              Iniciando sesión...
+            </span>
+          </button>
+
+        </form>
+
+        <div class="text-center mt-4">
+          <p class="text-muted">
+            ¿No tienes cuenta?
+            <a routerLink="/register" class="text-primary fw-bold">Regístrate aquí</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,142 @@
+.navbar {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 0.75rem 0;
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white !important;
+  letter-spacing: -0.5px;
+}
+
+.navbar-brand:hover {
+  opacity: 0.9;
+}
+
+.nav-link {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-weight: 500;
+  margin-left: 0.5rem;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem !important;
+  border-radius: 6px;
+}
+
+.nav-link:hover {
+  color: white !important;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-link.active {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white !important;
+}
+
+.user-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.user-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: white;
+}
+
+.dropdown-menu {
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 250px;
+}
+
+.dropdown-header {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px 8px 0 0;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.user-email {
+  font-size: 0.9rem;
+  color: #495057;
+  font-weight: 500;
+}
+
+.user-role {
+  font-size: 0.8rem;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.dropdown-item {
+  padding: 0.7rem 1rem;
+  color: #333;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+  margin: 0.25rem 0.5rem;
+}
+
+.dropdown-item:hover {
+  background-color: #e9ecef;
+  color: #333;
+}
+
+.dropdown-item.text-danger {
+  color: #EF4444 !important;
+}
+
+.dropdown-item.text-danger:hover {
+  background-color: #FEE2E2;
+}
+
+.dropdown-item.disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.dropdown-item.disabled:hover {
+  background-color: transparent;
+}
+
+.dropdown-divider {
+  margin: 0.5rem 0;
+  opacity: 0.5;
+}
+
+@media (max-width: 992px) {
+  .nav-link {
+    margin-left: 0;
+    padding: 0.5rem 0 !important;
+  }
+
+  .user-dropdown {
+    padding: 0.5rem 0 !important;
+  }
+
+  .dropdown-menu {
+    min-width: 200px;
+  }
+}
+
+.nav-link:focus,
+.dropdown-toggle:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+  border-radius: 4px;
+}

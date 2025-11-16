@@ -98,12 +98,12 @@
 **Dependencias**: Ninguna
 
 **Tareas técnicas**:
-- [ ] Endpoint POST `/api/auth/register-tutor`
-- [ ] Validación de email único
-- [ ] Cifrado BCrypt de contraseña
-- [ ] Creación de token JWT
-- [ ] Componente Angular de registro
-- [ ] Validaciones reactivas (FormGroup)
+- [x] Endpoint POST `/api/auth/register-tutor`
+- [x] Validación de email único
+- [x] Cifrado BCrypt de contraseña
+- [x] Creación de token JWT
+- [x] Componente Angular de registro
+- [x] Validaciones reactivas (FormGroup)
 
 ---
 
@@ -127,8 +127,8 @@
 - [ ] Lógica de clonación de tablero público
 - [ ] Generación de contraseña aleatoria segura
 - [ ] Validación de límite de usuarios por tutor
-- [ ] Componente Angular de creación de usuario
-- [ ] Guard de autorización (TUTOR)
+- [x] Componente Angular de creación de usuario
+- [x] Guard de autorización (TUTOR)
 
 ---
 
