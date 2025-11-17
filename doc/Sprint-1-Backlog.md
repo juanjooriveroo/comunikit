@@ -169,6 +169,9 @@ Una historia se considera DONE cuando:
 
 ### Semana 2 (12/11 - 18/11)
 **Día 6 (17/11)**:
+- Creación de documentación para el programador
+- Creación de documentación para el usuario
+- Creación de documentación para el despliegue
 
 **Día 7 (18/11)**:
 

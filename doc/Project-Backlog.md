@@ -380,4 +380,4 @@ Una historia se considera terminada cuando:
 
 ---
 
-**Última actualización**: 12 de noviembre de 2025
+**Última actualización**: 17 de noviembre de 2025
