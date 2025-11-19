@@ -1,6 +1,7 @@
 package authservice.service;
 
 import authservice.dto.*;
+import authservice.event.UserDeleteRequestEvent;
 import authservice.event.UserRecoveryAccountEvent;
 import authservice.event.UserRegisteredEvent;
 import authservice.exception.AccountNotActivatedException;
@@ -137,5 +138,38 @@ public class AuthService {
                 .build();
 
         eventPublisher.publishRecoveryAccount(event);
+    }
+
+    /**
+     * Publica evento para enviar el correo de baja de cuenta
+     */
+    @Transactional
+    public void deleteRequest(String userId) {
+        User user = userRepository.findById(UUID.fromString(userId))
+                .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
+
+        UserDeleteRequestEvent event = UserDeleteRequestEvent.builder()
+                .eventId(String.valueOf(UUID.randomUUID()))
+                .userId(user.getId().toString())
+                .email(user.getEmail())
+                .username(user.getName())
+                .build();
+
+        eventPublisher.publishDeleteRequest(event);
+    }
+
+    /**
+     * Elimina la cuenta si la contraseña coincide
+     */
+    @Transactional
+    public void deleteAccount(DeleteAccountRequestDto request, String userId) {
+        User user = userRepository.findById(UUID.fromString(userId))
+                .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
+
+        if (!passwordEncoder.matches(request.password(), user.getPassword())) {
+            throw new PasswordNotCorrectException("La contraseña introducida no es correcta");
+        }
+
+        userRepository.delete(user);
     }
 }

@@ -5,6 +5,7 @@ import { RegisterComponent } from './features/auth/register/register.component';
 import { ActivateComponent } from './features/auth/activate/activate.component';
 import { RecoveryComponent } from './features/auth/recovery/recovery.component';
 import { ResetPasswordComponent } from './features/auth/reset-password/reset-password.component';
+import { DeleteAccountComponent } from './features/auth/delete-account/delete-account.component';
 import { UserCreateComponent } from './features/auth/user-create/user-create.component';
 import { HomeComponent } from './features/home/home.component';
 import { AuthGuard } from './core/guards/auth.guard';
@@ -35,6 +36,11 @@ const routes: Routes = [
   {
     path: 'auth/reset-password/:id',
     component: ResetPasswordComponent
+  },
+  {
+    path: 'auth/delete-account',
+    component: DeleteAccountComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'create-user',

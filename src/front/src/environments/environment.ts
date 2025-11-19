@@ -1,3 +1,3 @@
 export const environment = {
-  apiUrl: 'https://back.comunikit.duckdns.org',
+  apiUrl: 'https://back.comunikit.es',
 };

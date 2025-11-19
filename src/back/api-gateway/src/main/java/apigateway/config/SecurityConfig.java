@@ -39,13 +39,19 @@ public class SecurityConfig {
                 .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(HttpMethod.OPTIONS).permitAll()
+
+                        .pathMatchers(HttpMethod.POST, "/auth/delete-request").authenticated()
+                        .pathMatchers(HttpMethod.DELETE, "/auth/delete-account").authenticated()
+
                         .pathMatchers("/auth/**").permitAll()
+
                         .pathMatchers("/board/public/**").permitAll()
                         .pathMatchers("/actuator/health", "/actuator/info").permitAll()
                         .pathMatchers("/documentacion", "/documentacion/**").permitAll()
                         .pathMatchers("/swagger-ui.html", "/swagger-ui/**").permitAll()
                         .pathMatchers("/api-docs", "/api-docs/**").permitAll()
                         .pathMatchers("/webjars/**").permitAll()
+
                         .pathMatchers(HttpMethod.GET, "/board/**")
                         .hasAnyAuthority("ROLE_USUARIO", "ROLE_TUTOR", "ROLE_ADMIN")
                         .pathMatchers(HttpMethod.POST, "/board/**")
@@ -55,6 +61,7 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.DELETE, "/board/**")
                         .hasAnyAuthority("ROLE_TUTOR", "ROLE_ADMIN")
                         .pathMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+
                         .anyExchange().authenticated()
                 )
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))

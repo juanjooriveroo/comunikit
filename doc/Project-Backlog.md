@@ -98,7 +98,7 @@
 **Dependencias**: Ninguna
 
 **Tareas técnicas**:
-- [x] Endpoint POST `/api/auth/register-tutor`
+- [x] Endpoint POST `/auth/register`
 - [x] Validación de email único
 - [x] Cifrado BCrypt de contraseña
 - [x] Creación de token JWT

@@ -2,6 +2,7 @@ package authservice.consumers;
 
 import authservice.event.UserRecoveryAccountEvent;
 import authservice.event.UserRegisteredEvent;
+import authservice.event.UserDeleteRequestEvent;
 import authservice.services.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -37,6 +38,17 @@ public class EmailNotificationConsumer {
                 event.getEmail(),
                 event.getUsername(),
                 event.getUserId()
+        );
+    }
+
+    /**
+     * Procesa evento de baja de cuenta y envía email de confirmación
+     */
+    @KafkaListener(topics = "user.delete", groupId = "notification-service-group")
+    public void handleUserRecovery(UserDeleteRequestEvent event) {
+        emailService.sendDeleteEmail(
+                event.getEmail(),
+                event.getUsername()
         );
     }
 }

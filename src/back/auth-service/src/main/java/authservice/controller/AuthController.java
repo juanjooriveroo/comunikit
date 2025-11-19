@@ -158,7 +158,7 @@ public class AuthController {
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "Jugador no encontrado"
+                            description = "Usuario no encontrado"
                     ),
                     @ApiResponse(
                             responseCode = "500",
@@ -169,6 +169,54 @@ public class AuthController {
     @PostMapping("/confirm-new-password")
     public ResponseEntity<?> confirmNewPassword(@Valid @RequestBody ConfirmNewPasswordRequestDto request){
         authService.confirmNewPassword(request);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(
+            summary = "Inicia petición de borrado de cuenta",
+            description = "Recibe por token el UUID del usuario y tramita un correo de baja de usuario de forma asíncrona",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Email enviado / en curso"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Usuario no encontrado"
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Error interno del servidor"
+                    )
+            }
+    )
+    @PostMapping("delete-request")
+    public ResponseEntity<?> deleteRequest(@RequestHeader("X-User-ID") String userId){
+        authService.deleteRequest(userId);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(
+            summary = "Inicia borrado de cuenta",
+            description = "Recibe por token el UUID del usuario y tramita la baja de la cuenta",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Cuenta eliminada con éxito"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Usuario no encontrado"
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Error interno del servidor"
+                    )
+            }
+    )
+    @DeleteMapping("/delete-account")
+    public ResponseEntity<?> deleteAccount(@RequestHeader("X-User-ID") String userId, @Valid @RequestBody DeleteAccountRequestDto request){
+        authService.deleteAccount(request, userId);
         return ResponseEntity.ok().build();
     }
 }

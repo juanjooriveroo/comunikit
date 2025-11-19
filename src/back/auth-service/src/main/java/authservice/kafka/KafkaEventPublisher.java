@@ -1,5 +1,6 @@
 package authservice.kafka;
 
+import authservice.event.UserDeleteRequestEvent;
 import authservice.event.UserRecoveryAccountEvent;
 import authservice.event.UserRegisteredEvent;
 import lombok.RequiredArgsConstructor;
@@ -26,5 +27,12 @@ public class KafkaEventPublisher {
      */
     public void publishRecoveryAccount(UserRecoveryAccountEvent event) {
         kafkaTemplate.send("user.recovery", event.getUserId(), event);
+    }
+
+    /**
+     * Publica evento de petición de baja
+     */
+    public void publishDeleteRequest(UserDeleteRequestEvent event) {
+        kafkaTemplate.send("user.delete", event.getUserId(), event);
     }
 }

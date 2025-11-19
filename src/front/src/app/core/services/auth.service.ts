@@ -241,4 +241,30 @@ export class AuthService {
       })
     );
   }
+
+  /**
+   * Solicitar borrado de cuenta (envía correo de confirmación)
+   */
+  deleteRequest(): Observable<any> {
+    const url = `${environment.apiUrl}/auth/delete-request`;
+    return this.http.post(url, {}).pipe(
+      catchError((error) => {
+        return throwError(() => error);
+      })
+    );
+  }
+
+  /**
+   * Confirmar eliminación de cuenta con contraseña
+   */
+  deleteAccount(deleteData: { password: string }): Observable<any> {
+    const url = `${environment.apiUrl}/auth/delete-account`;
+    return this.http.delete(url, {
+      body: deleteData
+    }).pipe(
+      catchError((error) => {
+        return throwError(() => error);
+      })
+    );
+  }
 }

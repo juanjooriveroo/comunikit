@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -34,27 +33,24 @@ public class JwtAuthenticationManager implements ReactiveAuthenticationManager {
         try {
             Claims claims = jwtService.validateToken(token);
             String username = claims.getSubject();
-            List<String> roles = claims.get("roles", List.class);
+            String role = claims.get("role", String.class);
 
-            if (roles == null || roles.isEmpty()) {
-                log.warn("Token sin roles para usuario: {}", username);
-                return Mono.error(new RuntimeException("Token sin roles"));
+            if (role == null || role.isBlank()) {
+                log.warn("Token sin rol para usuario: {}", username);
+                return Mono.error(new RuntimeException("Token sin rol"));
             }
 
-            List<SimpleGrantedAuthority> authorities = roles.stream()
-                    .map(role -> {
-                        String authority = role.startsWith("ROLE_") ? role : "ROLE_" + role;
-                        return new SimpleGrantedAuthority(authority);
-                    })
-                    .collect(Collectors.toList());
+            SimpleGrantedAuthority authority = new SimpleGrantedAuthority(
+                    role.startsWith("ROLE_") ? role : "ROLE_" + role
+            );
 
             var auth = new UsernamePasswordAuthenticationToken(
                     username,
                     null,
-                    authorities
+                    List.of(authority)
             );
 
-            log.debug("Usuario autenticado: {} con roles: {}", username, authorities);
+            log.debug("Usuario autenticado: {} con rol: {}", username, role);
             return Mono.just(auth);
 
         } catch (Exception e) {

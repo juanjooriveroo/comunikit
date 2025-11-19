@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { User, UserRole } from '../../models/user.model';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { DeleteAccountModalComponent } from '../delete-account-modal/delete-account-modal.component';
 
 @Component({
   selector: 'app-navbar',
@@ -14,6 +15,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   currentUser: User | null = null;
   isMenuOpen = false;
   private destroy$ = new Subject<void>();
+  @ViewChild('deleteAccountModal') deleteAccountModal!: DeleteAccountModalComponent;
 
   constructor(
     public authService: AuthService,
@@ -40,6 +42,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
   logout(): void {
     this.authService.logout();
     this.isMenuOpen = false;
+  }
+
+  /**
+   * Abrir modal de solicitud de borrado de cuenta
+   */
+  openDeleteConfirmModal(): void {
+    this.isMenuOpen = false;
+    this.deleteAccountModal.openModal();
   }
 
   get isAuthenticated(): boolean {

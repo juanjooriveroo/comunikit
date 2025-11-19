@@ -23,7 +23,7 @@ Al finalizar este Sprint, debería tener:
 ## Historias de Usuario
 
 ### HU01 - Registro de Tutor 
-**Estado**: ⏳ To Do
+**Estado**: FINISHED
 
 **Como** Tutor  
 **Quiero** crear mi cuenta y acceder a mi panel  
@@ -172,8 +172,6 @@ Una historia se considera DONE cuando:
 - Creación de documentación para el programador
 - Creación de documentación para el usuario
 - Creación de documentación para el despliegue
-
-**Día 7 (18/11)**:
 
 ---
 

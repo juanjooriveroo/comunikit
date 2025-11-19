@@ -65,9 +65,10 @@
               </li>
               <li><hr class="dropdown-divider"></li>
               <li>
-                <span class="dropdown-item disabled">
-                  <small class="text-muted">Próximamente...</small>
-                </span>
+                <button class="dropdown-item text-danger" type="button" (click)="openDeleteConfirmModal()">
+                  <i class="fa fa-trash me-2"></i>
+                  Dar de Baja
+                </button>
               </li>
               <li><hr class="dropdown-divider"></li>
               <li>
@@ -84,3 +85,5 @@
     </div>
   </div>
 </nav>
+
+<app-delete-account-modal #deleteAccountModal></app-delete-account-modal>

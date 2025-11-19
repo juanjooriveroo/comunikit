@@ -1,0 +1,37 @@
+<div class="modal fade" [id]="modalId" tabindex="-1" [attr.aria-labelledby]="modalId + 'Label'" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h1 class="modal-title fs-5" [id]="modalId + 'Label'">
+          <i class="fa fa-warning me-2"></i>
+          Dar de Baja Cuenta
+        </h1>
+        <button type="button" class="btn-close btn-close-white" (click)="cancelDeleteRequest()" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <p class="mb-0">
+          <strong>¿Estás seguro de que deseas dar de baja tu cuenta y las de los usuarios a tu cargo?</strong>
+        </p>
+        <p class="text-muted small mt-2 mb-0">
+          Se te enviará un correo de confirmación. Deberás completar el proceso desde el enlace en el email.
+        </p>
+
+        <div *ngIf="deleteRequestMessage" class="alert mt-3 mb-0" [ngClass]="deleteRequestMessage.includes('✓') ? 'alert-success' : 'alert-danger'">
+          {{ deleteRequestMessage }}
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cancelDeleteRequest()" [disabled]="deleteRequestLoading">
+          No, Cancelar
+        </button>
+        <button type="button" class="btn btn-danger" (click)="confirmDeleteRequest()" [disabled]="deleteRequestLoading">
+          <span *ngIf="!deleteRequestLoading">Sí, Continuar</span>
+          <span *ngIf="deleteRequestLoading">
+            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            Enviando...
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

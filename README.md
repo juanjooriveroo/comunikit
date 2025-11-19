@@ -151,8 +151,8 @@ comunikit/
 ## Ubicación de la app
 
 La aplicación estará disponible en:
-- **Frontend**: https://comunikit.duckdns.org
-- **API Gateway**: https://back.comunikit.duckdns.org
+- **Frontend**: https://comunikit.es
+- **API Gateway**: https://back.comunikit.es
 
 ---
 

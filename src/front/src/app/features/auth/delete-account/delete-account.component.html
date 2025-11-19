@@ -1,0 +1,101 @@
+<div class="row justify-content-center mt-5">
+  <div class="col-md-6 col-lg-5">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <h1 class="card-title text-center mb-4 h3">Eliminar Cuenta</h1>
+        <p class="text-center text-muted mb-4">Confirma tu contraseña para proceder</p>
+
+        <div *ngIf="deleteSuccess" class="alert alert-success alert-dismissible fade show" role="alert">
+          <div class="text-center">
+            <h4 class="alert-heading mb-3">¡Cuenta Eliminada!</h4>
+            <p class="mb-0">{{ successMessage }}</p>
+            <p class="mt-3 text-muted small">Serás redirigido al inicio en unos segundos...</p>
+            <div class="mt-4">
+              <a routerLink="/" class="btn btn-primary">Ir al Inicio Ahora</a>
+            </div>
+          </div>
+        </div>
+
+        <div
+          *ngIf="errorMessage"
+          class="alert alert-danger"
+          role="alert"
+          aria-live="polite">
+          <strong>Error:</strong> {{ errorMessage }}
+        </div>
+
+        <form
+          [formGroup]="deleteForm"
+          (ngSubmit)="onSubmit()"
+          novalidate
+          *ngIf="!deleteSuccess">
+
+          <div class="mb-3">
+            <label for="password" class="form-label">
+              Contraseña <span class="text-danger" aria-label="obligatorio">*</span>
+            </label>
+            <div class="input-group">
+              <input
+                [type]="showPassword ? 'text' : 'password'"
+                id="password"
+                class="form-control form-control-lg"
+                [class.is-invalid]="submitted && f['password'].errors"
+                formControlName="password"
+                placeholder="Tu contraseña"
+                aria-required="true"
+                aria-describedby="passwordError"
+                autocomplete="current-password">
+
+              <button
+                class="btn btn-outline-secondary"
+                type="button"
+                (click)="togglePasswordVisibility()"
+                [attr.aria-label]="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+                <span *ngIf="!showPassword"><fa-icon [icon]="faEyeSlash"></fa-icon></span>
+                <span *ngIf="showPassword"><fa-icon [icon]="faEye"></fa-icon></span>
+              </button>
+            </div>
+
+            <div
+              id="passwordError"
+              *ngIf="submitted && f['password'].errors"
+              class="invalid-feedback d-block"
+              role="alert">
+              <div *ngIf="f['password'].errors['required']">La contraseña es obligatoria</div>
+              <div *ngIf="f['password'].errors['minlength']">
+                La contraseña debe tener al menos 8 caracteres
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-warning" role="alert">
+            <small>
+              <strong>⚠️ Atención:</strong> Esta acción eliminará permanentemente tu cuenta y todos tus datos asociados. No se puede deshacer.
+            </small>
+          </div>
+
+          <button
+            type="submit"
+            class="btn btn-danger btn-lg w-100 mt-3"
+            [disabled]="loading"
+            [attr.aria-busy]="loading">
+            <span *ngIf="!loading">Eliminar Mi Cuenta</span>
+            <span *ngIf="loading">
+              <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              Eliminando...
+            </span>
+          </button>
+
+        </form>
+
+        <div class="text-center mt-4" *ngIf="!deleteSuccess">
+          <p class="text-muted">
+            <a routerLink="/" class="text-primary fw-bold">Volver al inicio</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

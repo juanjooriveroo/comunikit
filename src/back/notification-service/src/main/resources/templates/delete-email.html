@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmar baja de cuenta - ComuniKIT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #FFFFFF;
+            color: #1F2937;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #FFFFFF;
+            border-radius: 16px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: #DC2626;
+            color: #FFFFFF;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 30px;
+            text-align: center;
+        }
+        .welcome {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+        .message {
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        .delete-button {
+            background: #DC2626;
+            color: #FFFFFF;
+            border: none;
+            padding: 16px 40px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        .delete-button:hover {
+            background: #B91C1C;
+            transform: translateY(-2px);
+        }
+        .warning-box {
+            background: #FEF2F2;
+            border: 2px solid #FCA5A5;
+            color: #991B1B;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        .warning-box h3 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .warning-box ul {
+            font-size: 14px;
+            padding-left: 20px;
+            margin: 10px 0 0 0;
+        }
+        .warning-box li {
+            margin: 5px 0;
+        }
+        .expiry-warning {
+            background: #FEF3C7;
+            border: 1px solid #FCD34D;
+            color: #92400E;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        .security-info {
+            background: #F3F4F6;
+            border-left: 4px solid #DC2626;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            text-align: left;
+        }
+        .security-info h3 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+        }
+        .security-info p {
+            font-size: 14px;
+            margin: 5px 0;
+        }
+        .footer {
+            background: #F3F4F6;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #6B7280;
+        }
+        .footer strong {
+            color: #1F2937;
+        }
+        .alternative-link {
+            background: #E5E7EB;
+            padding: 12px;
+            margin: 20px 0;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #374151;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>ComuniKIT</h1>
+        <p>Confirmación de baja de cuenta</p>
+    </div>
+
+    <div class="content">
+        <div class="welcome">
+            Hola <span th:text="${username}">Usuario</span>
+        </div>
+
+        <div class="message">
+            Hemos recibido una solicitud para dar de baja tu cuenta en <strong>ComuniKIT</strong>.<br><br>
+            Lamentamos que hayas decidido dejarnos. Si estás seguro de continuar con este proceso, haz clic en el botón de abajo.
+        </div>
+
+        <div class="warning-box">
+            <h3>Esta acción es permanente</h3>
+            <p><strong>Al eliminar tu cuenta se perderá:</strong></p>
+            <ul>
+                <li>Todos tus pictogramas guardados</li>
+                <li>Tus colecciones personalizadas</li>
+                <li>Tu historial de comunicación</li>
+                <li>Todas las configuraciones y preferencias</li>
+                <li>Todas las cuentas vinculadas también serán eliminadas</li>
+            </ul>
+        </div>
+
+        <a th:href="${frontendUrl} + '/auth/delete-account'" class="delete-button">
+            Confirmar baja de cuenta
+        </a>
+
+        <div class="expiry-warning">
+            <strong>Importante:</strong> Este enlace expira en 24 horas por seguridad.
+        </div>
+
+        <div class="security-info">
+            <h3>¿No solicitaste esta baja?</h3>
+            <p><strong>Si no reconoces esta solicitud:</strong></p>
+            <p>Ignora este email de forma segura. Tu cuenta permanecerá activa y tus datos estarán protegidos. Te recomendamos cambiar tu contraseña y revisar la seguridad de tu cuenta.</p>
+        </div>
+
+        <div class="alternative-link">
+            <strong>¿Problemas con el botón?</strong><br>
+            Copia y pega este enlace en tu navegador:<br>
+            <code th:text="${frontendUrl} + '/auth/delete-account'"></code>
+        </div>
+    </div>
+
+    <div class="footer">
+        Este email fue enviado porque solicitaste dar de baja tu cuenta en ComuniKIT.<br>
+        Si no hiciste esta solicitud, puedes ignorar este mensaje de forma segura.<br><br>
+        <strong>ComuniKIT Team</strong> 💚
+    </div>
+</div>
+</body>
+</html>

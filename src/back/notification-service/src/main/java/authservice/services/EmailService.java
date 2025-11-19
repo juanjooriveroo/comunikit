@@ -81,4 +81,32 @@ public class EmailService {
             log.error("Error enviando email de recuperación a: {}", toEmail, e);
         }
     }
+
+    /**
+     * Envía email de recuperación de cuenta para restablecer contraseña
+     */
+    public void sendDeleteEmail(String toEmail, String username) {
+        try {
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+            helper.setTo(toEmail);
+            helper.setSubject("ComuniKIT - Baja de cuenta");
+            helper.setFrom("noreply.comunikit@gmail.com");
+
+            Context context = new Context();
+            context.setVariable("username", username);
+            context.setVariable("frontendUrl", frontend);
+
+            String htmlContent = templateEngine.process("delete-email", context);
+            helper.setText(htmlContent, true);
+
+            mailSender.send(mimeMessage);
+
+            log.info("Email de baja enviado exitosamente a: {}", toEmail);
+
+        } catch (Exception e) {
+            log.error("Error enviando email de baja a: {}", toEmail, e);
+        }
+    }
 }

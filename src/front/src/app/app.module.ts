@@ -13,9 +13,11 @@ import { RegisterComponent } from './features/auth/register/register.component';
 import { ActivateComponent } from './features/auth/activate/activate.component';
 import { RecoveryComponent } from './features/auth/recovery/recovery.component';
 import { ResetPasswordComponent } from './features/auth/reset-password/reset-password.component';
+import { DeleteAccountComponent } from './features/auth/delete-account/delete-account.component';
 import { UserCreateComponent } from './features/auth/user-create/user-create.component';
 import { HomeComponent } from './features/home/home.component';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
+import { DeleteAccountModalComponent } from './shared/components/delete-account-modal/delete-account-modal.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
@@ -26,9 +28,11 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     ActivateComponent,
     RecoveryComponent,
     ResetPasswordComponent,
+    DeleteAccountComponent,
     UserCreateComponent,
     HomeComponent,
-    NavbarComponent
+    NavbarComponent,
+    DeleteAccountModalComponent
   ],
   imports: [
     BrowserModule,
