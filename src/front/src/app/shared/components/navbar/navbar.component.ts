@@ -56,15 +56,18 @@ export class NavbarComponent implements OnInit, OnDestroy {
     return this.authService.isAuthenticated();
   }
 
-  get canManageUsers(): boolean {
-    return this.authService.canManageUsers();
+  /**
+   * Solo TUTOR puede crear usuarios dependientes
+   */
+  get canCreateDependentUsers(): boolean {
+    return this.authService.hasRole(UserRole.TUTOR);
   }
 
   get userInitials(): string {
-    if (!this.currentUser?.name) return '?';
+    if (!this.currentUser?.name) return '';
     return this.currentUser.name
       .split(' ')
-      .map(n => n[0])
+      .map(word => word[0])
       .join('')
       .toUpperCase()
       .slice(0, 2);

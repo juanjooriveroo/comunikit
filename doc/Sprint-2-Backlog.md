@@ -120,6 +120,9 @@ Una historia se considera DONE cuando:
 - Componentes Angular de la baja de usuarios (confirmacion, peticion por modal)
 - Compra de dominio personal y aplicación de ella en el servidor
 
+**Día 2 (20/11)**: 
+- Fixeo fallos de resolución de navbar en resoluciones moviles y que los admins no puedan crear usuarios del mismo modo que los tutores (sprint 3 todo)
+
 ---
 
 ## Métricas de Éxito

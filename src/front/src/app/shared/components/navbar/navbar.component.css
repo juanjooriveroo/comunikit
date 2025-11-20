@@ -3,6 +3,10 @@
   padding: 0.75rem 0;
 }
 
+.nav-item{
+  align-self: center;
+}
+
 .navbar-brand {
   font-size: 1.5rem;
   font-weight: 700;
@@ -123,6 +127,15 @@
   .nav-link {
     margin-left: 0;
     padding: 0.5rem 0 !important;
+    background-color: transparent !important;
+  }
+
+  .nav-link:hover {
+    background-color: transparent !important;
+  }
+
+  .nav-link.active {
+    background-color: transparent !important;
   }
 
   .user-dropdown {
@@ -132,8 +145,63 @@
   .dropdown-menu {
     min-width: 200px;
   }
-}
 
+  /* Estilos para opciones de usuario en móvil */
+  .mobile-user-section {
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    margin-top: 0.5rem;
+  }
+
+  .mobile-user-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.75rem 0 !important;
+  }
+
+  .mobile-user-header .user-email {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+  }
+
+  .mobile-user-header .user-role {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .mobile-user-action {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 0 !important;
+    margin: 0.25rem 0 !important;
+    border: none;
+    background: transparent !important;
+    border-radius: 0;
+    transition: all 0.2s ease;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.9) !important;
+  }
+
+  .mobile-user-action:hover {
+    background-color: transparent !important;
+    color: white !important;
+  }
+
+  .mobile-user-action.text-danger {
+    color: #EF4444 !important;
+  }
+
+  .mobile-user-action.text-danger:hover {
+    color: #EF4444 !important;
+    background-color: transparent !important;
+  }
+}
 .nav-link:focus,
 .dropdown-toggle:focus {
   outline: 2px solid rgba(255, 255, 255, 0.5);

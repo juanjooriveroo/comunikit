@@ -69,6 +69,7 @@ body {
   line-height: 1.6;
   color: var(--gray-800);
   background-color: var(--gray-50);
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -151,7 +152,7 @@ textarea:focus,
 
 /* Container principal */
 main.container {
-  min-height: calc(100vh - 60px);
+  min-height: calc(100dvh - 60px);
   padding: var(--spacing-lg);
 }
 
