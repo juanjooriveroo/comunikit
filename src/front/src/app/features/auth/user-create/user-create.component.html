@@ -4,9 +4,9 @@
     <div class="card shadow-sm">
       <div class="card-body p-4">
 
-        <h1 class="card-title text-center mb-3 h3">Crear Usuario Final</h1>
+        <h1 class="card-title text-center mb-3 h3">Crear Usuario Dependiente</h1>
         <p class="text-center text-muted mb-4">
-          Crea un nuevo usuario con necesidades de comunicación
+          Crea un nuevo usuario dependiente de tu cuenta. Este usuario tendrá su propio tablero de comunicación personalizado.
         </p>
 
         <div
@@ -17,69 +17,69 @@
           <strong>Error:</strong> {{ errorMessage }}
         </div>
 
-        <div
-          *ngIf="successMessage"
-          class="alert alert-success"
-          role="alert"
-          aria-live="polite">
-          <h4 class="alert-heading">¡Usuario creado exitosamente!</h4>
-          <p>{{ successMessage }}</p>
-          <hr>
-          <p class="mb-0">
-            <strong>Contraseña generada:</strong>
-          </p>
-          <div class="input-group mt-2">
-            <input
-              type="text"
-              class="form-control form-control-lg"
-              [value]="generatedPassword"
-              readonly
-              aria-label="Contraseña generada">
-          </div>
-          <p class="mt-3 text-warning">
-            <strong>⚠️ Importante:</strong> Guarda esta contraseña, no se volverá a mostrar.
-          </p>
-          <button
-            type="button"
-            class="btn btn-success w-100 mt-2"
-            (click)="createAnother()">
-            Crear otro usuario
-          </button>
-        </div>
-
         <form
-          *ngIf="!successMessage"
           [formGroup]="userForm"
           (ngSubmit)="onSubmit()"
           novalidate>
 
           <div class="mb-3">
-            <label for="name" class="form-label">
-              Nombre del usuario <span class="text-danger" aria-label="obligatorio">*</span>
+            <label for="firstName" class="form-label">
+              Nombre <span class="text-danger" aria-label="obligatorio">*</span>
             </label>
             <input
               type="text"
-              id="name"
+              id="firstName"
               class="form-control form-control-lg"
-              [class.is-invalid]="submitted && f['name'].errors"
-              formControlName="name"
-              placeholder="Ej: María García"
+              [class.is-invalid]="submitted && f['firstName'].errors"
+              formControlName="firstName"
+              placeholder="Ej: María"
               aria-required="true"
-              aria-describedby="nameError nameHelp"
-              autocomplete="name">
+              aria-describedby="firstNameError firstNameHelp"
+              autocomplete="given-name">
 
-            <div id="nameHelp" class="form-text">
-              Nombre completo de la persona que usará el tablero
+            <div id="firstNameHelp" class="form-text">
+              El nombre de la persona dependiente
             </div>
 
             <div
-              id="nameError"
-              *ngIf="submitted && f['name'].errors"
+              id="firstNameError"
+              *ngIf="submitted && f['firstName'].errors"
               class="invalid-feedback"
               role="alert">
-              <div *ngIf="f['name'].errors['required']">El nombre es obligatorio</div>
-              <div *ngIf="f['name'].errors['minlength']">
-                El nombre debe tener al menos 3 caracteres
+              <div *ngIf="f['firstName'].errors['required']">El nombre es obligatorio</div>
+              <div *ngIf="f['firstName'].errors['minlength']">
+                El nombre debe tener al menos 2 caracteres
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="lastName" class="form-label">
+              Apellido <span class="text-danger" aria-label="obligatorio">*</span>
+            </label>
+            <input
+              type="text"
+              id="lastName"
+              class="form-control form-control-lg"
+              [class.is-invalid]="submitted && f['lastName'].errors"
+              formControlName="lastName"
+              placeholder="Ej: García"
+              aria-required="true"
+              aria-describedby="lastNameError lastNameHelp"
+              autocomplete="family-name">
+
+            <div id="lastNameHelp" class="form-text">
+              El apellido de la persona dependiente
+            </div>
+
+            <div
+              id="lastNameError"
+              *ngIf="submitted && f['lastName'].errors"
+              class="invalid-feedback"
+              role="alert">
+              <div *ngIf="f['lastName'].errors['required']">El apellido es obligatorio</div>
+              <div *ngIf="f['lastName'].errors['minlength']">
+                El apellido debe tener al menos 2 caracteres
               </div>
             </div>
           </div>
@@ -103,13 +103,91 @@
             </div>
           </div>
 
+          <div class="mb-3">
+            <label for="password" class="form-label">
+              Contraseña <span class="text-danger" aria-label="obligatorio">*</span>
+            </label>
+            <div class="input-group">
+              <input
+                [type]="showPassword ? 'text' : 'password'"
+                id="password"
+                class="form-control form-control-lg"
+                [class.is-invalid]="submitted && f['password'].errors"
+                formControlName="password"
+                placeholder="Mínimo 8 caracteres"
+                aria-required="true"
+                aria-describedby="passwordError passwordHelp"
+                autocomplete="new-password">
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                (click)="togglePasswordVisibility('password')"
+                [attr.aria-label]="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+                <span *ngIf="!showPassword"><fa-icon [icon]="faEyeSlash"></fa-icon></span>
+                <span *ngIf="showPassword"><fa-icon [icon]="faEye"></fa-icon></span>
+              </button>
+            </div>
+
+            <div id="passwordHelp" class="form-text">
+              Mínimo 8 caracteres para mayor seguridad
+            </div>
+
+            <div
+              id="passwordError"
+              *ngIf="submitted && f['password'].errors"
+              class="invalid-feedback d-block"
+              role="alert">
+              <div *ngIf="f['password'].errors['required']">La contraseña es obligatoria</div>
+              <div *ngIf="f['password'].errors['minlength']">
+                La contraseña debe tener al menos 8 caracteres
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="confirmPassword" class="form-label">
+              Confirmar contraseña <span class="text-danger" aria-label="obligatorio">*</span>
+            </label>
+            <div class="input-group">
+              <input
+                [type]="showConfirmPassword ? 'text' : 'password'"
+                id="confirmPassword"
+                class="form-control form-control-lg"
+                [class.is-invalid]="submitted && f['confirmPassword'].errors"
+                formControlName="confirmPassword"
+                placeholder="Repite la contraseña"
+                aria-required="true"
+                aria-describedby="confirmPasswordError"
+                autocomplete="new-password">
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                (click)="togglePasswordVisibility('confirmPassword')"
+                [attr.aria-label]="showConfirmPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+                <span *ngIf="!showConfirmPassword"><fa-icon [icon]="faEyeSlash"></fa-icon></span>
+                <span *ngIf="showConfirmPassword"><fa-icon [icon]="faEye"></fa-icon></span>
+              </button>
+            </div>
+
+            <div
+              id="confirmPasswordError"
+              *ngIf="submitted && f['confirmPassword'].errors"
+              class="invalid-feedback d-block"
+              role="alert">
+              <div *ngIf="f['confirmPassword'].errors['required']">Debe confirmar la contraseña</div>
+              <div *ngIf="f['confirmPassword'].errors['passwordMismatch']">
+                Las contraseñas no coinciden
+              </div>
+            </div>
+          </div>
+
           <div class="alert alert-info" role="status">
-            <h5 class="alert-heading">ℹ️ Información</h5>
+            <h5 class="alert-heading"> Información sobre el usuario dependiente</h5>
             <ul class="mb-0">
-              <li>Se generará automáticamente una contraseña segura</li>
-              <li>Se creará un tablero personal con pictogramas básicos</li>
-              <li>El usuario tendrá 50MB de almacenamiento</li>
-              <li>Quedarás asignado como tutor del usuario</li>
+              <li>La contraseña que estableces será la inicial para el usuario</li>
+              <li>Se creará un tablero personal con pictogramas para facilitar la comunicación</li>
+              <li>Tú serás el tutor y podrás gestionar su tablero y configuración</li>
+              <li>El usuario tendrá su propio espacio de almacenamiento personalizado</li>
             </ul>
           </div>
 
@@ -118,7 +196,7 @@
             class="btn btn-primary btn-lg w-100 mt-3"
             [disabled]="loading"
             [attr.aria-busy]="loading">
-            <span *ngIf="!loading">Crear Usuario</span>
+            <span *ngIf="!loading">Crear Usuario Dependiente</span>
             <span *ngIf="loading">
               <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
               Creando usuario...
@@ -128,8 +206,8 @@
         </form>
 
         <div class="text-center mt-4">
-          <a routerLink="/dashboard" class="btn btn-link">
-            ← Volver al panel
+          <a routerLink="/" class="btn btn-link">
+            ← Volver al inicio
           </a>
         </div>
 

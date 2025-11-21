@@ -62,7 +62,7 @@ Al finalizar este Sprint, debería tener:
 ### Auth-Service
 - [ ] **G02**: Modificación de datos de usuario
 - [x] **G03**: Eliminación de datos de usuario (baja)
-- [ ] **G04**: Creación de usuarios dependientes
+- [x] **G04**: Creación de usuarios dependientes
 - [ ] **G05**: Gestión de usuarios dependientes
 
 ### Notification-Service
@@ -122,6 +122,10 @@ Una historia se considera DONE cuando:
 
 **Día 2 (20/11)**: 
 - Fixeo fallos de resolución de navbar en resoluciones moviles y que los admins no puedan crear usuarios del mismo modo que los tutores (sprint 3 todo)
+
+**Día 3 (21/11)**: 
+- Creación tanto en el back como en el front de usuarios dependientes (via usuario tutor).
+- Cambio de infraestructura del servidor (cambié de equipo que hostea todo el servicio)
 
 ---
 

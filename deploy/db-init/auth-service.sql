@@ -26,10 +26,19 @@ INSERT INTO language (code, name) VALUES
 CREATE TABLE users (
     id UUID PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
+    username VARCHAR(255) UNIQUE,
+    email VARCHAR(255) UNIQUE,
     password VARCHAR(255) NOT NULL,
     role_id INT NOT NULL REFERENCES role(id),
     language_code CHAR(2) NOT NULL REFERENCES language(code),
     storage_used FLOAT DEFAULT 0,
     activated BOOLEAN NOT NULL
+);
+
+CREATE TABLE user_relation (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tutor_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    UNIQUE(tutor_id, user_id),
+    CHECK (tutor_id != user_id)
 );

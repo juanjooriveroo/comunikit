@@ -7,6 +7,7 @@ import { RecoveryComponent } from './features/auth/recovery/recovery.component';
 import { ResetPasswordComponent } from './features/auth/reset-password/reset-password.component';
 import { DeleteAccountComponent } from './features/auth/delete-account/delete-account.component';
 import { UserCreateComponent } from './features/auth/user-create/user-create.component';
+import { UserDependentProfileComponent } from './features/auth/user/dependent/profile/profile.component';
 import { HomeComponent } from './features/home/home.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { RoleGuard } from './core/guards/role.guard';
@@ -46,7 +47,12 @@ const routes: Routes = [
     path: 'create-user',
     component: UserCreateComponent,
     canActivate: [AuthGuard, RoleGuard],
-    data: { roles: [UserRole.TUTOR, UserRole.ADMIN] }
+    data: { roles: [UserRole.TUTOR] }
+  },
+  {
+    path: 'user/profile/:id',
+    component: UserDependentProfileComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: '**',

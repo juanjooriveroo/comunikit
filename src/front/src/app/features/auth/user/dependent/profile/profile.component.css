@@ -1,0 +1,26 @@
+.card {
+  border: none;
+  border-radius: 12px;
+}
+
+.card-body {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+h1 {
+  color: #2c3e50;
+}
+
+.alert {
+  border: none;
+  border-radius: 8px;
+}
+
+.text-muted {
+  color: #6c757d;
+}
+
+.lead {
+  font-size: 1.25rem;
+  font-weight: 300;
+}

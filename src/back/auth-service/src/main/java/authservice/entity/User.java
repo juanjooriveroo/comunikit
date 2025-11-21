@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -40,11 +41,21 @@ public class User {
 
     @Column(nullable = false, unique = true)
     @Schema(
+            description = "Nombre de acceso del usuario.",
+            example = "frodriguezl01",
+            format = "String",
+            type = "String",
+            nullable = false
+    )
+    private String username;
+
+    @Column(nullable = true, unique = true)
+    @Schema(
             description = "Correo electrónico del usuario. Será validado posteriormente por correo",
             example = "jugador@example.com",
             format = "String",
             type = "String",
-            nullable = false
+            nullable = true
     )
     private String email;
 
@@ -95,4 +106,25 @@ public class User {
             nullable = false
     )
     private Boolean activated;
+
+    @OneToMany(mappedBy = "tutor")
+    @JsonIgnore
+    private List<UserRelation> dependents;
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<UserRelation> tutors;
+
+    public List<User> getDependents() {
+        return dependents.stream()
+                .map(UserRelation::getUser)
+                .toList();
+    }
+
+    public User getTutors() {
+        return tutors.stream()
+                .map(UserRelation::getTutor)
+                .findFirst()
+                .orElse(null);
+    }
 }

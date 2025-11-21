@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.UUID;
 
 @RestController
@@ -218,5 +219,33 @@ public class AuthController {
     public ResponseEntity<?> deleteAccount(@RequestHeader("X-User-ID") String userId, @Valid @RequestBody DeleteAccountRequestDto request){
         authService.deleteAccount(request, userId);
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(
+            summary = "Creación de usuario dependiente",
+            description = "Registra un usuario dependiente a la cuenta con la que se crea"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Registro exitoso, devuelve las nuevas credenciales creadas de acceso"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Petición inválida por parámetros incorrectos o rol de usuario no correcto"
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "Conflicto de datos (duplicados, estado inválido, etc.)"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor"
+            )
+    })
+    @PostMapping("/create-user")
+    public ResponseEntity<?> createUser(@RequestHeader("X-User-ID") String userId, @Valid @RequestBody CreateUserRequestDto request) {
+        CreateUserResponseDto credentials = authService.createUser(request, userId);
+        return ResponseEntity.created(URI.create("/user/profile/" + credentials.idUser())).body(credentials);
     }
 }

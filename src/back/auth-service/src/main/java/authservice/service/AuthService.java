@@ -1,16 +1,15 @@
 package authservice.service;
 
 import authservice.dto.*;
+import authservice.entity.UserRelation;
 import authservice.event.UserDeleteRequestEvent;
 import authservice.event.UserRecoveryAccountEvent;
 import authservice.event.UserRegisteredEvent;
-import authservice.exception.AccountNotActivatedException;
-import authservice.exception.PasswordDuplicateException;
-import authservice.exception.PasswordNotCorrectException;
-import authservice.exception.UserNotFoundException;
+import authservice.exception.*;
 import authservice.kafka.KafkaEventPublisher;
 import authservice.mapper.UserMapper;
 import authservice.entity.User;
+import authservice.repository.UserRelationRepository;
 import authservice.repository.UserRepository;
 import authservice.utils.JwtUtils;
 import jakarta.transaction.Transactional;
@@ -29,6 +28,7 @@ import java.util.UUID;
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final UserRelationRepository userRelationRepository;
     private final UserMapper userMapper;
     private final KafkaEventPublisher eventPublisher;
     private final JwtUtils jwtUtils;
@@ -171,5 +171,49 @@ public class AuthService {
         }
 
         userRepository.delete(user);
+    }
+
+    /**
+     * Crea un usuario dependiente a la cuenta que genera la petición, quedando vinculado a la cuenta tutora
+     */
+    @Transactional
+    public CreateUserResponseDto createUser(CreateUserRequestDto request, String userId) {
+        User currentUser = userRepository.findById(UUID.fromString(userId))
+                .orElseThrow(() -> new UserNotFoundException("Usuario actual no encontrado"));
+
+        return switch (currentUser.getRol().getName()) {
+            case "ADMIN" -> {
+                User userTutor = userRepository.findById(request.userId())
+                        .orElseThrow(() -> new UserNotFoundException("Usuario actual no encontrado"));
+
+                if (!userTutor.getRol().getName().equals("TUTOR")) {
+                    throw new UserNotTutorException("Usuario no válido por su rol");
+                }
+
+                yield createUserDependent(request, userTutor);
+            }
+            case "TUTOR" -> createUserDependent(request, currentUser);
+            default -> throw new UserNotTutorException("Usuario no válido por su rol");
+        };
+    }
+
+    /**
+     * Metodo privado que se dedica a generar un usuario nuevo y almacenarlo en base de datos.
+     * Retorna el nuevo username y el uuid
+     */
+    private CreateUserResponseDto createUserDependent(CreateUserRequestDto request, User currentUser) {
+        User newUser = userMapper.toEntityFromCreateUserRequest(request);
+        User savedUser = userRepository.save(newUser);
+
+        UserRelation relation = UserRelation.builder()
+                .user(savedUser)
+                .tutor(currentUser)
+                .build();
+        userRelationRepository.save(relation);
+
+        return CreateUserResponseDto.builder()
+                .username(savedUser.getUsername())
+                .idUser(savedUser.getId())
+                .build();
     }
 }

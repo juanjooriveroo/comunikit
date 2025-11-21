@@ -53,13 +53,12 @@ export interface RegisterResponse {
 export interface CreateUserRequest {
   name: string;
   language: string;
+  password?: string;
+  userId?: string | null;
 }
 
 export interface CreateUserResponse {
-  user: User;
-  generatedPassword: string;
-  board: {
-    id: number;
-    name: string;
-  };
+  username: string;
+  password: string;
+  idUser: string;
 }

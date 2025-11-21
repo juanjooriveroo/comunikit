@@ -15,6 +15,7 @@ import { RecoveryComponent } from './features/auth/recovery/recovery.component';
 import { ResetPasswordComponent } from './features/auth/reset-password/reset-password.component';
 import { DeleteAccountComponent } from './features/auth/delete-account/delete-account.component';
 import { UserCreateComponent } from './features/auth/user-create/user-create.component';
+import { UserDependentProfileComponent } from './features/auth/user/dependent/profile/profile.component';
 import { HomeComponent } from './features/home/home.component';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { DeleteAccountModalComponent } from './shared/components/delete-account-modal/delete-account-modal.component';
@@ -30,6 +31,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     ResetPasswordComponent,
     DeleteAccountComponent,
     UserCreateComponent,
+    UserDependentProfileComponent,
     HomeComponent,
     NavbarComponent,
     DeleteAccountModalComponent

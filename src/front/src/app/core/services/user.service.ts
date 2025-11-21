@@ -8,17 +8,18 @@ import { User, CreateUserRequest, CreateUserResponse } from '../../shared/models
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = `${environment.apiUrl}/users`;
+  private apiUrl = `${environment.apiUrl}/auth`;
 
   constructor(private http: HttpClient) {}
 
   /**
-   * Crear un nuevo usuario final (HU02)
-   * Solo accesible por TUTOR o ADMIN       HA DESARROLLAR
+   * Crear un nuevo usuario dependiente (HU02)
+   * Solo accesible por TUTOR
+   * Devuelve username, password e idUser
    */
   createUser(userData: CreateUserRequest): Observable<CreateUserResponse> {
     return this.http.post<CreateUserResponse>(
-      `${this.apiUrl}/create-final-user`,
+      `${this.apiUrl}/create-user`,
       userData
     );
   }
@@ -27,36 +28,36 @@ export class UserService {
    * Obtener todos los usuarios gestionados por el tutor actual
    */
   getManagedUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.apiUrl}/managed`);
+    return this.http.get<User[]>(`${environment.apiUrl}/users/managed`);
   }
 
   /**
    * Obtener un usuario específico por ID
    */
-  getUser(id: number): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/${id}`);
+  getUser(id: string): Observable<User> {
+    return this.http.get<User>(`${environment.apiUrl}/users/${id}`);
   }
 
   /**
    * Actualizar un usuario
    */
-  updateUser(id: number, userData: Partial<User>): Observable<User> {
-    return this.http.put<User>(`${this.apiUrl}/${id}`, userData);
+  updateUser(id: string, userData: Partial<User>): Observable<User> {
+    return this.http.put<User>(`${environment.apiUrl}/users/${id}`, userData);
   }
 
   /**
    * Eliminar un usuario
    */
-  deleteUser(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  deleteUser(id: string): Observable<void> {
+    return this.http.delete<void>(`${environment.apiUrl}/users/${id}`);
   }
 
   /**
    * Resetear contraseña de un usuario
    */
-  resetPassword(id: number): Observable<{ newPassword: string }> {
+  resetPassword(id: string): Observable<{ newPassword: string }> {
     return this.http.post<{ newPassword: string }>(
-      `${this.apiUrl}/${id}/reset-password`,
+      `${environment.apiUrl}/users/${id}/reset-password`,
       {}
     );
   }

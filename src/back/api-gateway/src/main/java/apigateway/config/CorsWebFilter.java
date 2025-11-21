@@ -37,7 +37,7 @@ public class CorsWebFilter implements WebFilter {
 
         String origin = request.getHeaders().getOrigin();
 
-        if (origin != null && origin.endsWith(front) || origin.equals("capacitor://localhost")) {
+        if (origin != null && (origin.endsWith(front) || origin.equals("capacitor://localhost"))) {
             headers.add("Access-Control-Allow-Origin", origin);
             headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
             headers.add("Access-Control-Allow-Headers", "*");

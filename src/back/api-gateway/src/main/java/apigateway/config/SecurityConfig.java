@@ -42,6 +42,7 @@ public class SecurityConfig {
 
                         .pathMatchers(HttpMethod.POST, "/auth/delete-request").authenticated()
                         .pathMatchers(HttpMethod.DELETE, "/auth/delete-account").authenticated()
+                        .pathMatchers(HttpMethod.POST, "/auth/create-user").authenticated()
 
                         .pathMatchers("/auth/**").permitAll()
 
