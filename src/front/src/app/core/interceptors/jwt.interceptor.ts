@@ -41,7 +41,9 @@ export class JwtInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
-          if (!request.url.includes('/delete-account') && !request.url.includes('/deleteAccount')) {
+          // No hacer logout si es una petición de cambio de contraseña o eliminación de cuenta
+          // ya que el 401 en estos casos es por validación de credenciales, no por token expirado
+          if (!request.url.includes('/delete-account') && !request.url.includes('/deleteAccount') && !request.url.includes('/change-password')) {
             this.authService.logout();
             this.router.navigate(['/login'], {
               queryParams: { expired: 'true' }

@@ -248,4 +248,64 @@ public class AuthController {
         CreateUserResponseDto credentials = authService.createUser(request, userId);
         return ResponseEntity.created(URI.create("/user/profile/" + credentials.idUser())).body(credentials);
     }
+
+    @Operation(
+            summary = "Cambiar datos de una cuenta",
+            description = "Cambia los datos de una cuenta y los guarda en la base de datos",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Cambio de datos exitosos"
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Petición inválida o parámetros incorrectos"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Usuario o lenguaje no encontrado"
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Error interno del servidor"
+                    )
+            }
+    )
+    @PutMapping("/edit-profile")
+    public ResponseEntity<?> editProfile(@RequestHeader("X-User-ID") String userId, @Valid @RequestBody EditProfileRequestDto request) {
+        authService.editProfile(userId, request);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(
+            summary = "Cambiar contraseña",
+            description = "Cambia la contraseña del usuario verificando que la anterior sea correcta",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Cambio de contraseña exitoso"
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Petición inválida o parámetros incorrectos"
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Contraseña anterior incorrecta"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Usuario no encontrado"
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Error interno del servidor"
+                    )
+            }
+    )
+    @PutMapping("/change-password")
+    public ResponseEntity<?> changePassword(@RequestHeader("X-User-ID") String userId, @Valid @RequestBody ChangePasswordRequestDto request) {
+        authService.changePassword(userId, request);
+        return ResponseEntity.ok().build();
+    }
 }

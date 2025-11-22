@@ -1,6 +1,7 @@
 package authservice.service;
 
 import authservice.dto.*;
+import authservice.entity.Language;
 import authservice.entity.UserRelation;
 import authservice.event.UserDeleteRequestEvent;
 import authservice.event.UserRecoveryAccountEvent;
@@ -9,10 +10,12 @@ import authservice.exception.*;
 import authservice.kafka.KafkaEventPublisher;
 import authservice.mapper.UserMapper;
 import authservice.entity.User;
+import authservice.repository.LanguageRepository;
 import authservice.repository.UserRelationRepository;
 import authservice.repository.UserRepository;
 import authservice.utils.JwtUtils;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,6 +36,7 @@ public class AuthService {
     private final KafkaEventPublisher eventPublisher;
     private final JwtUtils jwtUtils;
     private final PasswordEncoder passwordEncoder;
+    private final LanguageRepository languageRepository;
 
     /**
      * Autentica usuario y genera token JWT
@@ -195,6 +199,73 @@ public class AuthService {
             case "TUTOR" -> createUserDependent(request, currentUser);
             default -> throw new UserNotTutorException("Usuario no válido por su rol");
         };
+    }
+
+    /**
+     * Metodo para editar el perfil que se le pase por el request o el perfil propio si no viene ninguno.
+     */
+    @Transactional
+    public void editProfile(String userId, EditProfileRequestDto request) {
+        User currentUser = userRepository.findById(UUID.fromString(userId))
+                .orElseThrow(() -> new UserNotFoundException("Usuario actual no encontrado"));
+
+        User userToEdit;
+
+        if (request.userId() != null){
+            userToEdit = userRepository.findById(request.userId())
+                    .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
+        } else {
+            userToEdit = currentUser;
+        }
+
+        switch (currentUser.getRol().getName()) {
+            case "ADMIN" -> {
+                editAndSave(userToEdit, request);
+            }
+            case "TUTOR" -> {
+                if (!(userToEdit.getId().equals(currentUser.getId()) ||
+                        userToEdit.getTutors().getId().equals(currentUser.getId()))) {
+                    throw new UserNotTutorException("Usuario no válido por su rol");
+                }
+                editAndSave(userToEdit, request);
+            }
+            default -> throw new UserNotTutorException("Usuario no válido por su rol");
+        }
+    }
+
+    /**
+     * Metodo privado que nos permite, en caso de que haya datos, editar y guardar nuestro
+     * usuario en la base de datos.
+     */
+    private void editAndSave(User userToEdit, EditProfileRequestDto request) {
+        if (request.email() != null) userToEdit.setEmail(request.email());
+        if (request.name() != null) userToEdit.setName(request.name());
+        if (request.language() != null) {
+            Language language = languageRepository.findById(request.language())
+                    .orElseThrow(() -> new RuntimeException("Idioma no encontrado"));
+            userToEdit.setLanguage(language);
+        }
+        userRepository.save(userToEdit);
+    }
+
+    /**
+     * Cambia la contraseña del usuario verificando que la anterior sea correcta
+     */
+    @Transactional
+    public void changePassword(String userId, ChangePasswordRequestDto request) {
+        User user = userRepository.findById(UUID.fromString(userId))
+                .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
+
+        if (!passwordEncoder.matches(request.oldPassword(), user.getPassword())) {
+            throw new PasswordNotCorrectException("La contraseña anterior no es correcta");
+        }
+
+        if (passwordEncoder.matches(request.newPassword(), user.getPassword())) {
+            throw new PasswordDuplicateException("La contraseña no puede ser la misma");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.newPassword()));
+        userRepository.save(user);
     }
 
     /**

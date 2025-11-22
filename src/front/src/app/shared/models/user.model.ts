@@ -6,6 +6,7 @@ export interface TokenPayload {
   name: string;
   email: string;
   role: UserRole;
+  language?: string;
   iat: number;
   exp: number;
 }
@@ -18,6 +19,7 @@ export interface User {
   email: string;
   name: string;
   role: UserRole;
+  language?: string;
 }
 
 export enum UserRole {

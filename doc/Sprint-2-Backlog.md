@@ -60,7 +60,7 @@ Al finalizar este Sprint, debería tener:
 - [ ] **G01**: Crear `board-service.sql`
 
 ### Auth-Service
-- [ ] **G02**: Modificación de datos de usuario
+- [x] **G02**: Modificación de datos de usuario
 - [x] **G03**: Eliminación de datos de usuario (baja)
 - [x] **G04**: Creación de usuarios dependientes
 - [ ] **G05**: Gestión de usuarios dependientes
@@ -127,6 +127,10 @@ Una historia se considera DONE cuando:
 - Creación tanto en el back como en el front de usuarios dependientes (via usuario tutor).
 - Cambio de infraestructura del servidor (cambié de equipo que hostea todo el servicio)
 
+**Día 4 (22/11)**:
+- Modificación de perfiles tanto para uno mismo como para dependientes.
+- Modificación de contraseñas para uno mismo.
+- Implementación tanto en el backend como en el front ya funcional.
 ---
 
 ## Métricas de Éxito

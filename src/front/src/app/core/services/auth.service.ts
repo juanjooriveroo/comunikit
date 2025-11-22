@@ -56,7 +56,8 @@ export class AuthService {
         id: payload.sub,
         email: payload.email,
         name: payload.name,
-        role: payload.role
+        role: payload.role,
+        language: payload.language
       };
     } catch (e) {
       console.error('Error al decodificar token:', e);
@@ -262,6 +263,40 @@ export class AuthService {
     return this.http.delete(url, {
       body: deleteData
     }).pipe(
+      catchError((error) => {
+        return throwError(() => error);
+      })
+    );
+  }
+
+  /**
+   * Editar perfil del usuario actual o de un usuario dependiente
+   */
+  editProfile(profileData: { name?: string; email?: string; language?: string; userId?: string }): Observable<any> {
+    const url = `${environment.apiUrl}/auth/edit-profile`;
+    return this.http.put(url, profileData).pipe(
+      tap(() => {
+        // Actualizar el usuario en memoria si se cambió algún dato
+        const currentUser = this.getCurrentUser();
+        if (currentUser) {
+          if (profileData.name) currentUser.name = profileData.name;
+          if (profileData.email) currentUser.email = profileData.email;
+          if (profileData.language) currentUser.language = profileData.language;
+          this.currentUserSubject.next(currentUser);
+        }
+      }),
+      catchError((error) => {
+        return throwError(() => error);
+      })
+    );
+  }
+
+  /**
+   * Cambiar contraseña del usuario actual
+   */
+  changePassword(passwordData: { oldPassword: string; newPassword: string }): Observable<any> {
+    const url = `${environment.apiUrl}/auth/change-password`;
+    return this.http.put(url, passwordData).pipe(
       catchError((error) => {
         return throwError(() => error);
       })
