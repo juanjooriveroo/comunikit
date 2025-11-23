@@ -17,12 +17,39 @@
   <div class="welcome-section" *ngIf="isAuthenticated">
     <h1>¡Hola, {{ currentUserName }}!</h1>
     <p class="tagline">Bienvenido a ComuniKIT</p>
-    <p class="description">Accede al dashboard para ver tus clases y comunicaciones.</p>
 
-    <div class="cta-buttons">
-      <button class="btn btn-primary" (click)="navigateToDashboard()">
-        Ir al Dashboard
-      </button>
+    <!-- Mostrar cuentas dependientes si es tutor -->
+    <div *ngIf="isTutor" class="dependents-section">
+      <h2>Mis Cuentas Dependientes</h2>
+
+      <div *ngIf="loadingDependents" class="loading-spinner">
+        <p>Cargando cuentas...</p>
+      </div>
+
+      <div *ngIf="!loadingDependents && dependentAccounts.length === 0" class="no-dependents">
+        <p>No tienes cuentas dependientes aún.</p>
+      </div>
+
+      <div class="dependents-grid" *ngIf="!loadingDependents && dependentAccounts.length > 0">
+        <div class="dependent-card" *ngFor="let account of dependentAccounts">
+          <div class="card-header">
+            <div class="avatar-placeholder">
+              {{ account.name.charAt(0).toUpperCase() }}
+            </div>
+          </div>
+          <div class="card-body">
+            <h3 class="dependent-name">{{ account.name }}</h3>
+            <p class="dependent-username">@{{ account.username }}</p>
+          </div>
+          <div class="card-footer">
+            <button class="btn btn-access" (click)="navigateToDependentDetail(account.id)">
+              Acceder
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <p class="description" *ngIf="!isTutor">Accede al dashboard para ver tus clases y comunicaciones.</p>
   </div>
 </div>

@@ -1,0 +1,50 @@
+<div class="modal-backdrop" *ngIf="isOpen" (click)="onBackdropClick($event)">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>⚠️ Eliminar Cuenta</h2>
+      <button class="btn-close" (click)="onCancel()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="warning-box">
+        <p class="warning-title">¡ATENCIÓN! Esta acción es irreversible</p>
+        <p>Estás a punto de eliminar la cuenta de <strong>{{ accountName }}</strong>.</p>
+      </div>
+
+      <div class="info-list">
+        <p><strong>Al eliminar esta cuenta:</strong></p>
+        <ul>
+          <li>Se perderán todos los datos asociados a la cuenta</li>
+          <li>Se eliminarán todos los pictogramas y contenidos</li>
+          <li>Se borrarán todas las configuraciones personalizadas</li>
+          <li>No será posible recuperar la información</li>
+        </ul>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Introduce la contraseña de {{ accountName }} para confirmar:</label>
+        <input
+          type="password"
+          id="password"
+          [(ngModel)]="password"
+          name="password"
+          class="form-control"
+          placeholder="Contraseña de la cuenta a eliminar"
+          required
+        >
+        <div *ngIf="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="onCancel()">
+        Cancelar
+      </button>
+      <button type="button" class="btn btn-danger" (click)="onConfirm()">
+        Eliminar Cuenta Definitivamente
+      </button>
+    </div>
+  </div>
+</div>

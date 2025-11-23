@@ -11,6 +11,7 @@ import { ChangePasswordComponent } from './features/auth/change-password/change-
 import { UserCreateComponent } from './features/auth/user-create/user-create.component';
 import { UserDependentProfileComponent } from './features/auth/user/dependent/profile/profile.component';
 import { HomeComponent } from './features/home/home.component';
+import { DependentDetailComponent } from './features/dependent-detail/dependent-detail.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { RoleGuard } from './core/guards/role.guard';
 import { UserRole } from './shared/models/user.model';
@@ -65,6 +66,12 @@ const routes: Routes = [
     path: 'user/profile/:id',
     component: UserDependentProfileComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'dependent-detail/:id',
+    component: DependentDetailComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { roles: [UserRole.TUTOR] }
   },
   {
     path: '**',

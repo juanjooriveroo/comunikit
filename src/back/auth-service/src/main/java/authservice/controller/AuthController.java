@@ -308,4 +308,60 @@ public class AuthController {
         authService.changePassword(userId, request);
         return ResponseEntity.ok().build();
     }
+
+    @Operation(
+            summary = "Obtener todas las cuentas dependientes",
+            description = "Obtienes el uuid, nombre, nombre de usuario de los perfiles dependientes a tu cuenta",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Obtención exitósa"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Usuario no encontrado"
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Error interno del servidor"
+                    )
+            }
+    )
+    @GetMapping("/get-dependents-accounts")
+    public ResponseEntity<?> getAllDependentsAccounts(@RequestHeader("X-User-ID") String userID) {
+        GetAllDependentsAccountsResponseDto response = authService.getAllDependentsAccounts(userID);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(
+            summary = "Obtener la cuenta dependiente solicitada",
+            description = "Obtienes la cuenta dependiente solicitada siempre y cuando tengas permiso para hacerlo",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Obtención exitósa"
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Petición inválida o parámetros incorrectos"
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Usuario no válido para la petición"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Usuario no encontrado"
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Error interno del servidor"
+                    )
+            }
+    )
+    @GetMapping("/get/{id}")
+    public ResponseEntity<?> getDependentAccount(@RequestHeader("X-User-ID") String userID, @PathVariable String id) {
+        DependentAccountDto response = authService.getDependentAccount(userID, id);
+        return ResponseEntity.ok(response);
+    }
 }

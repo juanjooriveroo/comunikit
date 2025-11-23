@@ -52,11 +52,11 @@ Al finalizar este Sprint, debería tener:
 
 #### Criterios de Aceptación
 - [x] **AC1**: Existe un formulario de creación con campos: nombre, idioma
-- [ ] **AC2**: El sistema genera automáticamente una contraseña segura
+- ~~[x] **AC2**: El sistema genera automáticamente una contraseña segura~~
 - [ ] **AC3**: Se crea un tablero personal asociado al usuario
 - [ ] **AC4**: El tablero se clona del tablero público del idioma seleccionado
-- [ ] **AC5**: El tutor que crea el usuario queda asignado automáticamente
-- [ ] **AC6**: Se asigna un límite de 50MB de almacenamiento (campo `storage_used` inicializado a 0)
+- [x] **AC5**: El tutor que crea el usuario queda asignado automáticamente
+- [x] **AC6**: Se asigna un límite de 50MB de almacenamiento (campo `storage_used` inicializado a 0)
 - [x] **AC7**: Solo usuarios con rol TUTOR pueden acceder a este endpoint
 - [x] **AC8**: El formulario cumple WCAG 2.1 AA
 

@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+import java.util.UUID;
+
 @Schema(description = "Request para cambiar contraseña verificando la anterior")
 public record ChangePasswordRequestDto (
         @Schema(
@@ -25,5 +27,13 @@ public record ChangePasswordRequestDto (
         )
         @NotBlank(message = "La nueva contraseña es obligatoria")
         @Size(min = 8, message = "La contraseña debe tener al menos 8 caracteres")
-        String newPassword
+        String newPassword,
+
+        @Schema(
+                description = "UUID del usuario a editar su cuenta si procede",
+                example = "a81bc81b-dead-4e5d-abff-90865d1e13b1",
+                type = "UUID",
+                nullable = true
+        )
+        UUID userId
 ) {}

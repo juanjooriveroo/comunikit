@@ -1,0 +1,186 @@
+<div class="detail-container">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-section">
+    <h2>Cargando información...</h2>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="error-section">
+    <h2>{{ error }}</h2>
+    <button class="btn btn-secondary" (click)="goBack()">Volver</button>
+  </div>
+
+  <!-- Detalle de la cuenta -->
+  <div *ngIf="dependentAccount && !loading" class="detail-content">
+    <!-- Header -->
+    <div class="detail-header">
+      <button class="btn-back" (click)="goBack()">
+        ← Volver
+      </button>
+      <div class="header-info">
+        <div class="avatar-large">
+          {{ dependentAccount.name.charAt(0).toUpperCase() }}
+        </div>
+        <h1>{{ dependentAccount.name }}</h1>
+        <p class="username">@{{ dependentAccount.username }}</p>
+      </div>
+    </div>
+
+    <!-- Información de la cuenta -->
+    <div class="account-info-section">
+      <div class="info-card">
+        <h3>Información de la Cuenta</h3>
+        <div class="info-row">
+          <span class="info-label">Nombre:</span>
+          <span class="info-value">{{ dependentAccount.name }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Usuario:</span>
+          <span class="info-value">@{{ dependentAccount.username }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Idioma:</span>
+          <span class="info-value">{{ dependentAccount.language?.name || 'No especificado' }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Almacenamiento usado:</span>
+          <span class="info-value">{{ dependentAccount.storage_used !== null ? dependentAccount.storage_used + ' MB' : 'No disponible' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botones de acción principales -->
+    <div class="actions-section">
+      <h3>Acciones</h3>
+      <div class="actions-grid">
+        <button class="action-btn" (click)="toggleEditProfile()">
+          <span class="icon">✏️</span>
+          <span>Editar Perfil</span>
+        </button>
+        <button class="action-btn" (click)="toggleChangePassword()">
+          <span class="icon">🔒</span>
+          <span>Cambiar Contraseña</span>
+        </button>
+        <button class="action-btn action-btn-secondary" (click)="openDashboard()">
+          <span class="icon">📊</span>
+          <span>Tablero</span>
+        </button>
+        <button class="action-btn action-btn-secondary" (click)="openPictograms()">
+          <span class="icon">🖼️</span>
+          <span>Pictogramas y Secciones</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Formulario de editar perfil -->
+    <div *ngIf="isEditingProfile" class="form-section">
+      <div class="form-card">
+        <h3>Editar Perfil</h3>
+        <form (ngSubmit)="saveProfile()">
+          <div class="form-group">
+            <label for="name">Nombre completo:</label>
+            <input
+              type="text"
+              id="name"
+              [(ngModel)]="editForm.name"
+              name="name"
+              required
+              class="form-control"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="language">Idioma:</label>
+            <select
+              id="language"
+              [(ngModel)]="editForm.language"
+              name="language"
+              required
+              class="form-control"
+            >
+              <option value="es">Español</option>
+              <option value="en">Inglés</option>
+              <option value="fr">Francés</option>
+              <option value="de">Alemán</option>
+              <option value="pt">Portugués</option>
+            </select>
+          </div>
+
+          <div *ngIf="editMessage" class="message" [class.success]="editMessage.includes('correctamente')" [class.error]="editMessage.includes('Error')">
+            {{ editMessage }}
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            <button type="button" class="btn btn-secondary" (click)="toggleEditProfile()">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Formulario de cambiar contraseña -->
+    <div *ngIf="isChangingPassword" class="form-section">
+      <div class="form-card">
+        <h3>Cambiar Contraseña</h3>
+        <form (ngSubmit)="changePassword()">
+          <div class="form-group">
+            <label for="oldPassword">Contraseña anterior:</label>
+            <input
+              type="password"
+              id="oldPassword"
+              [(ngModel)]="passwordForm.oldPassword"
+              name="oldPassword"
+              required
+              class="form-control"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="newPassword">Nueva contraseña:</label>
+            <input
+              type="password"
+              id="newPassword"
+              [(ngModel)]="passwordForm.newPassword"
+              name="newPassword"
+              required
+              minlength="8"
+              class="form-control"
+            >
+            <small class="form-hint">Mínimo 8 caracteres</small>
+          </div>
+
+          <div *ngIf="passwordMessage" class="message" [class.success]="passwordMessage.includes('correctamente')" [class.error]="passwordMessage.includes('Error') || passwordMessage.includes('completa') || passwordMessage.includes('incorrecta')">
+            {{ passwordMessage }}
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Cambiar Contraseña</button>
+            <button type="button" class="btn btn-secondary" (click)="toggleChangePassword()">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Sección de eliminación de cuenta -->
+    <div class="danger-zone">
+      <h3>Zona de Peligro</h3>
+      <p class="danger-description">Una vez que elimines esta cuenta, no hay vuelta atrás. Por favor, ten en cuenta esto.</p>
+
+      <div *ngIf="deleteMessage" class="message" [class.success]="deleteMessage.includes('correctamente')" [class.error]="deleteMessage.includes('Error') || deleteMessage.includes('Verifica')">
+        {{ deleteMessage }}
+      </div>
+
+      <button class="btn btn-danger-outlined" (click)="openDeleteModal()">
+        🗑️ Eliminar Cuenta Definitivamente
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de confirmación de eliminación -->
+<app-confirm-delete-modal
+  [isOpen]="showDeleteModal"
+  [accountName]="dependentAccount?.name || ''"
+  (confirm)="confirmDelete($event)"
+  (cancel)="closeDeleteModal()"
+></app-confirm-delete-modal>

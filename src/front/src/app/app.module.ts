@@ -22,6 +22,9 @@ import { HomeComponent } from './features/home/home.component';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { DeleteAccountModalComponent } from './shared/components/delete-account-modal/delete-account-modal.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { DependentAccountsComponent } from './features/dependent-accounts/dependent-accounts.component';
+import { DependentDetailComponent } from './features/dependent-detail/dependent-detail.component';
+import { ConfirmDeleteModalComponent } from './shared/components/confirm-delete-modal/confirm-delete-modal.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +41,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     UserDependentProfileComponent,
     HomeComponent,
     NavbarComponent,
-    DeleteAccountModalComponent
+    DeleteAccountModalComponent,
+    DependentAccountsComponent,
+    DependentDetailComponent,
+    ConfirmDeleteModalComponent
   ],
   imports: [
     BrowserModule,

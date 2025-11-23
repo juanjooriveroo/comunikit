@@ -1,6 +1,7 @@
 package authservice.mapper;
 
 import authservice.dto.CreateUserRequestDto;
+import authservice.dto.DependentAccountDto;
 import authservice.dto.RegisterRequestDto;
 import authservice.entity.Language;
 import authservice.entity.Rol;
@@ -73,5 +74,25 @@ public class UserMapper {
         String username = firstInitial + firstSurname;
         long counts = userRepository.countUserByUsernameStartingWith(username);
         return username + String.format("%02d", counts + 1);
+    }
+
+    public DependentAccountDto toDto(User dependentAccount) {
+        return DependentAccountDto.builder()
+                .id(dependentAccount.getId())
+                .name(dependentAccount.getName())
+                .username(dependentAccount.getUsername())
+                .language(dependentAccount.getLanguage())
+                .storage_used(dependentAccount.getStorage_used())
+                .build();
+    }
+
+    public DependentAccountDto toDtoDependentList(User dependentAccount) {
+        return DependentAccountDto.builder()
+                .id(dependentAccount.getId())
+                .name(dependentAccount.getName())
+                .username(dependentAccount.getUsername())
+                .language(null)
+                .storage_used(null)
+                .build();
     }
 }

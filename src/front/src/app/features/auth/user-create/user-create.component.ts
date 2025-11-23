@@ -98,8 +98,8 @@ export class UserCreateComponent implements OnInit {
 
     this.userService.createUser(createUserRequest).subscribe({
       next: (response) => {
-        // Redirigir inmediatamente al perfil del usuario dependiente
-        this.router.navigate(['/user/profile', response.idUser]);
+        // Redirigir inmediatamente a la página de detalle del usuario dependiente
+        this.router.navigate(['/dependent-detail', response.idUser]);
       },
       error: (error) => {
         this.loading = false;

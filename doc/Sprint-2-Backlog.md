@@ -63,7 +63,7 @@ Al finalizar este Sprint, debería tener:
 - [x] **G02**: Modificación de datos de usuario
 - [x] **G03**: Eliminación de datos de usuario (baja)
 - [x] **G04**: Creación de usuarios dependientes
-- [ ] **G05**: Gestión de usuarios dependientes
+- [x] **G05**: Gestión de usuarios dependientes
 
 ### Notification-Service
 - [x] **G06**: Confirmación por email de eliminación de datos de usuario (baja)
@@ -131,6 +131,11 @@ Una historia se considera DONE cuando:
 - Modificación de perfiles tanto para uno mismo como para dependientes.
 - Modificación de contraseñas para uno mismo.
 - Implementación tanto en el backend como en el front ya funcional.
+
+**Día 5 (23/11)**:
+- Gestión de cuentas dependientes (visualizar los perfiles creados, editar sus datos o eliminarlos)
+- Modificación del backend para adaptar los endpoints de borrado de cuenta y edición de cuenta a uso tanto propio como de cuentas derivadas
+- Añadimos los endpoints de auth-services que necesitan estar autenticados al gateway como necesarios de autenticación (devuelve 401 si no pasas token los que requieren de usuario)
 ---
 
 ## Métricas de Éxito

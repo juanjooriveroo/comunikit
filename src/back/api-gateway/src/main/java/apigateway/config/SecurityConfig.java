@@ -43,6 +43,10 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.POST, "/auth/delete-request").authenticated()
                         .pathMatchers(HttpMethod.DELETE, "/auth/delete-account").authenticated()
                         .pathMatchers(HttpMethod.POST, "/auth/create-user").authenticated()
+                        .pathMatchers(HttpMethod.PUT, "/auth/edit-profile").authenticated()
+                        .pathMatchers(HttpMethod.PUT, "/auth/change-password").authenticated()
+                        .pathMatchers(HttpMethod.GET, "/auth/get/{id}").authenticated()
+                        .pathMatchers(HttpMethod.GET, "/auth/get-dependents-accounts").authenticated()
 
                         .pathMatchers("/auth/**").permitAll()
 

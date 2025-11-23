@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.UUID;
 
 /**
@@ -167,14 +168,33 @@ public class AuthService {
      */
     @Transactional
     public void deleteAccount(DeleteAccountRequestDto request, String userId) {
-        User user = userRepository.findById(UUID.fromString(userId))
+        User currentUser = userRepository.findById(UUID.fromString(userId))
                 .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
 
-        if (!passwordEncoder.matches(request.password(), user.getPassword())) {
+        User userToEdit;
+
+        if (request.userId() != null){
+            userToEdit = userRepository.findById(request.userId())
+                    .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
+
+            if (!userToEdit.getTutors().getId().equals(currentUser.getId())) {
+                throw new UserNotTutorException("Usuario no válido por su rol");
+            }
+        } else {
+            userToEdit = currentUser;
+        }
+
+        if (!passwordEncoder.matches(request.password(), userToEdit.getPassword())) {
             throw new PasswordNotCorrectException("La contraseña introducida no es correcta");
         }
 
-        userRepository.delete(user);
+        // Eliminar todas las relaciones donde este usuario es dependiente
+        userRelationRepository.deleteByUser(userToEdit);
+        
+        // Eliminar todas las relaciones donde este usuario es tutor
+        userRelationRepository.deleteByTutor(userToEdit);
+        
+        userRepository.delete(userToEdit);
     }
 
     /**
@@ -253,19 +273,32 @@ public class AuthService {
      */
     @Transactional
     public void changePassword(String userId, ChangePasswordRequestDto request) {
-        User user = userRepository.findById(UUID.fromString(userId))
+        User currentUser = userRepository.findById(UUID.fromString(userId))
                 .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
 
-        if (!passwordEncoder.matches(request.oldPassword(), user.getPassword())) {
+        User userToEdit;
+
+        if (request.userId() != null){
+            userToEdit = userRepository.findById(request.userId())
+                    .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
+
+            if (!userToEdit.getTutors().getId().equals(currentUser.getId())) {
+                throw new UserNotTutorException("Usuario no válido por su rol");
+            }
+        } else {
+            userToEdit = currentUser;
+        }
+
+        if (!passwordEncoder.matches(request.oldPassword(), userToEdit.getPassword())) {
             throw new PasswordNotCorrectException("La contraseña anterior no es correcta");
         }
 
-        if (passwordEncoder.matches(request.newPassword(), user.getPassword())) {
+        if (passwordEncoder.matches(request.newPassword(), userToEdit.getPassword())) {
             throw new PasswordDuplicateException("La contraseña no puede ser la misma");
         }
 
-        user.setPassword(passwordEncoder.encode(request.newPassword()));
-        userRepository.save(user);
+        userToEdit.setPassword(passwordEncoder.encode(request.newPassword()));
+        userRepository.save(userToEdit);
     }
 
     /**
@@ -286,5 +319,29 @@ public class AuthService {
                 .username(savedUser.getUsername())
                 .idUser(savedUser.getId())
                 .build();
+    }
+
+    public GetAllDependentsAccountsResponseDto getAllDependentsAccounts(String userID) {
+        User currentUser = userRepository.findById(UUID.fromString(userID))
+                .orElseThrow(() -> new UserNotFoundException("Usuario actual no encontrado"));
+
+        GetAllDependentsAccountsResponseDto response = new GetAllDependentsAccountsResponseDto(new ArrayList<>());
+        currentUser.getDependents().forEach(dependentAccount -> {
+            response.accounts().add(userMapper.toDtoDependentList(dependentAccount));
+        });
+
+        return response;
+    }
+
+
+    public DependentAccountDto getDependentAccount(String userID, String id) {
+        User requestedUser = userRepository.findById(UUID.fromString(id))
+                .orElseThrow(() -> new UserNotFoundException("Usuario actual no encontrado"));
+
+        if (!requestedUser.getTutors().getId().equals(UUID.fromString(userID))) {
+            throw new UserNotTutorException("Usuario no válido por su rol");
+        }
+
+        return userMapper.toDto(requestedUser);
     }
 }
