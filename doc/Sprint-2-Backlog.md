@@ -136,6 +136,11 @@ Una historia se considera DONE cuando:
 - Gestión de cuentas dependientes (visualizar los perfiles creados, editar sus datos o eliminarlos)
 - Modificación del backend para adaptar los endpoints de borrado de cuenta y edición de cuenta a uso tanto propio como de cuentas derivadas
 - Añadimos los endpoints de auth-services que necesitan estar autenticados al gateway como necesarios de autenticación (devuelve 401 si no pasas token los que requieren de usuario)
+
+### Semana 2 (24/11 - 30/11)
+
+**Día 6 (28/11)**:
+- Fixeo que en movil no se ve las opciones de editar perfil y contraseña
 ---
 
 ## Métricas de Éxito

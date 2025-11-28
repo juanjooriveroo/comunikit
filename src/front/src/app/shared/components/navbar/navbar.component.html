@@ -93,7 +93,25 @@
             </ul>
           </li>
 
-          <li class="nav-item d-lg-none mt-1">
+          <li class="nav-item d-lg-none mt-3 border-top pt-3">
+            <a
+              class="nav-link"
+              routerLink="/auth/edit-profile"
+              (click)="isMenuOpen = false">
+              <i class="fa fa-edit me-2"></i>
+              Editar Perfil
+            </a>
+          </li>
+          <li class="nav-item d-lg-none">
+            <a
+              class="nav-link"
+              routerLink="/auth/change-password"
+              (click)="isMenuOpen = false">
+              <i class="fa fa-lock me-2"></i>
+              Cambiar Contraseña
+            </a>
+          </li>
+          <li class="nav-item d-lg-none">
             <button
               class="nav-link mobile-user-action text-danger"
               type="button"
