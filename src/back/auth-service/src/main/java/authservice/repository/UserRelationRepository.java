@@ -9,4 +9,5 @@ import java.util.UUID;
 public interface UserRelationRepository extends JpaRepository<UserRelation, UUID> {
     void deleteByUser(User user);
     void deleteByTutor(User tutor);
+    boolean existsByTutorIdAndUserId(UUID tutorId, UUID userId);
 }

@@ -89,10 +89,11 @@ services:
     labels:
       caddy: ${BACK_FQDN}
       caddy.reverse_proxy: "gateway:${PORT_GATEWAY}"
+      caddy.request_body.max_size: 10MB
     depends_on:
       - auth-service
       - notification-service
-#      - board-service
+      - board-service
 #      - admin-service
 #    ports:          #LOCAL TESTING  (COMENTAR PARA DEPLOY EN NUBE)
 #      - 50001:8080       #LOCAL TESTING  (COMENTAR PARA DEPLOY EN NUBE)
@@ -122,15 +123,28 @@ services:
       - postgres
     networks:
       - internal
+    restart: unless-stopped
 
   # BOARD-SERVICE OFRECE UN MICROSERVICIO DE GESTION DE TABLERO (CORE DE LA APP)
-#  board-service:
-#    build: ../src/back/board-service
-#    container_name: board-service
-#    expose:
-#      - "8082"
-#    networks:#
-#      - internal
+  board-service:
+    build: ../src/back/board-service
+    container_name: board-service
+    expose:
+      - "8082"
+    environment:
+      - PORT_BOARD=${PORT_BOARD}
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=board_service
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - KAFKA_CONSUMER_GROUP=notification-group
+      - AUTH_SERVICE_URL=${AUTH_SERVICE_URL}
+      - FQDN=${FQDN}
+    networks:
+      - internal
+    restart: unless-stopped
 
   # ADMIN-SERVICE BRINDA UN MICROSERVICIO PARA LOS ADMINS Y SUS GESTIONES
 #  admin-service:
@@ -162,6 +176,7 @@ services:
       - kafka
     networks:
       - internal
+    restart: unless-stopped
 
   # POSTGRESQL COMO BASE DE DATOS PARA LOS MICROSERVICIOS
   postgres:

@@ -364,4 +364,27 @@ public class AuthController {
         DependentAccountDto response = authService.getDependentAccount(userID, id);
         return ResponseEntity.ok(response);
     }
+
+    @Operation(
+            summary = "Validar relación tutor-dependiente",
+            description = "Valida si el tutorId tiene una relación con el dependentId",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Validación exitosa, devuelve true si existe la relación"
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Petición inválida o parámetros incorrectos"
+                    )
+            }
+    )
+    @GetMapping("/validate-relation")
+    public ResponseEntity<Boolean> validateRelation(
+            @RequestParam UUID tutorId,
+            @RequestParam UUID dependentId
+    ) {
+        boolean isValid = authService.validateUserRelation(tutorId, dependentId);
+        return ResponseEntity.ok(isValid);
+    }
 }

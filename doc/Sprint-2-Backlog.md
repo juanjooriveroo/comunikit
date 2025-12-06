@@ -30,11 +30,11 @@ Al finalizar este Sprint, debería tener:
 **Para** adaptarlos a las necesidades de mis usuarios
 
 #### Criterios de Aceptación
-- [ ] **AC1**: Upload de imágenes (PNG, JPG, JPEG)
-- [ ] **AC2**: Máximo 3MB por archivo
-- [ ] **AC3**: Validación de tipo MIME en backend
-- [ ] **AC4**: Conversión automática a BYTEA en PostgreSQL
-- [ ] **AC5**: Asociación de texto al pictograma
+- [x] **AC1**: Upload de imágenes (PNG, JPG, JPEG)
+- [x] **AC2**: Máximo 5MB por archivo
+- [x] **AC3**: Validación de tipo MIME en backend
+- [x] **AC4**: Conversión automática a BYTEA en PostgreSQL
+- [x] **AC5**: Asociación de texto al pictograma
 - [ ] **AC6**: Control de cuota de 50MB por cuenta
 - [ ] **AC7**: Componente de Angular para la subida de pictograma
 
@@ -57,7 +57,7 @@ Al finalizar este Sprint, debería tener:
 ## Tareas generales
 
 ### Docker & DevOps
-- [ ] **G01**: Crear `board-service.sql`
+- [x] **G01**: Crear `board-service.sql`
 
 ### Auth-Service
 - [x] **G02**: Modificación de datos de usuario
@@ -69,12 +69,12 @@ Al finalizar este Sprint, debería tener:
 - [x] **G06**: Confirmación por email de eliminación de datos de usuario (baja)
 
 ### Board-Service
-- [ ] **G07**: Crear proyecto `board-service`
-- [ ] **G08**: Creación de pictogramas
+- [x] **G07**: Crear proyecto `board-service`
+- [x] **G08**: Creación de pictogramas
 - [ ] **G09**: Modificación de pictogramas
 - [ ] **G10**: Creación de secciones
 - [ ] **G11**: Modificación de secciones
-- [ ] **G12**: Configurar Swagger/OpenAPI
+- [x] **G12**: Configurar Swagger/OpenAPI
 - [ ] **G13**: Documentar endpoints en Swagger
 
 ---
@@ -141,6 +141,18 @@ Una historia se considera DONE cuando:
 
 **Día 6 (28/11)**:
 - Fixeo que en movil no se ve las opciones de editar perfil y contraseña
+
+### Semana 3 (01/12 - 07/12)
+
+**Día 7 (06/12)**:
+- Añado permitir max 10mb a caddy para transferencia de imagenes
+- Creación de base de datos board-service.sql
+- Creación de microservicio board-service
+- Añadido el autodespliegue de contenedor de microservicios en caso de reinicio de server
+- Creación de entidades, repositorios, controlador, servicio, dto y configuracion de Swagger en board-service
+- Creación de endpoints de obtención de pictogramas y subidas de imagen y pictogramas y validación de relación de usuarios dependientes con su usuario tutor mediante auth-service y RestTemplate 
+- Creación de validación de usuarios tutor-dependiente en el auth-service
+- (TO DO: Validar propiedades de imagenes para crear pictogramas, añadir almacenamiento al usuario, validar almacenamiento para crear, documentar, tests)
 ---
 
 ## Métricas de Éxito

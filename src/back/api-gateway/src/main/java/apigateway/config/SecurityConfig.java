@@ -47,10 +47,12 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.PUT, "/auth/change-password").authenticated()
                         .pathMatchers(HttpMethod.GET, "/auth/get/{id}").authenticated()
                         .pathMatchers(HttpMethod.GET, "/auth/get-dependents-accounts").authenticated()
-
                         .pathMatchers("/auth/**").permitAll()
 
-                        .pathMatchers("/board/public/**").permitAll()
+                        .pathMatchers("/board/api-docs/**", "/board/api-docs/").permitAll()
+                        .pathMatchers("/board/swagger-ui.html", "/board/swagger-ui/**").permitAll()
+                        .pathMatchers("/board/**").authenticated()
+
                         .pathMatchers("/actuator/health", "/actuator/info").permitAll()
                         .pathMatchers("/documentacion", "/documentacion/**").permitAll()
                         .pathMatchers("/swagger-ui.html", "/swagger-ui/**").permitAll()

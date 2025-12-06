@@ -15,7 +15,6 @@ import authservice.repository.UserRelationRepository;
 import authservice.repository.UserRepository;
 import authservice.utils.JwtUtils;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -321,6 +320,7 @@ public class AuthService {
                 .build();
     }
 
+    @Transactional
     public GetAllDependentsAccountsResponseDto getAllDependentsAccounts(String userID) {
         User currentUser = userRepository.findById(UUID.fromString(userID))
                 .orElseThrow(() -> new UserNotFoundException("Usuario actual no encontrado"));
@@ -333,7 +333,7 @@ public class AuthService {
         return response;
     }
 
-
+    @Transactional
     public DependentAccountDto getDependentAccount(String userID, String id) {
         User requestedUser = userRepository.findById(UUID.fromString(id))
                 .orElseThrow(() -> new UserNotFoundException("Usuario actual no encontrado"));
@@ -343,5 +343,18 @@ public class AuthService {
         }
 
         return userMapper.toDto(requestedUser);
+    }
+
+    /**
+     * Valida si existe una relación tutor-dependiente entre dos usuarios
+     * @return true si existe la relación, false en caso contrario
+     */
+    @Transactional
+    public boolean validateUserRelation(UUID tutorId, UUID dependentId) {
+        if (tutorId.equals(dependentId)) {
+            return true;
+        }
+        
+        return userRelationRepository.existsByTutorIdAndUserId(tutorId, dependentId);
     }
 }
