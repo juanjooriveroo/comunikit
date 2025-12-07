@@ -42,6 +42,22 @@ public class Image {
     )
     private byte[] image;
 
+    @Column(name = "mime_type", nullable = false, length = 50)
+    @Schema(
+            description = "MIME type original de la imagen.",
+            example = "image/png",
+            nullable = false
+    )
+    private String mimeType;
+
+    @Column(name = "size_bytes", nullable = false)
+    @Schema(
+            description = "Tamaño de la imagen en bytes tras la compresión.",
+            example = "15324",
+            nullable = false
+    )
+    private long sizeBytes;
+
     @ManyToOne
     @JoinColumn(name = "language_code", nullable = false)
     @Schema(

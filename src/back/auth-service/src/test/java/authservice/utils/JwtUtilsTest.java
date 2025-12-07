@@ -2,6 +2,7 @@ package authservice.utils;
 
 import authservice.entity.User;
 import authservice.entity.Rol;
+import authservice.entity.Language;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,11 +34,16 @@ class JwtUtilsTest {
                 .name("USER")
                 .build();
 
+        Language testLanguage = new Language();
+        testLanguage.setCode("es");
+        testLanguage.setName("Español");
+
         testUser = User.builder()
                 .id(UUID.randomUUID())
                 .name("Test User")
                 .email("test@example.com")
                 .rol(testRole)
+                .language(testLanguage)
                 .build();
     }
 

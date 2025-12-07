@@ -38,6 +38,8 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final LanguageRepository languageRepository;
 
+    private float storageLimitMb = 50f;
+
     /**
      * Autentica usuario y genera token JWT
      */
@@ -50,7 +52,7 @@ public class AuthService {
             throw new PasswordNotCorrectException("La contraseña introducida no es correcta");
         }
 
-        if (user.getActivated().equals(false)) {
+        if (!user.getActivated()) {
             UserRegisteredEvent event = UserRegisteredEvent.builder()
                     .eventId(String.valueOf(UUID.randomUUID()))
                     .userId(user.getId().toString())
@@ -76,17 +78,17 @@ public class AuthService {
     public RegisterResponseDto register(RegisterRequestDto request) {
         User user = userMapper.toEntityFromRegisterRequest(request);
 
+        User savedUser = userRepository.save(user);
+
         UserRegisteredEvent event = UserRegisteredEvent.builder()
                 .eventId(String.valueOf(UUID.randomUUID()))
-                .userId(user.getId().toString())
-                .email(user.getEmail())
-                .username(user.getName())
+                .userId(savedUser.getId().toString())
+                .email(savedUser.getEmail())
+                .username(savedUser.getName())
                 .timestamp(LocalDateTime.now())
                 .build();
 
         eventPublisher.publishUserRegistered(event);
-
-        userRepository.save(user);
 
         return RegisterResponseDto.builder()
                 .request(true)
@@ -176,21 +178,21 @@ public class AuthService {
             userToEdit = userRepository.findById(request.userId())
                     .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
 
-            if (!userToEdit.getTutors().getId().equals(currentUser.getId())) {
+            if (userToEdit.getTutors() == null || !userToEdit.getTutors().getId().equals(currentUser.getId())) {
                 throw new UserNotTutorException("Usuario no válido por su rol");
             }
         } else {
             userToEdit = currentUser;
         }
 
-        if (!passwordEncoder.matches(request.password(), userToEdit.getPassword())) {
+        User passwordOwner = (userToEdit.getId().equals(currentUser.getId())) ? userToEdit : currentUser;
+
+        if (!passwordEncoder.matches(request.password(), passwordOwner.getPassword())) {
             throw new PasswordNotCorrectException("La contraseña introducida no es correcta");
         }
 
-        // Eliminar todas las relaciones donde este usuario es dependiente
         userRelationRepository.deleteByUser(userToEdit);
         
-        // Eliminar todas las relaciones donde este usuario es tutor
         userRelationRepository.deleteByTutor(userToEdit);
         
         userRepository.delete(userToEdit);
@@ -242,8 +244,9 @@ public class AuthService {
                 editAndSave(userToEdit, request);
             }
             case "TUTOR" -> {
-                if (!(userToEdit.getId().equals(currentUser.getId()) ||
-                        userToEdit.getTutors().getId().equals(currentUser.getId()))) {
+                boolean isSelf = userToEdit.getId().equals(currentUser.getId());
+                boolean isDependentOfTutor = userToEdit.getTutors() != null && userToEdit.getTutors().getId().equals(currentUser.getId());
+                if (!(isSelf || isDependentOfTutor)) {
                     throw new UserNotTutorException("Usuario no válido por su rol");
                 }
                 editAndSave(userToEdit, request);
@@ -281,7 +284,7 @@ public class AuthService {
             userToEdit = userRepository.findById(request.userId())
                     .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
 
-            if (!userToEdit.getTutors().getId().equals(currentUser.getId())) {
+            if (userToEdit.getTutors() == null || !userToEdit.getTutors().getId().equals(currentUser.getId())) {
                 throw new UserNotTutorException("Usuario no válido por su rol");
             }
         } else {
@@ -320,6 +323,9 @@ public class AuthService {
                 .build();
     }
 
+    /**
+     * Método para obtener todos los usuarios dependientes de un tutor
+     */
     @Transactional
     public GetAllDependentsAccountsResponseDto getAllDependentsAccounts(String userID) {
         User currentUser = userRepository.findById(UUID.fromString(userID))
@@ -333,6 +339,9 @@ public class AuthService {
         return response;
     }
 
+    /**
+     * Método que permite tras verificaciones obtener una cuenta dependiente y sus datos
+     */
     @Transactional
     public DependentAccountDto getDependentAccount(String userID, String id) {
         User requestedUser = userRepository.findById(UUID.fromString(id))
@@ -352,9 +361,31 @@ public class AuthService {
     @Transactional
     public boolean validateUserRelation(UUID tutorId, UUID dependentId) {
         if (tutorId.equals(dependentId)) {
-            return true;
+            return false;
         }
         
         return userRelationRepository.existsByTutorIdAndUserId(tutorId, dependentId);
+    }
+
+    /**
+     * Valida si un usuario puede almacenar bytesToAdd adicionales sin superar el límite
+     */
+    @Transactional
+    public StorageValidationResponseDto validateStorage(UUID ownerId, long bytesToAdd) {
+        User user = userRepository.findById(ownerId)
+                .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
+
+        float currentUsed = user.getStorage_used() == null ? 0F : user.getStorage_used();
+        float storageTotal = currentUsed + bytesToMb(bytesToAdd);
+
+        if (storageTotal > storageLimitMb && bytesToAdd > 0) {
+            throw new StorageLimitExceededException("Límite de almacenamiento excedido");
+        }
+
+        return new StorageValidationResponseDto(storageTotal <= storageLimitMb ? true : false);
+    }
+
+    private float bytesToMb(long bytes) {
+        return bytes / 1024F / 1024F;
     }
 }

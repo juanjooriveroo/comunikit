@@ -4,7 +4,6 @@ import authservice.dto.*;
 import authservice.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,30 +26,30 @@ public class AuthController {
 
     @Operation(
             summary = "Login de usuario",
-            description = "Autentica un usuario y devuelve un token JWT"
+            description = "Autentica un usuario y devuelve un token JWT",
+            responses = {
+                    @ApiResponse(
+                        responseCode = "200",
+                        description = "Logueo exitoso, devuelve token"
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Petición inválida o parámetros incorrectos"
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "No autenticado o credenciales inválidas"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Usuario no encontrado"
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Error interno del servidor"
+                    )
+            }
     )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Logueo exitoso, devuelve token"
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Petición inválida o parámetros incorrectos"
-            ),
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "No autenticado o credenciales inválidas"
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Usuario no encontrado"
-            ),
-            @ApiResponse(
-                    responseCode = "500",
-                    description = "Error interno del servidor"
-            )
-    })
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto request) {
         TokenResponseDto response = authService.login(request);
@@ -59,26 +58,26 @@ public class AuthController {
 
     @Operation(
             summary = "Registro de usuario",
-            description = "Registra un usuario y devuelve un ok si se envió el correo de verificación"
+            description = "Registra un usuario y devuelve un ok si se envió el correo de verificación",
+            responses = {
+                    @ApiResponse(
+                        responseCode = "200",
+                        description = "Registro exitoso, devuelve true si se envió email de confirmación"
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Petición inválida o parámetros incorrectos"
+                    ),
+                    @ApiResponse(
+                            responseCode = "409",
+                            description = "Conflicto de datos (duplicados, estado inválido, etc.)"
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Error interno del servidor"
+                    )
+            }
     )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Registro exitoso, devuelve true si se envió email de confirmación"
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Petición inválida o parámetros incorrectos"
-            ),
-            @ApiResponse(
-                    responseCode = "409",
-                    description = "Conflicto de datos (duplicados, estado inválido, etc.)"
-            ),
-            @ApiResponse(
-                    responseCode = "500",
-                    description = "Error interno del servidor"
-            )
-    })
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequestDto request) {
         RegisterResponseDto response = authService.register(request);
@@ -223,26 +222,26 @@ public class AuthController {
 
     @Operation(
             summary = "Creación de usuario dependiente",
-            description = "Registra un usuario dependiente a la cuenta con la que se crea"
+            description = "Registra un usuario dependiente a la cuenta con la que se crea",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Registro exitoso, devuelve las nuevas credenciales creadas de acceso"
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Petición inválida por parámetros incorrectos o rol de usuario no correcto"
+                    ),
+                    @ApiResponse(
+                            responseCode = "409",
+                            description = "Conflicto de datos (duplicados, estado inválido, etc.)"
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Error interno del servidor"
+                    )
+            }
     )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Registro exitoso, devuelve las nuevas credenciales creadas de acceso"
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Petición inválida por parámetros incorrectos o rol de usuario no correcto"
-            ),
-            @ApiResponse(
-                    responseCode = "409",
-                    description = "Conflicto de datos (duplicados, estado inválido, etc.)"
-            ),
-            @ApiResponse(
-                    responseCode = "500",
-                    description = "Error interno del servidor"
-            )
-    })
     @PostMapping("/create-user")
     public ResponseEntity<?> createUser(@RequestHeader("X-User-ID") String userId, @Valid @RequestBody CreateUserRequestDto request) {
         CreateUserResponseDto credentials = authService.createUser(request, userId);
@@ -386,5 +385,31 @@ public class AuthController {
     ) {
         boolean isValid = authService.validateUserRelation(tutorId, dependentId);
         return ResponseEntity.ok(isValid);
+    }
+    @Operation(
+            summary = "Validar límite de almacenamiento",
+            description = "Comprueba si el usuario puede almacenar los bytes solicitados sin exceder su límite",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Validación exitosa"
+                    ),
+                    @ApiResponse(
+                            responseCode = "409",
+                            description = "El límite de almacenamiento sería superado"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Usuario no encontrado"
+                    )
+            }
+    )
+    @PostMapping("/storage/validate")
+    public ResponseEntity<?> validateStorage(
+            @RequestHeader("X-User-ID") String requesterId,
+            @RequestBody StorageValidationRequestDto request
+    ) {
+        StorageValidationResponseDto response = authService.validateStorage(request.ownerId(),request.bytesToAdd());
+        return ResponseEntity.ok(response);
     }
 }

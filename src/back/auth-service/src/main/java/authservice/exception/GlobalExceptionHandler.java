@@ -76,6 +76,17 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
+    @ExceptionHandler(StorageLimitExceededException.class)
+    @ApiResponse(
+            responseCode = "409",
+            description = "El archivo supera el límite permitido",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ApiErrorResponse.class))
+    )
+    public ResponseEntity<ApiErrorResponse> storageLimitExceeded(StorageLimitExceededException ex) {
+        return buildErrorResponse(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ApiResponse(
             responseCode = "400",

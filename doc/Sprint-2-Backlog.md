@@ -35,7 +35,7 @@ Al finalizar este Sprint, debería tener:
 - [x] **AC3**: Validación de tipo MIME en backend
 - [x] **AC4**: Conversión automática a BYTEA en PostgreSQL
 - [x] **AC5**: Asociación de texto al pictograma
-- [ ] **AC6**: Control de cuota de 50MB por cuenta
+- [x] **AC6**: Control de cuota de 50MB por cuenta
 - [ ] **AC7**: Componente de Angular para la subida de pictograma
 
 ### HU04 - Creación de secciones privadas
@@ -71,11 +71,11 @@ Al finalizar este Sprint, debería tener:
 ### Board-Service
 - [x] **G07**: Crear proyecto `board-service`
 - [x] **G08**: Creación de pictogramas
-- [ ] **G09**: Modificación de pictogramas
+- [x] **G09**: Modificación de pictogramas
 - [ ] **G10**: Creación de secciones
 - [ ] **G11**: Modificación de secciones
 - [x] **G12**: Configurar Swagger/OpenAPI
-- [ ] **G13**: Documentar endpoints en Swagger
+- [x] **G13**: Documentar endpoints en Swagger
 
 ---
 
@@ -153,6 +153,16 @@ Una historia se considera DONE cuando:
 - Creación de endpoints de obtención de pictogramas y subidas de imagen y pictogramas y validación de relación de usuarios dependientes con su usuario tutor mediante auth-service y RestTemplate 
 - Creación de validación de usuarios tutor-dependiente en el auth-service
 - (TO DO: Validar propiedades de imagenes para crear pictogramas, añadir almacenamiento al usuario, validar almacenamiento para crear, documentar, tests)
+
+**Día 8 (07/12)**:
+- Creación la validación de propiedad de imagen para crear pictograma para usuario dependiente
+- Creación con Kafka mensaje y consumidor para actualizar el almacenamiento de la cuenta una vez se le ha subido la imagen
+- Creación con RestTemplate en auth-service endpoint para verificar si la nueva imagen a subir no supera el limite
+- Refactorizo toda la lógica de verificación de tipo MIME, compresión y almacenamiento de las imagenes
+- Documento todos los endpoints, schemas y métodos
+- Creación de nuevos endpoints de edición, eliminación y obtención de imagenes y pictogramas
+- Genero tests de los nuevos endpoints creados hasta ahora (tanto en board-service como en auth-service, con el objetivo de cubrir todos los errores)
+
 ---
 
 ## Métricas de Éxito

@@ -31,5 +31,23 @@ public record ImageDto (
         @Schema(
                 description = "Idioma asociado a la imagen.",
                 nullable = false
-        ) Language language
+        ) Language language,
+
+        @Schema(
+                description = "MIME type original de la imagen.",
+                example = "image/png",
+                nullable = false
+        ) String mimeType,
+
+        @Schema(
+                description = "Tamaño de la imagen en bytes tras la compresión.",
+                example = "15324",
+                nullable = false
+        ) long sizeBytes,
+
+        @Schema(
+                description = "Si la imagen es pública o no.",
+                example = "false",
+                nullable = false
+        ) boolean isPublic
 ){}

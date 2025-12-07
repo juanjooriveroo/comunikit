@@ -17,6 +17,8 @@ CREATE TABLE image (
     id UUID PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     image BYTEA NOT NULL,
+    mime_type VARCHAR(50) NOT NULL,
+    size_bytes BIGINT NOT NULL,
     language_code CHAR(2) NOT NULL REFERENCES language(code),
     owner_id UUID NOT NULL,
     public BOOLEAN NOT NULL DEFAULT FALSE

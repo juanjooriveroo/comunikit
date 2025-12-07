@@ -3,7 +3,8 @@ package boardservice.mapper;
 import boardservice.dto.PictogramDto;
 import boardservice.dto.PictogramPushRequestDto;
 import boardservice.entity.Pictogram;
-import boardservice.repository.ImageRepository;
+import boardservice.entity.Image;
+import boardservice.exception.LanguageNotFoundException;
 import boardservice.repository.LanguageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -14,9 +15,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PictogramMapper {
 
-    private final ImageMapper imageMapper;
-    private final ImageRepository imageRepository;
-    private final LanguageRepository languageRepository;
+        private final ImageMapper imageMapper;
+        private final LanguageRepository languageRepository;
 
     public PictogramDto toDto(Pictogram pictogram){
         return PictogramDto.builder()
@@ -27,15 +27,14 @@ public class PictogramMapper {
                 .build();
     }
 
-    public Pictogram create(PictogramPushRequestDto request) {
+        public Pictogram create(PictogramPushRequestDto request, Image image) {
         return Pictogram.builder()
                 .id(UUID.randomUUID())
                 .ownerId(request.ownerId())
-                .image(imageRepository.findById(request.imageId())
-                        .orElseThrow(() -> new RuntimeException("Image no encontrada")))
+                                .image(image)
                 .name(request.name())
                 .language(languageRepository.findByCode(request.language())
-                        .orElseThrow(() -> new RuntimeException("Lenguaje no encontrado")))
+                        .orElseThrow(() -> new LanguageNotFoundException("Lenguaje no encontrado")))
                 .build();
     }
 }
