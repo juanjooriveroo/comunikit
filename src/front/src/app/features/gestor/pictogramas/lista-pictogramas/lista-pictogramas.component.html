@@ -1,0 +1,44 @@
+<div *ngIf="loading" class="alert alert-info">
+  <span class="spinner-border spinner-border-sm me-2"></span>Cargando pictogramas...
+</div>
+
+<div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+  {{ error }}
+</div>
+
+<div *ngIf="!loading && pictogramas.length > 0" class="row g-3">
+  <div *ngFor="let pictograma of pictogramas" class="col-md-6 col-lg-4">
+    <div class="card h-100 shadow-sm">
+      <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 150px; overflow: hidden;">
+        <img
+          [src]="getImageUrl(pictograma.image)"
+          alt="{{ pictograma.name }}"
+          class="img-fluid"
+          style="max-height: 100%; max-width: 100%; object-fit: contain;"
+        />
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">{{ pictograma.name }}</h5>
+        <p class="card-text text-muted small">{{ pictograma.language?.code || 'Sin lenguaje' }}</p>
+      </div>
+      <div class="card-footer bg-white border-top">
+        <div class="btn-group w-100" role="group">
+          <button type="button" class="btn btn-sm btn-outline-primary" (click)="editarPictograma(pictograma)">
+            ✏️ Editar
+          </button>
+          <button
+            type="button"
+            class="btn btn-sm btn-outline-danger"
+            (click)="deletePictogram(pictograma.id)"
+          >
+            🗑️ Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!loading && pictogramas.length === 0" class="alert alert-info">
+  No tienes pictogramas aún
+</div>

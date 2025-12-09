@@ -1,0 +1,58 @@
+<div class="modal fade" tabindex="-1" [class.show]="true" style="display: block; background: rgba(0, 0, 0, 0.5);">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Subir imagen</h5>
+        <button type="button" class="btn-close" (click)="closeModal()"></button>
+      </div>
+
+      <div class="modal-body">
+        <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+          {{ error }}
+        </div>
+
+        <div *ngIf="preview" class="text-center mb-3">
+          <img [src]="preview" alt="Preview" class="img-thumbnail" style="max-width: 100%; max-height: 300px;">
+        </div>
+
+        <div class="input-group mb-3">
+          <input
+            type="file"
+            class="form-control"
+            id="fileInput"
+            accept="image/jpeg,image/png"
+            (change)="onFileSelected($event)"
+          />
+          <label class="input-group-text" for="fileInput">📁 {{ selectedFile ? selectedFile.name : 'Seleccionar' }}</label>
+        </div>
+
+        <div class="alert alert-info small">
+          <p class="mb-1">Tipos permitidos: JPG, PNG</p>
+          <p class="mb-0">Tamaño máximo: 5MB</p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeModal()"
+          [disabled]="uploading"
+        >
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="uploadImage()"
+          [disabled]="!selectedFile || uploading"
+        >
+          <span *ngIf="!uploading">Subir imagen</span>
+          <span *ngIf="uploading">
+            <span class="spinner-border spinner-border-sm me-2"></span>Subiendo...
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

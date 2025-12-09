@@ -203,12 +203,26 @@ export class DependentDetailComponent implements OnInit {
     this.router.navigate(['/home']);
   }
 
-  // Métodos placeholder para botones futuros
+  /**
+   * Abre la pantalla de tablero del dependiente
+   */
   openDashboard(): void {
     alert('Funcionalidad de Tablero en desarrollo');
   }
 
+  /**
+   * Abre el gestor del dependiente
+   */
   openPictograms(): void {
-    alert('Funcionalidad de Pictogramas y Secciones en desarrollo');
+    if (this.dependentAccount) {
+      this.router.navigate(['/gestor', this.dependentAccount.id]);
+    }
+  }
+
+  /**
+   * Abre la pantalla de gestión de secciones del dependiente
+   */
+  openSections(): void {
+    alert('Funcionalidad de Secciones en desarrollo');
   }
 }

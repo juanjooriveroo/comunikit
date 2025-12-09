@@ -1,0 +1,94 @@
+<div class="bg-light min-vh-100 ps-0">
+  <div class="container pt-4">
+    <!-- Tabs -->
+    <ul class="nav nav-tabs mb-4 border-bottom" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button
+          class="nav-link"
+          [class.active]="activeTab === 'tablero'"
+          type="button"
+          (click)="switchTab('tablero')"
+        >
+          Tablero
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button
+          class="nav-link"
+          [class.active]="activeTab === 'secciones'"
+          type="button"
+          (click)="switchTab('secciones')"
+        >
+          Secciones
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button
+          class="nav-link"
+          [class.active]="activeTab === 'pictogramas'"
+          type="button"
+          (click)="switchTab('pictogramas')"
+        >
+          Pictogramas
+        </button>
+      </li>
+    </ul>
+
+    <!-- Contenido de pestañas -->
+    <div class="tab-content">
+      <!-- Pestaña de Tablero -->
+      <div
+        class="tab-pane fade"
+        [class.active]="activeTab === 'tablero'"
+        [class.show]="activeTab === 'tablero'"
+        *ngIf="activeTab === 'tablero'"
+      >
+        <div class="alert alert-info text-center py-5">
+          <h4 class="mb-3">Coming Soon</h4>
+          <p class="mb-0">El tablero estará disponible pronto</p>
+        </div>
+      </div>
+
+      <!-- Pestaña de Secciones -->
+      <div
+        class="tab-pane fade"
+        [class.active]="activeTab === 'secciones'"
+        [class.show]="activeTab === 'secciones'"
+        *ngIf="activeTab === 'secciones'"
+      >
+        <div class="alert alert-info text-center py-5">
+          <h4 class="mb-3">Coming Soon</h4>
+          <p class="mb-0">Las secciones estarán disponibles pronto</p>
+        </div>
+      </div>
+
+      <!-- Pestaña de Pictogramas -->
+      <div
+        class="tab-pane fade"
+        [class.active]="activeTab === 'pictogramas'"
+        [class.show]="activeTab === 'pictogramas'"
+        *ngIf="activeTab === 'pictogramas'"
+      >
+        <div class="mb-4" *ngIf="!mostrarFormularioPictograma">
+          <button type="button" class="btn btn-primary" (click)="crearPictograma()">
+            Nuevo pictograma
+          </button>
+        </div>
+
+        <app-crear-editar-pictograma
+          *ngIf="mostrarFormularioPictograma"
+          [ownerId]="dependienteId"
+          [pictograma]="pictogramaEditando"
+          (cancelar)="cerrarFormularioPictograma()"
+        ></app-crear-editar-pictograma>
+
+        <app-lista-pictogramas
+          *ngIf="!mostrarFormularioPictograma"
+          [ownerId]="dependienteId"
+          [key]="reloadKey"
+          (editar)="editarPictograma($event)"
+        ></app-lista-pictogramas>
+      </div>
+    </div>
+  </div>
+</div>

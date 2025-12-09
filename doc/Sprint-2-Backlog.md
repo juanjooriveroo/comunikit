@@ -22,7 +22,7 @@ Al finalizar este Sprint, debería tener:
 ## Historias de Usuario
 
 ### HU03 - Subida de pictogramas
-**Estado**: ⏳ To Do  
+**Estado**: FINISHED 
 **Dependencias**: Ninguna
 
 **Como** Tutor  
@@ -36,7 +36,7 @@ Al finalizar este Sprint, debería tener:
 - [x] **AC4**: Conversión automática a BYTEA en PostgreSQL
 - [x] **AC5**: Asociación de texto al pictograma
 - [x] **AC6**: Control de cuota de 50MB por cuenta
-- [ ] **AC7**: Componente de Angular para la subida de pictograma
+- [x] **AC7**: Componente de Angular para la subida de pictograma
 
 ### HU04 - Creación de secciones privadas
 **Estado**: ⏳ To Do  
@@ -162,6 +162,11 @@ Una historia se considera DONE cuando:
 - Documento todos los endpoints, schemas y métodos
 - Creación de nuevos endpoints de edición, eliminación y obtención de imagenes y pictogramas
 - Genero tests de los nuevos endpoints creados hasta ahora (tanto en board-service como en auth-service, con el objetivo de cubrir todos los errores)
+
+**Día 9 (09/12)**:
+- Creación de componentes para los pictogramas para la edición-creación, visualización y subida de tanto pictogramas como imagenes.
+- Creación de servicio de pictogramas para la conexión con el backend
+- Creación de nuevas rutas y módulos del gestor
 
 ---
 

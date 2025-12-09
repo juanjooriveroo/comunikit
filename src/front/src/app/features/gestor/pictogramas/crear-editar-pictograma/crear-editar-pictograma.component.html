@@ -1,0 +1,83 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">{{ isEdit ? 'Editar pictograma' : 'Nuevo pictograma' }}</h4>
+        </div>
+
+        <div class="card-body">
+          <div *ngIf="success" class="alert alert-success alert-dismissible fade show" role="alert">
+            ✓ Pictograma creado correctamente
+          </div>
+
+          <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ error }}
+          </div>
+
+          <form (ngSubmit)="submit()">
+            <div class="mb-3">
+              <label for="nombre" class="form-label">Nombre *</label>
+              <input
+                type="text"
+                class="form-control"
+                id="nombre"
+                [(ngModel)]="form.nombre"
+                name="nombre"
+                placeholder="Ej: Casa, Árbol, Libro"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="language" class="form-label">Lenguaje *</label>
+              <select
+                class="form-select"
+                id="language"
+                [(ngModel)]="form.language"
+                name="language"
+              >
+                <option value="">-- Selecciona un lenguaje --</option>
+                <option *ngFor="let lang of languages" [value]="lang.code">
+                  {{ lang.name }}
+                </option>
+              </select>
+            </div>
+
+            <div class="mb-5">
+              <label class="form-label">Imagen *</label>
+              <app-selector-imagenes
+                [ownerId]="ownerId"
+                [selectedImageId]="form.imageId"
+                (imageSelected)="onImageSelected($event)"
+              ></app-selector-imagenes>
+              <div *ngIf="selectedImage" class="mt-3">
+                <small class="text-muted">Imagen seleccionada: {{ selectedImage.name || selectedImage.id }}</small>
+              </div>
+            </div>
+
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-end">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="cancel()"
+                [disabled]="loading"
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="loading"
+              >
+                <span *ngIf="!loading">{{ isEdit ? 'Guardar cambios' : 'Crear' }}</span>
+                <span *ngIf="loading">
+                  <span class="spinner-border spinner-border-sm me-2"></span>Enviando...
+                </span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,68 @@
+<div *ngIf="loading" class="alert alert-info">
+  <span class="spinner-border spinner-border-sm me-2"></span>Cargando imágenes...
+</div>
+
+<div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+  {{ error }}
+</div>
+
+<div *ngIf="!loading && (imagenes.length > 0 || true)" class="row g-2 mb-5">
+  <!-- Botón de subida (primera posición) -->
+  <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+    <button
+      type="button"
+      class="w-100 btn btn-outline-primary p-3"
+      style="aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem;"
+      (click)="openUploadModal()"
+    >
+      <span class="fw-semibold">Subir foto</span>
+    </button>
+  </div>
+
+  <!-- Imágenes existentes -->
+  <div
+    *ngFor="let imagen of imagenes"
+    class="col-6 col-sm-4 col-md-3 col-lg-2"
+  >
+    <button
+      type="button"
+      class="w-100 btn p-0 border position-relative"
+      [class.border-success]="isSelected(imagen.id)"
+      [class.border-3]="isSelected(imagen.id)"
+      [class.shadow]="isSelected(imagen.id)"
+      style="aspect-ratio: 1; overflow: hidden; display: flex; align-items: center; justify-content: center;"
+      (click)="selectImage(imagen)"
+    >
+      <button
+        type="button"
+        class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1 px-2 py-1"
+        style="z-index: 2; line-height: 1;"
+        (click)="deleteImage(imagen, $event)"
+        aria-label="Eliminar imagen"
+      >
+        ×
+      </button>
+      <img
+        [src]="getImageUrl(imagen)"
+        alt="Imagen"
+        class="img-fluid"
+        style="max-height: 100%; max-width: 100%; object-fit: cover;"
+      />
+    </button>
+  </div>
+</div>
+
+<div *ngIf="!loading && imagenes.length === 0" class="alert alert-info">
+  <p class="mb-2">No tienes imágenes subidas</p>
+  <button type="button" class="btn btn-sm btn-primary" (click)="openUploadModal()">
+    Sube tu primera imagen
+  </button>
+</div>
+
+<!-- Modal de subida -->
+<app-modal-upload-imagen
+  *ngIf="showUploadModal"
+  [ownerId]="ownerId"
+  (imageUploaded)="onImageUploaded($event)"
+  (close)="closeUploadModal()"
+></app-modal-upload-imagen>

@@ -12,6 +12,7 @@ import { UserCreateComponent } from './features/auth/user-create/user-create.com
 import { UserDependentProfileComponent } from './features/auth/user/dependent/profile/profile.component';
 import { HomeComponent } from './features/home/home.component';
 import { DependentDetailComponent } from './features/dependent-detail/dependent-detail.component';
+import { GestorComponent } from './features/gestor/gestor.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { RoleGuard } from './core/guards/role.guard';
 import { UserRole } from './shared/models/user.model';
@@ -70,6 +71,12 @@ const routes: Routes = [
   {
     path: 'dependent-detail/:id',
     component: DependentDetailComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { roles: [UserRole.TUTOR] }
+  },
+  {
+    path: 'gestor/:id',
+    component: GestorComponent,
     canActivate: [AuthGuard, RoleGuard],
     data: { roles: [UserRole.TUTOR] }
   },

@@ -25,6 +25,11 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DependentAccountsComponent } from './features/dependent-accounts/dependent-accounts.component';
 import { DependentDetailComponent } from './features/dependent-detail/dependent-detail.component';
 import { ConfirmDeleteModalComponent } from './shared/components/confirm-delete-modal/confirm-delete-modal.component';
+import { GestorComponent } from './features/gestor/gestor.component';
+import { ListaPictogramasComponent } from './features/gestor/pictogramas/lista-pictogramas/lista-pictogramas.component';
+import { SelectorImagenesComponent } from './features/gestor/pictogramas/selector-imagenes/selector-imagenes.component';
+import { ModalUploadImagenComponent } from './features/gestor/pictogramas/modal-upload-imagen/modal-upload-imagen.component';
+import { CrearEditarPictogramaComponent } from './features/gestor/pictogramas/crear-editar-pictograma/crear-editar-pictograma.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +49,12 @@ import { ConfirmDeleteModalComponent } from './shared/components/confirm-delete-
     DeleteAccountModalComponent,
     DependentAccountsComponent,
     DependentDetailComponent,
-    ConfirmDeleteModalComponent
+    ConfirmDeleteModalComponent,
+    GestorComponent,
+    ListaPictogramasComponent,
+    SelectorImagenesComponent,
+    ModalUploadImagenComponent,
+    CrearEditarPictogramaComponent
   ],
   imports: [
     BrowserModule,
@@ -52,7 +62,7 @@ import { ConfirmDeleteModalComponent } from './shared/components/confirm-delete-
     HttpClientModule,
     ReactiveFormsModule,
     FormsModule,
-    FontAwesomeModule,
+    FontAwesomeModule
   ],
   providers: [
     {

@@ -44,7 +44,7 @@
         </div>
         <div class="info-row">
           <span class="info-label">Almacenamiento usado:</span>
-          <span class="info-value">{{ dependentAccount.storage_used !== null ? dependentAccount.storage_used + ' MB' : 'No disponible' }}</span>
+          <span class="info-value">{{ dependentAccount.storage_used !== null ? dependentAccount.storage_used + ' MB' : 'No disponible' }} / 50MB</span>
         </div>
       </div>
     </div>
@@ -61,13 +61,9 @@
           <span class="icon">🔒</span>
           <span>Cambiar Contraseña</span>
         </button>
-        <button class="action-btn action-btn-secondary" (click)="openDashboard()">
+        <button class="action-btn action-btn-secondary" (click)="openPictograms()">
           <span class="icon">📊</span>
           <span>Tablero</span>
-        </button>
-        <button class="action-btn action-btn-secondary" (click)="openPictograms()">
-          <span class="icon">🖼️</span>
-          <span>Pictogramas y Secciones</span>
         </button>
       </div>
     </div>
