@@ -22,7 +22,6 @@ import { HomeComponent } from './features/home/home.component';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { DeleteAccountModalComponent } from './shared/components/delete-account-modal/delete-account-modal.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { DependentAccountsComponent } from './features/dependent-accounts/dependent-accounts.component';
 import { DependentDetailComponent } from './features/dependent-detail/dependent-detail.component';
 import { ConfirmDeleteModalComponent } from './shared/components/confirm-delete-modal/confirm-delete-modal.component';
 import { GestorComponent } from './features/gestor/gestor.component';
@@ -47,7 +46,6 @@ import { CrearEditarPictogramaComponent } from './features/gestor/pictogramas/cr
     HomeComponent,
     NavbarComponent,
     DeleteAccountModalComponent,
-    DependentAccountsComponent,
     DependentDetailComponent,
     ConfirmDeleteModalComponent,
     GestorComponent,

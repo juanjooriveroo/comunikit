@@ -7,6 +7,7 @@ import authservice.exception.*;
 import authservice.kafka.KafkaEventPublisher;
 import authservice.mapper.UserMapper;
 import authservice.entity.User;
+import authservice.repository.UserRelationRepository;
 import authservice.repository.UserRepository;
 import authservice.utils.JwtUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -44,6 +44,9 @@ class AuthServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
+    @Mock
+    private UserRelationRepository userRelationRepository;
+
     @InjectMocks
     private AuthService authService;
 
@@ -65,8 +68,6 @@ class AuthServiceTest {
                 .password("encodedPassword")
                 .activated(true)
                 .build();
-
-        ReflectionTestUtils.setField(authService, "storageLimitMb", 50f);
     }
 
     @Test
@@ -223,59 +224,5 @@ class AuthServiceTest {
         assertThrows(UserNotFoundException.class, () -> authService.recoveryAccount(request));
         verify(userRepository).findByEmail("nonexistent@example.com");
         verifyNoInteractions(eventPublisher);
-    }
-
-    @Test
-    void validateStorage_ShouldReturnAllowed_WhenLimitIsNotExceeded() {
-        testUser.setStorage_used(10f); // 10 MB used
-        long bytesToAdd = 5 * 1024 * 1024; // 5 MB to add
-
-        when(userRepository.findById(testUserId)).thenReturn(Optional.of(testUser));
-
-        StorageValidationResponseDto result = authService.validateStorage(testUserId, bytesToAdd);
-
-        assertNotNull(result);
-        assertTrue(result.allowed());
-        verify(userRepository).findById(testUserId);
-    }
-
-    @Test
-    void validateStorage_ShouldThrowStorageLimitExceededException_WhenLimitIsExceeded() {
-        testUser.setStorage_used(48f); // 48 MB used
-        long bytesToAdd = 5 * 1024 * 1024; // 5 MB to add 
-
-        when(userRepository.findById(testUserId)).thenReturn(Optional.of(testUser));
-
-        StorageLimitExceededException exception = assertThrows(
-                StorageLimitExceededException.class,
-                () -> authService.validateStorage(testUserId, bytesToAdd)
-        );
-
-        assertTrue(exception.getMessage().contains("Límite de almacenamiento excedido"));
-        verify(userRepository).findById(testUserId);
-    }
-
-    @Test
-    void validateStorage_ShouldThrowUserNotFoundException_WhenUserDoesNotExist() {
-        long bytesToAdd = 1024;
-
-        when(userRepository.findById(testUserId)).thenReturn(Optional.empty());
-
-        assertThrows(UserNotFoundException.class, () -> authService.validateStorage(testUserId, bytesToAdd));
-        verify(userRepository).findById(testUserId);
-    }
-
-    @Test
-    void validateStorage_ShouldReturnAllowed_WhenStorageUsedIsNull() {
-        testUser.setStorage_used(null);
-        long bytesToAdd = 1024;
-
-        when(userRepository.findById(testUserId)).thenReturn(Optional.of(testUser));
-
-        StorageValidationResponseDto result = authService.validateStorage(testUserId, bytesToAdd);
-
-        assertNotNull(result);
-        assertTrue(result.allowed());
-        verify(userRepository).findById(testUserId);
     }
 }

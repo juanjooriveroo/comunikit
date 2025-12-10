@@ -1,5 +1,8 @@
 package boardservice.utils;
 
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.exif.ExifIFD0Directory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,7 +12,9 @@ import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Objects;
@@ -27,12 +32,15 @@ public class ImageProcessor {
         validateFile(file);
 
         try {
-            BufferedImage original = ImageIO.read(file.getInputStream());
+            byte[] fileBytes = file.getBytes();
+            BufferedImage original = ImageIO.read(new ByteArrayInputStream(fileBytes));
             if (original == null) {
                 throw new IllegalArgumentException("El fichero no es una imagen válida");
             }
 
-            BufferedImage resized = resize(original);
+            // Aplicar orientación EXIF si existe
+            BufferedImage oriented = applyExifOrientation(original, fileBytes);
+            BufferedImage resized = resize(oriented);
             boolean hasAlpha = resized.getColorModel().hasAlpha();
 
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -106,6 +114,91 @@ public class ImageProcessor {
 
         String contentType = file.getContentType();
         return contentType != null ? contentType : "image/jpeg";
+    }
+
+    /**
+     * Lee y aplica la orientación EXIF de la imagen.
+     * Las cámaras de móviles guardan las imágenes en orientación horizontal
+     * y usan metadatos EXIF para indicar cómo rotarlas al mostrarlas.
+     */
+    private BufferedImage applyExifOrientation(BufferedImage image, byte[] imageBytes) {
+        try {
+            Metadata metadata = ImageMetadataReader.readMetadata(new ByteArrayInputStream(imageBytes));
+            ExifIFD0Directory exifDir = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
+            
+            if (exifDir == null || !exifDir.containsTag(ExifIFD0Directory.TAG_ORIENTATION)) {
+                return image; // Sin metadatos EXIF, devolver original
+            }
+
+            int orientation = exifDir.getInt(ExifIFD0Directory.TAG_ORIENTATION);
+            
+            return switch (orientation) {
+                case 1 -> image; // Normal, sin rotación
+                case 2 -> flipHorizontal(image);
+                case 3 -> rotate(image, 180);
+                case 4 -> flipVertical(image);
+                case 5 -> flipHorizontal(rotate(image, 90));
+                case 6 -> rotate(image, 90);  // Rotación 90° derecha (foto vertical)
+                case 7 -> flipHorizontal(rotate(image, 270));
+                case 8 -> rotate(image, 270); // Rotación 90° izquierda
+                default -> image;
+            };
+            
+        } catch (Exception e) {
+            return image;
+        }
+    }
+
+    private BufferedImage rotate(BufferedImage image, int degrees) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+        
+        // Para rotaciones de 90/270, intercambiar dimensiones
+        int newWidth = (degrees % 180 != 0) ? height : width;
+        int newHeight = (degrees % 180 != 0) ? width : height;
+        
+        int imageType = image.getColorModel().hasAlpha() ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB;
+        BufferedImage rotated = new BufferedImage(newWidth, newHeight, imageType);
+        
+        Graphics2D g = rotated.createGraphics();
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        
+        AffineTransform transform = new AffineTransform();
+        transform.translate(newWidth / 2.0, newHeight / 2.0);
+        transform.rotate(Math.toRadians(degrees));
+        transform.translate(-width / 2.0, -height / 2.0);
+        
+        g.setTransform(transform);
+        g.drawImage(image, 0, 0, null);
+        g.dispose();
+        
+        return rotated;
+    }
+
+    private BufferedImage flipHorizontal(BufferedImage image) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+        int imageType = image.getColorModel().hasAlpha() ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB;
+        BufferedImage flipped = new BufferedImage(width, height, imageType);
+        
+        Graphics2D g = flipped.createGraphics();
+        g.drawImage(image, width, 0, -width, height, null);
+        g.dispose();
+        
+        return flipped;
+    }
+
+    private BufferedImage flipVertical(BufferedImage image) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+        int imageType = image.getColorModel().hasAlpha() ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB;
+        BufferedImage flipped = new BufferedImage(width, height, imageType);
+        
+        Graphics2D g = flipped.createGraphics();
+        g.drawImage(image, 0, height, width, -height, null);
+        g.dispose();
+        
+        return flipped;
     }
 
     public record ProcessedImage(byte[] bytes, String mimeType, long sizeBytes) {}

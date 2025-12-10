@@ -1,5 +1,7 @@
 server:
   port: ${PORT_AUTH}
+  servlet:
+    context-path: /auth
 
 spring:
   application:
@@ -41,6 +43,6 @@ app:
 
 springdoc:
   api-docs:
-    path: /auth/api-docs/auth
+    path: /api-docs/auth
   swagger-ui:
-    path: /auth/swagger-ui/auth
+    path: /swagger-ui/auth

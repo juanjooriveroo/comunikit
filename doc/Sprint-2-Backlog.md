@@ -38,6 +38,8 @@ Al finalizar este Sprint, debería tener:
 - [x] **AC6**: Control de cuota de 50MB por cuenta
 - [x] **AC7**: Componente de Angular para la subida de pictograma
 
+---
+
 ### HU04 - Creación de secciones privadas
 **Estado**: ⏳ To Do  
 **Dependencias**: HU03
@@ -167,6 +169,10 @@ Una historia se considera DONE cuando:
 - Creación de componentes para los pictogramas para la edición-creación, visualización y subida de tanto pictogramas como imagenes.
 - Creación de servicio de pictogramas para la conexión con el backend
 - Creación de nuevas rutas y módulos del gestor
+
+**Día 10 (10/12)**:
+- Refactorizo el código, creando controladores, servicios y tests para pictogramas, imagenes y usuarios en vez de centralizarlo en un solo controlador, servicio o test global
+- Elimino componente no utilizado en el front
 
 ---
 
