@@ -26,11 +26,12 @@ CREATE TABLE image (
 
 CREATE TABLE pictogram (
     id UUID PRIMARY KEY,
-    name VARCHAR(50) UNIQUE NOT NULL,
+    name VARCHAR(50) NOT NULL,
     language_code CHAR(2) NOT NULL REFERENCES language(code),
     image_id UUID NOT NULL REFERENCES image(id) ON DELETE CASCADE,
     owner_id UUID NOT NULL,
-    is_public BOOLEAN NOT NULL DEFAULT FALSE
+    is_public BOOLEAN NOT NULL DEFAULT FALSE,
+    UNIQUE (name, language_code)
 );
 
 CREATE TABLE section (
@@ -45,6 +46,8 @@ CREATE TABLE section (
 CREATE TABLE section_pictogram (
     section_id UUID NOT NULL REFERENCES section(id) ON DELETE CASCADE,
     pictogram_id UUID NOT NULL REFERENCES pictogram(id) ON DELETE CASCADE,
-    pictogram_order INTEGER,
-    PRIMARY KEY (section_id, pictogram_id)
+    col INTEGER NOT NULL CHECK (col >= 0 AND col < 5),
+    row INTEGER NOT NULL CHECK (row >= 0 AND row < 6),
+    PRIMARY KEY (section_id, col, row),
+    UNIQUE (section_id, pictogram_id)
 );

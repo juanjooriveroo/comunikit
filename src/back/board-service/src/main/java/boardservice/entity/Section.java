@@ -69,14 +69,8 @@ public class Section {
     )
     private boolean isPublic;
 
-    @ManyToMany
-    @JoinTable(
-            name = "section_pictogram",
-            joinColumns = @JoinColumn(name = "section_id"),
-            inverseJoinColumns = @JoinColumn(name = "pictogram_id")
-    )
-    @OrderColumn(name = "pictogram_order")
-    @Schema(description = "Lista de pictogramas asociados a la sección.")
+    @OneToMany(mappedBy = "sectionId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Schema(description = "Pictogramas en el grid 5x6 con sus posiciones.")
     @Builder.Default
-    private List<Pictogram> pictograms = new ArrayList<>();
+    private List<SectionPictogram> pictogramPositions = new ArrayList<>();
 }

@@ -13,4 +13,8 @@ public interface PictogramRepository extends JpaRepository<Pictogram, UUID> {
     Optional<Pictogram> findByIdAndOwnerId(UUID id, UUID ownerId);
 
     List<Pictogram> findAllByImageIdAndOwnerId(UUID imageId, UUID ownerId);
+
+    Optional<Pictogram> findByNameAndLanguageCode(String name, String languageCode);
+
+    boolean existsByNameAndLanguageCode(String name, String languageCode);
 }

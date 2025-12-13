@@ -88,30 +88,19 @@
     <div class="col-lg-7">
       <div class="card shadow section-preview-card">
         <div class="card-header bg-gradient-primary text-white d-flex justify-content-between align-items-center">
-          <h5 class="mb-0">Vista previa - Cómo se verá en la app</h5>
-          <button
-            type="button"
-            class="btn btn-sm btn-light"
-            (click)="toggleLayoutMode()"
-            title="Cambiar orientación"
-          >
-            {{ layoutMode === 'vertical' ? '📱 Vertical' : '🖥️ Horizontal' }}
-          </button>
+          <h5 class="mb-0">Vista previa</h5>
+          <small class="text-white-50">Puedes dejar celdas vacías</small>
         </div>
-        <div class="card-body preview-body" [class.preview-horizontal]="layoutMode === 'horizontal'">
+        <div class="card-body preview-body">
           <!-- Nombre de la sección -->
           <div class="section-title-preview">
             <h3 class="section-name">{{ form.nombre || 'Nombre de la sección' }}</h3>
           </div>
 
-          <!-- Grid de pictogramas -->
-          <div
-            class="pictogram-preview-grid"
-            [style.grid-template-columns]="'repeat(' + gridColumns + ', 1fr)'"
-            [style.grid-template-rows]="'repeat(' + gridRows + ', 1fr)'"
-          >
+          <!-- Grid de pictogramas 5x6 fijo -->
+          <div class="pictogram-preview-grid grid-5x6">
             <div
-              *ngFor="let pictogram of pictogramasEnSeccion.slice(0, gridColumns * gridRows); let i = index"
+              *ngFor="let pictogram of pictogramasEnSeccion; let i = index"
               class="pictogram-preview-slot"
               (dragover)="onDragOver($event)"
               (drop)="onDropInSlot(i, $event)"

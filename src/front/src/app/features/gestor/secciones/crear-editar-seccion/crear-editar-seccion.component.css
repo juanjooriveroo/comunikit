@@ -49,16 +49,10 @@
   border: 3px solid rgba(255, 255, 255, 0.8);
 }
 
-/* Grid vertical: 4 columnas x 6 filas */
-.pictogram-preview-grid.grid-4x6 {
-  grid-template-columns: repeat(4, 1fr);
+/* Grid fijo: 5 columnas x 6 filas */
+.pictogram-preview-grid.grid-5x6 {
+  grid-template-columns: repeat(5, 1fr);
   grid-template-rows: repeat(6, 1fr);
-}
-
-/* Grid horizontal: 8 columnas x 3 filas */
-.pictogram-preview-grid.grid-8x3 {
-  grid-template-columns: repeat(8, 1fr);
-  grid-template-rows: repeat(3, 1fr);
 }
 
 .pictogram-preview-slot {

@@ -1,6 +1,7 @@
 package boardservice.service;
 
 import boardservice.dto.DeleteSectionRequestDto;
+import boardservice.dto.PictogramPositionRequestDto;
 import boardservice.dto.SectionDto;
 import boardservice.dto.SectionPushRequestDto;
 import boardservice.dto.SectionUpdateRequestDto;
@@ -8,6 +9,7 @@ import boardservice.entity.Image;
 import boardservice.entity.Language;
 import boardservice.entity.Pictogram;
 import boardservice.entity.Section;
+import boardservice.entity.SectionPictogram;
 import boardservice.exception.LanguageNotFoundException;
 import boardservice.exception.ResourceNotFoundException;
 import boardservice.exception.UnauthorizedAccessException;
@@ -92,6 +94,13 @@ class SectionServiceTest {
                 .name("p1")
                 .build();
 
+        SectionPictogram sectionPictogram = SectionPictogram.builder()
+                .sectionId(sectionId)
+                .col(0)
+                .row(0)
+                .pictogram(pictogram)
+                .build();
+
         section = Section.builder()
                 .id(sectionId)
                 .name("Casa")
@@ -99,7 +108,7 @@ class SectionServiceTest {
                 .image(image)
                 .ownerId(ownerId)
                 .isPublic(false)
-                .pictograms(new ArrayList<>(List.of(pictogram)))
+                .pictogramPositions(new ArrayList<>(List.of(sectionPictogram)))
                 .build();
     }
 
@@ -179,12 +188,13 @@ class SectionServiceTest {
 
     @Test
     void updateSection_UpdatesFieldsAndOrder_WhenValid() {
+        PictogramPositionRequestDto positionRequest = new PictogramPositionRequestDto(pictogramId, 2, 3);
         SectionUpdateRequestDto request = new SectionUpdateRequestDto(
                 ownerId,
                 imageId,
                 "Nuevo nombre",
                 "en",
-                List.of(pictogramId)
+                List.of(positionRequest)
         );
 
         Language newLanguage = new Language();
@@ -193,7 +203,7 @@ class SectionServiceTest {
 
         SectionDto dto = SectionDto.builder().id(sectionId).name("Nuevo nombre").build();
 
-        section.setPictograms(new ArrayList<>());
+        section.setPictogramPositions(new ArrayList<>());
 
         doNothing().when(userValidator).validateUserAccess(requesterId.toString(), ownerId);
         when(sectionRepository.findByIdAndOwnerId(sectionId, ownerId)).thenReturn(Optional.of(section));
@@ -208,19 +218,21 @@ class SectionServiceTest {
         assertEquals("Nuevo nombre", section.getName());
         assertEquals(newLanguage, section.getLanguage());
         assertEquals(image, section.getImage());
-        assertEquals(1, section.getPictograms().size());
-        assertEquals(pictogramId, section.getPictograms().get(0).getId());
+        assertEquals(1, section.getPictogramPositions().size());
+        assertEquals(2, section.getPictogramPositions().get(0).getCol());
+        assertEquals(3, section.getPictogramPositions().get(0).getRow());
         verify(sectionRepository).save(section);
     }
 
     @Test
     void updateSection_ThrowsWhenLanguageMissing() {
+        PictogramPositionRequestDto positionRequest = new PictogramPositionRequestDto(pictogramId, 0, 0);
         SectionUpdateRequestDto request = new SectionUpdateRequestDto(
                 ownerId,
                 imageId,
                 "Nuevo nombre",
                 "en",
-                List.of(pictogramId)
+                List.of(positionRequest)
         );
 
         doNothing().when(userValidator).validateUserAccess(requesterId.toString(), ownerId);
@@ -233,19 +245,20 @@ class SectionServiceTest {
 
     @Test
     void updateSection_ThrowsWhenPictogramMissing() {
+        PictogramPositionRequestDto positionRequest = new PictogramPositionRequestDto(pictogramId, 0, 0);
         SectionUpdateRequestDto request = new SectionUpdateRequestDto(
                 ownerId,
                 imageId,
                 "Nuevo nombre",
                 "en",
-                List.of(pictogramId)
+                List.of(positionRequest)
         );
 
         doNothing().when(userValidator).validateUserAccess(requesterId.toString(), ownerId);
         when(sectionRepository.findByIdAndOwnerId(sectionId, ownerId)).thenReturn(Optional.of(section));
         when(languageRepository.findByCode("en")).thenReturn(Optional.of(language));
         when(imageRepository.findByIdAndOwnerId(imageId, ownerId)).thenReturn(Optional.of(image));
-        section.setPictograms(new ArrayList<>());
+        section.setPictogramPositions(new ArrayList<>());
         when(pictogramRepository.findById(pictogramId)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,

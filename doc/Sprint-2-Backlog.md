@@ -41,7 +41,7 @@ Al finalizar este Sprint, debería tener:
 ---
 
 ### HU04 - Creación de secciones privadas
-**Estado**: ⏳ To Do  
+**Estado**: FINISHED  
 **Dependencias**: HU03
 
 **Como** Tutor  
@@ -49,10 +49,10 @@ Al finalizar este Sprint, debería tener:
 **Para** organizar pictogramas por categorías
 
 #### Criterios de Aceptación
-- [ ] **AC1**: Formulario con: nombre, idioma, categoría
-- [ ] **AC2**: Asociación de pictogramas a la sección
-- [ ] **AC3**: Secciones privadas (no visibles por otros)
-- [ ] **AC4**: Componentes Angular de creación y configuración de secciones
+- [x] **AC1**: Formulario con: nombre, idioma
+- [x] **AC2**: Asociación de pictogramas a la sección
+- [x] **AC3**: Secciones privadas (no visibles por otros)
+- [x] **AC4**: Componentes Angular de creación y configuración de secciones
 
 ---
 
@@ -74,8 +74,8 @@ Al finalizar este Sprint, debería tener:
 - [x] **G07**: Crear proyecto `board-service`
 - [x] **G08**: Creación de pictogramas
 - [x] **G09**: Modificación de pictogramas
-- [ ] **G10**: Creación de secciones
-- [ ] **G11**: Modificación de secciones
+- [x] **G10**: Creación de secciones
+- [x] **G11**: Modificación de secciones
 - [x] **G12**: Configurar Swagger/OpenAPI
 - [x] **G13**: Documentar endpoints en Swagger
 
@@ -180,6 +180,11 @@ Una historia se considera DONE cuando:
 - Refactorización de UserValidator
 - Tests de secciones en el back
 - Creación, borrado y customización de secciones en el front
+
+**Día 12 (14/12)**:
+- Creación de food.sql y body.sql para importar los pictogramas públicos de esas 2 secciones
+- Reordeno los .sql para ejecutar en orden dentro de postgres
+- Cambio la manera de guardar los pictogramas en las secciones (puedes colocarlas donde quieras y se reasigna la cantidad de pictogramas que caben (30 por sección) ), ajustando back y front
 
 ---
 

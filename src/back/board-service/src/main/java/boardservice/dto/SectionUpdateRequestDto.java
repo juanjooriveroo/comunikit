@@ -30,7 +30,7 @@ public record SectionUpdateRequestDto(
         ) String language,
 
         @Schema(
-                description = "Lista de UUIDs de pictogramas.",
+                description = "Lista de pictogramas con sus posiciones en el grid 5x6.",
                 nullable = false
-        ) List<UUID> pictograms
+        ) List<PictogramPositionRequestDto> pictograms
 ) {}

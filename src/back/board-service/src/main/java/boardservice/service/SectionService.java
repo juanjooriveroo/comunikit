@@ -4,6 +4,7 @@ import boardservice.dto.*;
 import boardservice.entity.Image;
 import boardservice.entity.Pictogram;
 import boardservice.entity.Section;
+import boardservice.entity.SectionPictogram;
 import boardservice.exception.LanguageNotFoundException;
 import boardservice.exception.ResourceNotFoundException;
 import boardservice.mapper.SectionMapper;
@@ -83,21 +84,29 @@ public class SectionService {
             section.setImage(image);
         }
 
-        List<UUID> pictogramIds = request.pictograms() == null ? new ArrayList<>() : request.pictograms();
+        if (request.pictograms() != null) {
+            // Limpiar posiciones actuales
+            section.getPictogramPositions().clear();
 
-        if (!pictogramIds.isEmpty()){
-            List<Pictogram> pictogramsToAdd = new ArrayList<>(
-                pictogramIds.stream()
-                    .map(pictogramId -> section.getPictograms().stream()
-                                .filter(p -> p.getId().equals(pictogramId))
-                                .findFirst()
-                                .orElseGet(() -> pictogramRepository.findById(pictogramId)
-                                        .orElseThrow(() -> new ResourceNotFoundException("Pictograma no encontrado")))
-                        )
-                        .toList()
-            );
+            // Añadir nuevas posiciones
+            for (PictogramPositionRequestDto pos : request.pictograms()) {
+                // Validar límites del grid 5x6
+                if (pos.col() < 0 || pos.col() > 4 || pos.row() < 0 || pos.row() > 5) {
+                    throw new IllegalArgumentException("Posición fuera del grid 5x6: col=" + pos.col() + ", row=" + pos.row());
+                }
 
-            section.setPictograms(pictogramsToAdd);
+                Pictogram pictogram = pictogramRepository.findById(pos.pictogramId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Pictograma no encontrado: " + pos.pictogramId()));
+
+                SectionPictogram sp = SectionPictogram.builder()
+                        .sectionId(section.getId())
+                        .col(pos.col())
+                        .row(pos.row())
+                        .pictogram(pictogram)
+                        .build();
+
+                section.getPictogramPositions().add(sp);
+            }
         }
 
         sectionRepository.save(section);

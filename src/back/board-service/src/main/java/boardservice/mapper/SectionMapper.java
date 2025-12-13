@@ -1,5 +1,6 @@
 package boardservice.mapper;
 
+import boardservice.dto.PictogramPositionDto;
 import boardservice.dto.SectionDto;
 import boardservice.dto.SectionPushRequestDto;
 import boardservice.entity.Image;
@@ -26,8 +27,12 @@ public class SectionMapper {
                 .language(section.getLanguage())
                 .image(imageMapper.toDto(section.getImage()))
                 .isPublic(section.isPublic())
-                .pictograms(section.getPictograms().stream()
-                        .map(pictogramMapper::toDto)
+                .pictograms(section.getPictogramPositions().stream()
+                        .map(sp -> new PictogramPositionDto(
+                                sp.getCol(),
+                                sp.getRow(),
+                                pictogramMapper.toDto(sp.getPictogram())
+                        ))
                         .toList())
                 .build();
     }
@@ -39,7 +44,7 @@ public class SectionMapper {
                 .language(languageRepository.findByCode(request.language())
                         .orElseThrow(() -> new LanguageNotFoundException("Lenguaje no encontrado")))
                 .isPublic(false)
-                .pictograms(new ArrayList<>())
+                .pictogramPositions(new ArrayList<>())
                 .image(image)
                 .build();
     }

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Schema(
-        description = "Dto de sección"
+        description = "Dto de sección con grid fijo 5x6"
 )
 @Builder
 public record SectionDto (
@@ -40,7 +40,7 @@ public record SectionDto (
         ) Boolean isPublic,
 
         @Schema(
-                description = "Lista de pictogramas de la sección.",
+                description = "Pictogramas con sus posiciones en el grid 5x6 (col: 0-4, row: 0-5).",
                 nullable = false
-        ) List<PictogramDto> pictograms
+        ) List<PictogramPositionDto> pictograms
 ){}

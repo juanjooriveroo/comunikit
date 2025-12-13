@@ -2,6 +2,13 @@ import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from
 import { SectionService } from '../../../../core/services/section.service';
 import { PictogramService } from '../../../../core/services/pictogram.service';
 
+// Interfaz para pictograma con posición en el grid
+interface PictogramPosition {
+  col: number;
+  row: number;
+  pictogram: any;
+}
+
 @Component({
   selector: 'app-crear-editar-seccion',
   templateUrl: './crear-editar-seccion.component.html',
@@ -14,6 +21,11 @@ export class CrearEditarSeccionComponent implements OnChanges {
   @Output() cancelar = new EventEmitter<void>();
   @Output() seccionCreada = new EventEmitter<any>();
 
+  // Constantes del grid fijo 5x6
+  readonly GRID_COLS = 5;
+  readonly GRID_ROWS = 6;
+  readonly TOTAL_CELLS = 30; // 5 * 6
+
   form = {
     nombre: '',
     language: '',
@@ -23,14 +35,14 @@ export class CrearEditarSeccionComponent implements OnChanges {
   languages: any[] = [];
   selectedImage: any = null;
   pictogramasDisponibles: any[] = [];
-  pictogramasEnSeccion: any[] = new Array(24).fill(null); // 24 pictogramas máximo
+  // Grid fijo 5x6: array de 30 celdas (null = vacío)
+  pictogramasEnSeccion: (any | null)[] = new Array(this.TOTAL_CELLS).fill(null);
   draggedPictogram: any = null;
   draggedFromIndex: number | null = null;
   loading: boolean = false;
   error: string = '';
   success: boolean = false;
-  formCollapsed: boolean = false; // Control de formulario colapsado
-  layoutMode: 'vertical' | 'horizontal' = 'vertical'; // Modo de visualización
+  formCollapsed: boolean = false;
 
   constructor(
     private sectionService: SectionService,
@@ -76,9 +88,22 @@ export class CrearEditarSeccionComponent implements OnChanges {
     this.form.imageId = image.id;
   }
 
+  // Convierte índice lineal a coordenadas (col, row)
+  indexToPosition(index: number): { col: number; row: number } {
+    return {
+      col: index % this.GRID_COLS,
+      row: Math.floor(index / this.GRID_COLS)
+    };
+  }
+
+  // Convierte coordenadas (col, row) a índice lineal
+  positionToIndex(col: number, row: number): number {
+    return row * this.GRID_COLS + col;
+  }
+
   onDragStart(pictogram: any, event: DragEvent): void {
     this.draggedPictogram = pictogram;
-    this.draggedFromIndex = null; // Clear when dragging from available list
+    this.draggedFromIndex = null;
     if (event.dataTransfer) {
       event.dataTransfer.effectAllowed = 'move';
     }
@@ -86,7 +111,7 @@ export class CrearEditarSeccionComponent implements OnChanges {
 
   onDragStartFromPreview(pictogram: any, index: number, event: DragEvent): void {
     this.draggedPictogram = pictogram;
-    this.draggedFromIndex = index; // Track source index
+    this.draggedFromIndex = index;
     if (event.dataTransfer) {
       event.dataTransfer.effectAllowed = 'move';
     }
@@ -105,7 +130,7 @@ export class CrearEditarSeccionComponent implements OnChanges {
 
     // Si estamos arrastrando desde el preview (reordenando)
     if (this.draggedFromIndex !== null) {
-      // Intercambiar posiciones
+      // Intercambiar posiciones (permite celdas vacías)
       const temp = this.pictogramasEnSeccion[index];
       this.pictogramasEnSeccion[index] = this.draggedPictogram;
       this.pictogramasEnSeccion[this.draggedFromIndex] = temp;
@@ -116,41 +141,23 @@ export class CrearEditarSeccionComponent implements OnChanges {
         p?.id === this.draggedPictogram.id ? null : p
       );
 
-      // Agregarlo en el índice
+      // Agregarlo en el índice específico
       this.pictogramasEnSeccion[index] = this.draggedPictogram;
     }
 
-    // Compactar: mover todos los pictogramas hacia arriba eliminando espacios
-    this.compactarPictogramas();
+    // NO compactamos - permitimos celdas vacías entre pictogramas
 
     this.draggedPictogram = null;
     this.draggedFromIndex = null;
   }
 
-  compactarPictogramas(): void {
-    const pictogramas = this.pictogramasEnSeccion.filter(p => p !== null);
-    this.pictogramasEnSeccion = [...pictogramas, ...new Array(24 - pictogramas.length).fill(null)];
-  }
-
   removePictogramFromSlot(index: number): void {
     this.pictogramasEnSeccion[index] = null;
-    this.compactarPictogramas();
+    // NO compactamos - la celda queda vacía
   }
 
   toggleFormCollapse(): void {
     this.formCollapsed = !this.formCollapsed;
-  }
-
-  toggleLayoutMode(): void {
-    this.layoutMode = this.layoutMode === 'vertical' ? 'horizontal' : 'vertical';
-  }
-
-  get gridColumns(): number {
-    return this.layoutMode === 'vertical' ? 4 : 8;
-  }
-
-  get gridRows(): number {
-    return this.layoutMode === 'vertical' ? 6 : 3;
   }
 
   private resetForm(): void {
@@ -160,7 +167,7 @@ export class CrearEditarSeccionComponent implements OnChanges {
       imageId: ''
     };
     this.selectedImage = null;
-    this.pictogramasEnSeccion = new Array(24).fill(null);
+    this.pictogramasEnSeccion = new Array(this.TOTAL_CELLS).fill(null);
     this.success = false;
     this.error = '';
   }
@@ -172,12 +179,17 @@ export class CrearEditarSeccionComponent implements OnChanges {
       this.form.imageId = this.seccion.image?.id || '';
       this.selectedImage = this.seccion.image || null;
 
-      // Cargar pictogramas en la sección
-      this.pictogramasEnSeccion = new Array(24).fill(null);
+      // Inicializar grid vacío
+      this.pictogramasEnSeccion = new Array(this.TOTAL_CELLS).fill(null);
+
+      // Cargar pictogramas en sus posiciones del grid
       const pictogramas = this.seccion.pictograms || [];
-      pictogramas.forEach((p: any, index: number) => {
-        if (index < 24) {
-          this.pictogramasEnSeccion[index] = p;
+      pictogramas.forEach((p: PictogramPosition) => {
+        if (p.col !== undefined && p.row !== undefined && p.pictogram) {
+          const index = this.positionToIndex(p.col, p.row);
+          if (index >= 0 && index < this.TOTAL_CELLS) {
+            this.pictogramasEnSeccion[index] = p.pictogram;
+          }
         }
       });
     } else {
@@ -212,9 +224,19 @@ export class CrearEditarSeccionComponent implements OnChanges {
       language: this.form.language
     };
 
-    // Solo agregar pictograms en edición
+    // Solo agregar pictograms en edición - ahora con posiciones (col, row)
     if (this.isEdit) {
-      request.pictograms = this.pictogramasEnSeccion.filter(p => p !== null).map(p => p.id);
+      request.pictograms = this.pictogramasEnSeccion
+        .map((p, index) => {
+          if (p === null) return null;
+          const pos = this.indexToPosition(index);
+          return {
+            pictogramId: p.id,
+            col: pos.col,
+            row: pos.row
+          };
+        })
+        .filter(p => p !== null);
     }
 
     const request$ = this.isEdit

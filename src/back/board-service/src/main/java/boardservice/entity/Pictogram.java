@@ -10,7 +10,9 @@ import lombok.NoArgsConstructor;
 import java.util.UUID;
 
 @Entity
-@Table(name = "pictogram")
+@Table(name = "pictogram", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"name", "language_code"})
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,9 +28,9 @@ public class Pictogram {
     )
     private UUID id;
 
-    @Column(nullable = false, unique = true, length = 50)
+    @Column(nullable = false, length = 50)
     @Schema(
-            description = "Nombre único del pictograma.",
+            description = "Nombre del pictograma (único por idioma).",
             example = "casa",
             nullable = false
     )
