@@ -1,11 +1,7 @@
 package boardservice.controller;
 
-import boardservice.dto.DeletePictogramRequestDto;
-import boardservice.dto.GetAllPictogramsRequestDto;
-import boardservice.dto.PictogramDto;
-import boardservice.dto.PictogramPushRequestDto;
-import boardservice.dto.PictogramUpdateRequestDto;
-import boardservice.service.PictogramService;
+import boardservice.dto.*;
+import boardservice.service.SectionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -30,23 +26,23 @@ import java.util.UUID;
 @RequestMapping("/")
 @RequiredArgsConstructor
 @Tag(
-        name = "Pictogramas",
-        description = "Endpoints para la gestión de pictogramas"
+        name = "Secciones",
+        description = "Endpoints para la gestión de secciones"
 )
-public class PictogramController {
-    private final PictogramService pictogramService;
+public class SectionController {
+    private final SectionService sectionService;
 
     @Operation(
-            summary = "Crear pictograma",
-            description = "Crea un nuevo pictograma para el usuario dependiente",
+            summary = "Crear sección",
+            description = "Crea una sección por un nombre y una imagen de presentación",
             responses = {
                     @ApiResponse(
                             responseCode = "201",
-                            description = "Pictograma creado exitosamente"
+                            description = "Sección creada exitosamente"
                     ),
                     @ApiResponse(
                             responseCode = "400",
-                            description = "Petición inválida o parámetros incorrectos"
+                            description = "Petición inválida, archivo inválido o parámetros incorrectos"
                     ),
                     @ApiResponse(
                             responseCode = "404",
@@ -58,54 +54,22 @@ public class PictogramController {
                     )
             }
     )
-    @PostMapping("/pictogram")
-    public ResponseEntity<?> pushPictogram(
+    @PostMapping(value = "/section")
+    public ResponseEntity<?> pushImage(
             @RequestHeader("X-User-ID") String userId,
-            @RequestBody PictogramPushRequestDto request
+            @RequestBody SectionPushRequestDto request
     ) {
-        PictogramDto response = pictogramService.pushPictogram(userId, request);
-        return ResponseEntity.created(URI.create("/board/pictogram/" + response.id())).body(response);
+        SectionDto response = sectionService.pushSection(userId, request);
+        return ResponseEntity.created(URI.create("/section/" + response.id())).body(response);
     }
 
     @Operation(
-            summary = "Actualizar pictograma",
-            description = "Actualiza un pictograma existente del usuario dependiente",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "Pictograma actualizado exitosamente"
-                    ),
-                    @ApiResponse(
-                            responseCode = "400",
-                            description = "Petición inválida o parámetros incorrectos"
-                    ),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "Pictograma o usuario no encontrado"
-                    ),
-                    @ApiResponse(
-                            responseCode = "500",
-                            description = "Error interno del servidor"
-                    )
-            }
-    )
-    @PutMapping("/pictogram/{id}")
-    public ResponseEntity<?> updatePictogram(
-            @RequestHeader("X-User-ID") String userId,
-            @PathVariable UUID id,
-            @RequestBody PictogramUpdateRequestDto request
-    ) {
-        PictogramDto response = pictogramService.updatePictogram(userId, id, request);
-        return ResponseEntity.ok(response);
-    }
-
-    @Operation(
-            summary = "Eliminar pictograma",
-            description = "Elimina un pictograma existente del usuario dependiente",
+            summary = "Eliminar sección",
+            description = "Elimina una sección existente",
             responses = {
                     @ApiResponse(
                             responseCode = "204",
-                            description = "Pictograma eliminado exitosamente"
+                            description = "Sección eliminada exitosamente"
                     ),
                     @ApiResponse(
                             responseCode = "400",
@@ -113,7 +77,7 @@ public class PictogramController {
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "Pictograma o usuario no encontrado"
+                            description = "Usuario o sección no encontrado"
                     ),
                     @ApiResponse(
                             responseCode = "500",
@@ -121,23 +85,23 @@ public class PictogramController {
                     )
             }
     )
-    @DeleteMapping("/pictogram/{id}")
-    public ResponseEntity<?> deletePictogram(
+    @DeleteMapping("/section/{id}")
+    public ResponseEntity<?> deleteImage(
             @RequestHeader("X-User-ID") String userId,
             @PathVariable UUID id,
-            @RequestBody DeletePictogramRequestDto request
+            @RequestBody DeleteSectionRequestDto request
     ) {
-        pictogramService.deletePictogram(userId, id, request);
+        sectionService.deleteSection(userId, id, request);
         return ResponseEntity.noContent().build();
     }
 
     @Operation(
-            summary = "Obtener todos los pictogramas",
-            description = "Obtiene la lista de todos los pictogramas del usuario dependiente especificado",
+            summary = "Obtener todas las secciones de un usuario",
+            description = "Obtiene la lista de todas las secciones del usuario dependiente especificado",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Obtención exitosa de pictogramas"
+                            description = "Obtención exitosa de secciones"
                     ),
                     @ApiResponse(
                             responseCode = "400",
@@ -145,7 +109,7 @@ public class PictogramController {
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "Usuario no encontrado"
+                            description = "Usuario o sección no encontrado"
                     ),
                     @ApiResponse(
                             responseCode = "500",
@@ -153,13 +117,44 @@ public class PictogramController {
                     )
             }
     )
-    @GetMapping("/getAll-pictograms")
-    public ResponseEntity<?> getAll(
+    @GetMapping("/getAll-section")
+    public ResponseEntity<?> getAllImages(
             @RequestHeader("X-User-ID") String userId,
             @RequestParam("ownerId") UUID ownerId
     ) {
-        GetAllPictogramsRequestDto request = new GetAllPictogramsRequestDto(ownerId);
-        List<PictogramDto> response = pictogramService.getAllPictograms(userId, request);
+        List<SectionDto> response = sectionService.getAllSection(userId, ownerId);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(
+            summary = "Actualizar sección",
+            description = "Actualiza una sección existente del usuario dependiente",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Sección actualizada exitosamente"
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Petición inválida o parámetros incorrectos"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Sección o usuario no encontrado"
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Error interno del servidor"
+                    )
+            }
+    )
+    @PutMapping("/section/{id}")
+    public ResponseEntity<?> updateSection(
+            @RequestHeader("X-User-ID") String userId,
+            @PathVariable UUID id,
+            @RequestBody SectionUpdateRequestDto request
+    ) {
+        SectionDto response = sectionService.updateSection(userId, id, request);
         return ResponseEntity.ok(response);
     }
 }

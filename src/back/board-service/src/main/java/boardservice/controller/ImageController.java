@@ -35,7 +35,6 @@ import java.util.UUID;
         description = "Endpoints para la gestión de imágenes"
 )
 public class ImageController {
-
     private final ImageService imageService;
 
     @Operation(

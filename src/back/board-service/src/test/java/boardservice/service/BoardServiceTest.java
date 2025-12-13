@@ -2,6 +2,8 @@ package boardservice.service;
 
 import boardservice.client.AuthServiceClient;
 import boardservice.exception.UnauthorizedAccessException;
+import boardservice.utils.UserValidator;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,7 +23,7 @@ class BoardServiceTest {
     private AuthServiceClient authServiceClient;
 
     @InjectMocks
-    private BoardService boardService;
+    private UserValidator userValidator;
 
     @Test
     void validateUserAccess_AllowsWhenRelated() {
@@ -29,7 +31,7 @@ class BoardServiceTest {
         UUID owner = UUID.randomUUID();
         when(authServiceClient.validateUserRelation(requester, owner)).thenReturn(true);
 
-        assertDoesNotThrow(() -> boardService.validateUserAccess(requester.toString(), owner));
+        assertDoesNotThrow(() -> userValidator.validateUserAccess(requester.toString(), owner));
     }
 
     @Test
@@ -38,6 +40,6 @@ class BoardServiceTest {
         UUID owner = UUID.randomUUID();
         when(authServiceClient.validateUserRelation(requester, owner)).thenReturn(false);
 
-        assertThrows(UnauthorizedAccessException.class, () -> boardService.validateUserAccess(requester.toString(), owner));
+        assertThrows(UnauthorizedAccessException.class, () -> userValidator.validateUserAccess(requester.toString(), owner));
     }
 }

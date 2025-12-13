@@ -15,6 +15,8 @@ import boardservice.mapper.PictogramMapper;
 import boardservice.repository.ImageRepository;
 import boardservice.repository.LanguageRepository;
 import boardservice.repository.PictogramRepository;
+import boardservice.utils.UserValidator;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,7 +35,7 @@ import static org.mockito.Mockito.*;
 class PictogramServiceTest {
 
     @Mock
-    private BoardService boardService;
+    private UserValidator userValidator;
 
     @Mock
     private LanguageRepository languageRepository;
@@ -89,25 +91,24 @@ class PictogramServiceTest {
         GetAllPictogramsRequestDto request = new GetAllPictogramsRequestDto(ownerId);
         PictogramDto dto = PictogramDto.builder().id(pictogramId).name("casa").build();
 
-        doNothing().when(boardService).validateUserAccess(requesterId.toString(), ownerId);
+        doNothing().when(userValidator).validateUserAccess(requesterId.toString(), ownerId);
         when(pictogramRepository.findAllByOwnerId(ownerId)).thenReturn(List.of(pictogram));
         when(pictogramMapper.toDto(pictogram)).thenReturn(dto);
 
         List<PictogramDto> result = pictogramService.getAllPictograms(requesterId.toString(), request);
 
         assertEquals(1, result.size());
-            assertEquals(dto, result.get(0));
+        assertEquals(dto, result.get(0));
     }
 
     @Test
     void getAllPictograms_ThrowsWhenUnauthorized() {
         GetAllPictogramsRequestDto request = new GetAllPictogramsRequestDto(ownerId);
-        doThrow(new UnauthorizedAccessException("No access")).when(boardService)
+        doThrow(new UnauthorizedAccessException("No access")).when(userValidator)
                 .validateUserAccess(requesterId.toString(), ownerId);
 
-        assertThrows(UnauthorizedAccessException.class, () ->
-                pictogramService.getAllPictograms(requesterId.toString(), request)
-        );
+        assertThrows(UnauthorizedAccessException.class,
+                () -> pictogramService.getAllPictograms(requesterId.toString(), request));
     }
 
     @Test
@@ -115,7 +116,7 @@ class PictogramServiceTest {
         PictogramPushRequestDto request = new PictogramPushRequestDto(imageId, ownerId, "casa", "es");
         PictogramDto dto = PictogramDto.builder().id(pictogramId).name("casa").build();
 
-        doNothing().when(boardService).validateUserAccess(requesterId.toString(), ownerId);
+        doNothing().when(userValidator).validateUserAccess(requesterId.toString(), ownerId);
         when(imageRepository.findByIdAndOwnerId(imageId, ownerId)).thenReturn(Optional.of(image));
         when(pictogramMapper.create(request, image)).thenReturn(pictogram);
         when(pictogramMapper.toDto(pictogram)).thenReturn(dto);
@@ -129,12 +130,11 @@ class PictogramServiceTest {
     @Test
     void pushPictogram_ThrowsWhenImageMissing() {
         PictogramPushRequestDto request = new PictogramPushRequestDto(imageId, ownerId, "casa", "es");
-        doNothing().when(boardService).validateUserAccess(requesterId.toString(), ownerId);
+        doNothing().when(userValidator).validateUserAccess(requesterId.toString(), ownerId);
         when(imageRepository.findByIdAndOwnerId(imageId, ownerId)).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class, () ->
-                pictogramService.pushPictogram(requesterId.toString(), request)
-        );
+        assertThrows(ResourceNotFoundException.class,
+                () -> pictogramService.pushPictogram(requesterId.toString(), request));
     }
 
     @Test
@@ -146,7 +146,7 @@ class PictogramServiceTest {
 
         PictogramDto dto = PictogramDto.builder().id(pictogramId).name("hogar").build();
 
-        doNothing().when(boardService).validateUserAccess(requesterId.toString(), ownerId);
+        doNothing().when(userValidator).validateUserAccess(requesterId.toString(), ownerId);
         when(pictogramRepository.findByIdAndOwnerId(pictogramId, ownerId)).thenReturn(Optional.of(pictogram));
         when(languageRepository.findByCode("en")).thenReturn(Optional.of(newLanguage));
         when(imageRepository.findByIdAndOwnerId(imageId, ownerId)).thenReturn(Optional.of(image));
@@ -164,19 +164,18 @@ class PictogramServiceTest {
     @Test
     void updatePictogram_ThrowsWhenLanguageNotFound() {
         PictogramUpdateRequestDto request = new PictogramUpdateRequestDto(ownerId, imageId, "hogar", "en");
-        doNothing().when(boardService).validateUserAccess(requesterId.toString(), ownerId);
+        doNothing().when(userValidator).validateUserAccess(requesterId.toString(), ownerId);
         when(pictogramRepository.findByIdAndOwnerId(pictogramId, ownerId)).thenReturn(Optional.of(pictogram));
         when(languageRepository.findByCode("en")).thenReturn(Optional.empty());
 
-        assertThrows(LanguageNotFoundException.class, () ->
-                pictogramService.updatePictogram(requesterId.toString(), pictogramId, request)
-        );
+        assertThrows(LanguageNotFoundException.class,
+                () -> pictogramService.updatePictogram(requesterId.toString(), pictogramId, request));
     }
 
     @Test
     void deletePictogram_Removes_WhenFound() {
         DeletePictogramRequestDto request = DeletePictogramRequestDto.builder().ownerId(ownerId).build();
-        doNothing().when(boardService).validateUserAccess(requesterId.toString(), ownerId);
+        doNothing().when(userValidator).validateUserAccess(requesterId.toString(), ownerId);
         when(pictogramRepository.findByIdAndOwnerId(pictogramId, ownerId)).thenReturn(Optional.of(pictogram));
 
         pictogramService.deletePictogram(requesterId.toString(), pictogramId, request);
@@ -187,11 +186,10 @@ class PictogramServiceTest {
     @Test
     void deletePictogram_ThrowsWhenMissing() {
         DeletePictogramRequestDto request = DeletePictogramRequestDto.builder().ownerId(ownerId).build();
-        doNothing().when(boardService).validateUserAccess(requesterId.toString(), ownerId);
+        doNothing().when(userValidator).validateUserAccess(requesterId.toString(), ownerId);
         when(pictogramRepository.findByIdAndOwnerId(pictogramId, ownerId)).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class, () ->
-                pictogramService.deletePictogram(requesterId.toString(), pictogramId, request)
-        );
+        assertThrows(ResourceNotFoundException.class,
+                () -> pictogramService.deletePictogram(requesterId.toString(), pictogramId, request));
     }
 }

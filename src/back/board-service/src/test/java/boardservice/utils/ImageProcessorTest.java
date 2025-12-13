@@ -1,12 +1,10 @@
-package boardservice.service;
+package boardservice.utils;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
-
-import boardservice.utils.ImageProcessor;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

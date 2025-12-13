@@ -13,6 +13,7 @@ import boardservice.mapper.ImageMapper;
 import boardservice.repository.ImageRepository;
 import boardservice.repository.PictogramRepository;
 import boardservice.utils.ImageProcessor;
+import boardservice.utils.UserValidator;
 import boardservice.utils.ImageProcessor.ProcessedImage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,7 +35,7 @@ import static org.mockito.Mockito.*;
 class ImageServiceTest {
 
     @Mock
-    private BoardService boardService;
+    private UserValidator userValidator;
 
     @Mock
     private AuthServiceClient authServiceClient;
@@ -86,7 +87,7 @@ class ImageServiceTest {
         ImagePushRequestDto request = new ImagePushRequestDto("test.png", "es", ownerId);
         ImageDto dto = ImageDto.builder().id(imageId).name("test.png").build();
 
-        doNothing().when(boardService).validateUserAccess(requesterId.toString(), ownerId);
+        doNothing().when(userValidator).validateUserAccess(requesterId.toString(), ownerId);
         when(imageProcessor.process(file)).thenReturn(processedImage);
         when(authServiceClient.validateStorageLimit(requesterId, ownerId, processedImage.sizeBytes()))
                 .thenReturn(null);
@@ -104,7 +105,7 @@ class ImageServiceTest {
     void pushImage_PropagatesStorageLimitError() {
         ImagePushRequestDto request = new ImagePushRequestDto("test.png", "es", ownerId);
 
-        doNothing().when(boardService).validateUserAccess(requesterId.toString(), ownerId);
+        doNothing().when(userValidator).validateUserAccess(requesterId.toString(), ownerId);
         when(imageProcessor.process(file)).thenReturn(processedImage);
         when(authServiceClient.validateStorageLimit(requesterId, ownerId, processedImage.sizeBytes()))
                 .thenThrow(new RuntimeException("limit"));
@@ -119,7 +120,7 @@ class ImageServiceTest {
         DeleteImageRequestDto request = DeleteImageRequestDto.builder().ownerId(ownerId).build();
         Pictogram pictogram = Pictogram.builder().image(image).ownerId(ownerId).build();
 
-        doNothing().when(boardService).validateUserAccess(requesterId.toString(), ownerId);
+        doNothing().when(userValidator).validateUserAccess(requesterId.toString(), ownerId);
         when(imageRepository.findByIdAndOwnerId(imageId, ownerId)).thenReturn(Optional.of(image));
         when(pictogramRepository.findAllByImageIdAndOwnerId(imageId, ownerId)).thenReturn(List.of(pictogram));
 
@@ -134,7 +135,7 @@ class ImageServiceTest {
     void deleteImage_ThrowsWhenNotFound() {
         DeleteImageRequestDto request = DeleteImageRequestDto.builder().ownerId(ownerId).build();
 
-        doNothing().when(boardService).validateUserAccess(requesterId.toString(), ownerId);
+        doNothing().when(userValidator).validateUserAccess(requesterId.toString(), ownerId);
         when(imageRepository.findByIdAndOwnerId(imageId, ownerId)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () ->
@@ -147,7 +148,7 @@ class ImageServiceTest {
         GetAllPictogramsRequestDto request = new GetAllPictogramsRequestDto(ownerId);
         ImageDto dto = ImageDto.builder().id(imageId).name("test.png").build();
 
-        doNothing().when(boardService).validateUserAccess(requesterId.toString(), ownerId);
+        doNothing().when(userValidator).validateUserAccess(requesterId.toString(), ownerId);
         when(imageRepository.findAllByOwnerId(ownerId)).thenReturn(List.of(image));
         when(imageMapper.toDto(image)).thenReturn(dto);
 

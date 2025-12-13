@@ -29,6 +29,8 @@ import { ListaPictogramasComponent } from './features/gestor/pictogramas/lista-p
 import { SelectorImagenesComponent } from './features/gestor/pictogramas/selector-imagenes/selector-imagenes.component';
 import { ModalUploadImagenComponent } from './features/gestor/pictogramas/modal-upload-imagen/modal-upload-imagen.component';
 import { CrearEditarPictogramaComponent } from './features/gestor/pictogramas/crear-editar-pictograma/crear-editar-pictograma.component';
+import { ListaSectionesComponent } from './features/gestor/secciones/lista-secciones/lista-secciones.component';
+import { CrearEditarSeccionComponent } from './features/gestor/secciones/crear-editar-seccion/crear-editar-seccion.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +54,9 @@ import { CrearEditarPictogramaComponent } from './features/gestor/pictogramas/cr
     ListaPictogramasComponent,
     SelectorImagenesComponent,
     ModalUploadImagenComponent,
-    CrearEditarPictogramaComponent
+    CrearEditarPictogramaComponent,
+    ListaSectionesComponent,
+    CrearEditarSeccionComponent
   ],
   imports: [
     BrowserModule,

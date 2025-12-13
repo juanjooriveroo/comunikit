@@ -56,10 +56,26 @@
         [class.show]="activeTab === 'secciones'"
         *ngIf="activeTab === 'secciones'"
       >
-        <div class="alert alert-info text-center py-5">
-          <h4 class="mb-3">Coming Soon</h4>
-          <p class="mb-0">Las secciones estarán disponibles pronto</p>
+        <div class="mb-4" *ngIf="!mostrarFormularioSeccion">
+          <button type="button" class="btn btn-primary" (click)="crearSeccion()">
+            Nueva sección
+          </button>
         </div>
+
+        <app-crear-editar-seccion
+          *ngIf="mostrarFormularioSeccion"
+          [ownerId]="dependienteId"
+          [seccion]="seccionEditando"
+          (cancelar)="cerrarFormularioSeccion()"
+          (seccionCreada)="seccionGuardada($event)"
+        ></app-crear-editar-seccion>
+
+        <app-lista-secciones
+          *ngIf="!mostrarFormularioSeccion"
+          [ownerId]="dependienteId"
+          [key]="reloadKeySeccion"
+          (editar)="editarSeccion($event)"
+        ></app-lista-secciones>
       </div>
 
       <!-- Pestaña de Pictogramas -->
@@ -85,7 +101,7 @@
         <app-lista-pictogramas
           *ngIf="!mostrarFormularioPictograma"
           [ownerId]="dependienteId"
-          [key]="reloadKey"
+          [key]="reloadKeyPictograma"
           (editar)="editarPictograma($event)"
         ></app-lista-pictogramas>
       </div>

@@ -21,7 +21,7 @@ CREATE TABLE image (
     size_bytes BIGINT NOT NULL,
     language_code CHAR(2) NOT NULL REFERENCES language(code),
     owner_id UUID NOT NULL,
-    public BOOLEAN NOT NULL DEFAULT FALSE
+    is_public BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE pictogram (
@@ -29,5 +29,22 @@ CREATE TABLE pictogram (
     name VARCHAR(50) UNIQUE NOT NULL,
     language_code CHAR(2) NOT NULL REFERENCES language(code),
     image_id UUID NOT NULL REFERENCES image(id) ON DELETE CASCADE,
-    owner_id UUID NOT NULL
+    owner_id UUID NOT NULL,
+    is_public BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+CREATE TABLE section (
+    id UUID PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    image_id UUID NOT NULL REFERENCES image(id),
+    language_code CHAR(2) NOT NULL REFERENCES language(code),
+    owner_id UUID NOT NULL,
+    is_public BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+CREATE TABLE section_pictogram (
+    section_id UUID NOT NULL REFERENCES section(id) ON DELETE CASCADE,
+    pictogram_id UUID NOT NULL REFERENCES pictogram(id) ON DELETE CASCADE,
+    pictogram_order INTEGER,
+    PRIMARY KEY (section_id, pictogram_id)
 );

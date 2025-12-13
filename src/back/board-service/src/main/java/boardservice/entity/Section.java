@@ -7,16 +7,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "image")
+@Table(name = "section")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Schema(description = "Entidad que representa una imagen almacenada en la plataforma.")
+@Schema(description = "Entidad que representa una sección almacenada en la plataforma.")
 @Builder
-public class Image {
+public class Section {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -35,28 +37,13 @@ public class Image {
     )
     private String name;
 
-    @Column(name = "image", columnDefinition = "bytea", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "image_id", nullable = false)
     @Schema(
-            description = "Contenido binario de la imagen.",
+            description = "Imagen asociada al pictograma.",
             nullable = false
     )
-    private byte[] image;
-
-    @Column(name = "mime_type", nullable = false, length = 50)
-    @Schema(
-            description = "MIME type original de la imagen.",
-            example = "image/png",
-            nullable = false
-    )
-    private String mimeType;
-
-    @Column(name = "size_bytes", nullable = false)
-    @Schema(
-            description = "Tamaño de la imagen en bytes tras la compresión.",
-            example = "15324",
-            nullable = false
-    )
-    private long sizeBytes;
+    private Image image;
 
     @ManyToOne
     @JoinColumn(name = "language_code", nullable = false)
@@ -82,4 +69,14 @@ public class Image {
     )
     private boolean isPublic;
 
+    @ManyToMany
+    @JoinTable(
+            name = "section_pictogram",
+            joinColumns = @JoinColumn(name = "section_id"),
+            inverseJoinColumns = @JoinColumn(name = "pictogram_id")
+    )
+    @OrderColumn(name = "pictogram_order")
+    @Schema(description = "Lista de pictogramas asociados a la sección.")
+    @Builder.Default
+    private List<Pictogram> pictograms = new ArrayList<>();
 }

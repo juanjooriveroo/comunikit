@@ -13,6 +13,7 @@ import boardservice.mapper.PictogramMapper;
 import boardservice.repository.ImageRepository;
 import boardservice.repository.LanguageRepository;
 import boardservice.repository.PictogramRepository;
+import boardservice.utils.UserValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PictogramService {
 
-    private final BoardService boardService;
+    private final UserValidator userValidator;
     private final LanguageRepository languageRepository;
     private final PictogramRepository pictogramRepository;
     private final PictogramMapper pictogramMapper;
@@ -33,7 +34,7 @@ public class PictogramService {
 
     @Transactional
     public List<PictogramDto> getAllPictograms(String userId, GetAllPictogramsRequestDto request) {
-        boardService.validateUserAccess(userId, request.ownerId());
+        userValidator.validateUserAccess(userId, request.ownerId());
 
         List<PictogramDto> response = new ArrayList<>();
         pictogramRepository.findAllByOwnerId(request.ownerId()).forEach(pictogram -> response.add(pictogramMapper.toDto(pictogram)));
@@ -42,7 +43,7 @@ public class PictogramService {
 
     @Transactional
     public PictogramDto pushPictogram(String userId, PictogramPushRequestDto request) {
-        boardService.validateUserAccess(userId, request.ownerId());
+        userValidator.validateUserAccess(userId, request.ownerId());
 
         Image image = imageRepository.findByIdAndOwnerId(request.imageId(), request.ownerId())
                 .orElseThrow(() -> new ResourceNotFoundException("Imagen no vinculada al usuario asignado o no encontrada"));
@@ -54,7 +55,7 @@ public class PictogramService {
 
     @Transactional
     public PictogramDto updatePictogram(String userId, UUID pictogramId, PictogramUpdateRequestDto request) {
-        boardService.validateUserAccess(userId, request.ownerId());
+        userValidator.validateUserAccess(userId, request.ownerId());
 
         Pictogram pictogram = pictogramRepository.findByIdAndOwnerId(pictogramId, request.ownerId())
                 .orElseThrow(() -> new ResourceNotFoundException("Pictograma no vinculado al usuario asignado"));
@@ -80,7 +81,7 @@ public class PictogramService {
 
     @Transactional
     public void deletePictogram(String userId, UUID pictogramId, DeletePictogramRequestDto requestDto) {
-        boardService.validateUserAccess(userId, requestDto.ownerId());
+        userValidator.validateUserAccess(userId, requestDto.ownerId());
 
         Pictogram pictogram = pictogramRepository.findByIdAndOwnerId(pictogramId, requestDto.ownerId())
                 .orElseThrow(() -> new ResourceNotFoundException("Pictograma no vinculado al usuario asignado"));

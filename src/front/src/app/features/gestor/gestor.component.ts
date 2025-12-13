@@ -10,8 +10,11 @@ import { ActivatedRoute } from '@angular/router';
 export class GestorComponent implements OnInit {
   activeTab: 'tablero' | 'secciones' | 'pictogramas' = 'tablero';
   dependienteId: string = '';
+  mostrarFormularioSeccion: boolean = false;
   mostrarFormularioPictograma: boolean = false;
-  reloadKey: number = 0;
+  reloadKeySeccion: number = 0;
+  reloadKeyPictograma: number = 0;
+  seccionEditando: any = null;
   pictogramaEditando: any = null;
 
   constructor(private route: ActivatedRoute) {}
@@ -27,6 +30,38 @@ export class GestorComponent implements OnInit {
     this.activeTab = tab;
   }
 
+  // Métodos para secciones
+  crearSeccion(): void {
+    this.seccionEditando = null;
+    this.mostrarFormularioSeccion = true;
+  }
+
+  cerrarFormularioSeccion(): void {
+    this.mostrarFormularioSeccion = false;
+    this.seccionEditando = null;
+    this.reloadKeySeccion++;
+  }
+
+  editarSeccion(seccion: any): void {
+    this.seccionEditando = seccion;
+    this.mostrarFormularioSeccion = true;
+  }
+
+  seccionGuardada(seccion: any): void {
+    // Si se acaba de crear, abrirlo automáticamente en edición
+    if (seccion && seccion.shouldReopen === true) {
+      // Pequeño delay para que el componente se re-cargue
+      setTimeout(() => {
+        this.seccionEditando = seccion;
+        this.mostrarFormularioSeccion = true;
+      }, 100);
+    } else if (seccion) {
+      // Si es actualización, recargar lista
+      this.cerrarFormularioSeccion();
+    }
+  }
+
+  // Métodos para pictogramas
   crearPictograma(): void {
     this.pictogramaEditando = null;
     this.mostrarFormularioPictograma = true;
@@ -35,7 +70,7 @@ export class GestorComponent implements OnInit {
   cerrarFormularioPictograma(): void {
     this.mostrarFormularioPictograma = false;
     this.pictogramaEditando = null;
-    this.reloadKey++;
+    this.reloadKeyPictograma++;
   }
 
   editarPictograma(pictograma: any): void {

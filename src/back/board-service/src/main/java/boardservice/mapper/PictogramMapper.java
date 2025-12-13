@@ -24,6 +24,7 @@ public class PictogramMapper {
                 .name(pictogram.getName())
                 .language(pictogram.getLanguage())
                 .image(imageMapper.toDto(pictogram.getImage()))
+                .is_public(pictogram.isPublic())
                 .build();
     }
 
@@ -35,6 +36,7 @@ public class PictogramMapper {
                 .name(request.name())
                 .language(languageRepository.findByCode(request.language())
                         .orElseThrow(() -> new LanguageNotFoundException("Lenguaje no encontrado")))
+                .isPublic(false)
                 .build();
     }
 }

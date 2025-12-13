@@ -174,6 +174,13 @@ Una historia se considera DONE cuando:
 - Refactorizo el código, creando controladores, servicios y tests para pictogramas, imagenes y usuarios en vez de centralizarlo en un solo controlador, servicio o test global
 - Elimino componente no utilizado en el front
 
+**Día 11 (13/12)**:
+- Creación de las tablas de secciones y seccion-pictograma en el sql de board-service
+- Creación de controlador, servicio, mapper, repositorio y entidad de seccion en el board-service
+- Refactorización de UserValidator
+- Tests de secciones en el back
+- Creación, borrado y customización de secciones en el front
+
 ---
 
 ## Métricas de Éxito

@@ -14,6 +14,7 @@ import boardservice.repository.ImageRepository;
 import boardservice.repository.PictogramRepository;
 import boardservice.utils.ImageProcessor;
 import boardservice.utils.ImageProcessor.ProcessedImage;
+import boardservice.utils.UserValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ImageService {
 
-    private final BoardService boardService;
+    private final UserValidator userValidator;
     private final AuthServiceClient authServiceClient;
     private final ImageRepository imageRepository;
     private final PictogramRepository pictogramRepository;
@@ -37,7 +38,7 @@ public class ImageService {
 
     @Transactional
     public ImageDto pushImage(String userId, ImagePushRequestDto request, MultipartFile file) {
-        boardService.validateUserAccess(userId, request.ownerId());
+        userValidator.validateUserAccess(userId, request.ownerId());
 
         ProcessedImage processedImage = imageProcessor.process(file);
         authServiceClient.validateStorageLimit(UUID.fromString(userId), request.ownerId(), processedImage.sizeBytes());
@@ -51,7 +52,7 @@ public class ImageService {
 
     @Transactional
     public void deleteImage(String userId, UUID imageId, DeleteImageRequestDto requestDto) {
-        boardService.validateUserAccess(userId, requestDto.ownerId());
+        userValidator.validateUserAccess(userId, requestDto.ownerId());
 
         Image image = imageRepository.findByIdAndOwnerId(imageId, requestDto.ownerId())
                 .orElseThrow(() -> new ResourceNotFoundException("Imagen no vinculada al usuario asignado o no encontrada"));
@@ -67,7 +68,7 @@ public class ImageService {
 
     @Transactional
     public List<ImageDto> getAllImages(String userId, GetAllPictogramsRequestDto request) {
-        boardService.validateUserAccess(userId, request.ownerId());
+        userValidator.validateUserAccess(userId, request.ownerId());
 
         List<ImageDto> response = new ArrayList<>();
         imageRepository.findAllByOwnerId(request.ownerId()).forEach(image -> response.add(imageMapper.toDto(image)));

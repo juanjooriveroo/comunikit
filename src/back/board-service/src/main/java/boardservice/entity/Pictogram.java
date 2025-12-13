@@ -50,6 +50,14 @@ public class Pictogram {
     )
     private Image image;
 
+    @Column(name = "is_public", nullable = false)
+    @Schema(
+            description = "Indica si la imagen es pública o privada.",
+            example = "false",
+            nullable = false
+    )
+    private boolean isPublic;
+
     @Column(name = "owner_id", nullable = false)
     @Schema(
             description = "Identificador del usuario propietario.",

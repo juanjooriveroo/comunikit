@@ -4,14 +4,14 @@ import boardservice.entity.Language;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
+import java.util.List;
 import java.util.UUID;
 
 @Schema(
-        description = "Dto de pictograma"
+        description = "Dto de sección"
 )
 @Builder
-public record PictogramDto (
-
+public record SectionDto (
         @Schema(
                 description = "Identificador único del pictograma.",
                 example = "550e8400-e29b-41d4-a716-446655440002",
@@ -25,17 +25,22 @@ public record PictogramDto (
         ) String name,
 
         @Schema(
-                description = "Idioma del pictograma.",
+                description = "Idioma de la sección.",
                 nullable = false
         ) Language language,
 
         @Schema(
-                description = "Imagen asociada al pictograma.",
+                description = "Sección asociada al pictograma.",
                 nullable = false
         ) ImageDto image,
 
         @Schema(
-                description = "Indica si es público o no.",
+                description = "Indica si la sección es pública o privada.",
                 nullable = false
-        ) Boolean is_public
+        ) Boolean isPublic,
+
+        @Schema(
+                description = "Lista de pictogramas de la sección.",
+                nullable = false
+        ) List<PictogramDto> pictograms
 ){}
