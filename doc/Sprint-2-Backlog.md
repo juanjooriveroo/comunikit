@@ -186,6 +186,8 @@ Una historia se considera DONE cuando:
 - Reordeno los .sql para ejecutar en orden dentro de postgres
 - Cambio la manera de guardar los pictogramas en las secciones (puedes colocarlas donde quieras y se reasigna la cantidad de pictogramas que caben (30 por sección) ), ajustando back y front
 
+**Día 13 (15/12)**:
+- Desarrollo de manuales del sprint
 ---
 
 ## Métricas de Éxito

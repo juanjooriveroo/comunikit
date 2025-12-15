@@ -1,7 +1,7 @@
 # Manual del Usuario - ComuniKIT
 
-**Versión**: 1.0  
-**Fecha**: 17 de noviembre de 2025  
+**Versión**: 2.0  
+**Fecha**: 26 de enero de 2026  
 **Audiencia**: Tutores y usuarios finales
 
 ---
@@ -13,9 +13,14 @@
 3. [Activar tu Cuenta](#activar-tu-cuenta)
 4. [Iniciar Sesión](#iniciar-sesión)
 5. [Recuperar Contraseña](#recuperar-contraseña)
-6. [Usar la Aplicación](#usar-la-aplicación)
-7. [Preguntas Frecuentes](#preguntas-frecuentes)
-8. [Soporte](#soporte)
+6. [Gestionar tu Perfil](#gestionar-tu-perfil)
+7. [Crear Usuarios Dependientes](#crear-usuarios-dependientes)
+8. [Gestionar Usuarios Dependientes](#gestionar-usuarios-dependientes)
+9. [Gestionar Pictogramas](#gestionar-pictogramas)
+10. [Gestionar Secciones](#gestionar-secciones)
+11. [Usar la Aplicación](#usar-la-aplicación)
+12. [Preguntas Frecuentes](#preguntas-frecuentes)
+13. [Soporte](#soporte)
 
 ---
 
@@ -40,7 +45,7 @@
 
 ### **Paso 1: Acceder a la página de registro**
 
-1. Abre `https://comunikit.duckdns.org/` en tu navegador
+1. Abre `https://comunikit.es/` en tu navegador
 2. Haz clic en el botón **"Registrarse"** (esquina superior derecha)
 
 ### **Paso 2: Completar el formulario**
@@ -99,7 +104,7 @@ El email contiene un botón azul:
 
 O también un enlace directo:
 ```
-https://comunikit.duckdns.org/auth/activate/abc123def456...
+https://comunikit.es/auth/activate/abc123def456...
 ```
 
 1. Haz clic en el botón o enlace
@@ -120,9 +125,9 @@ Después de activar, verás el mensaje:
 
 ### **Paso 1: Acceder a la página de login**
 
-1. Abre `https://comunikit.duckdns.org/`
+1. Abre `https://comunikit.es/`
 2. Haz clic en **"Iniciar Sesión"** (esquina superior derecha)
-3. O accede directamente a `https://comunikit.duckdns.org/login`
+3. O accede directamente a `https://comunikit.es/login`
 
 ### **Paso 2: Completar credenciales**
 
@@ -154,7 +159,7 @@ Ingresa:
 
 > **¿Olvidaste tu contraseña?**
 
-2. O accede directamente a: `https://comunikit.duckdns.org/auth/recovery`
+2. O accede directamente a: `https://comunikit.es/auth/recovery`
 
 ### **Paso 2: Solicitar recuperación**
 
@@ -223,8 +228,299 @@ Después de iniciar sesión, ves tu panel personal con:
 Haz clic en tu **nombre** (arriba a la derecha) para ver:
 
 - Mi Perfil
-- Proximamente
+- Editar Perfil
+- Cambiar Contraseña
+- Mis Dependientes
 - Cerrar Sesión
+
+---
+
+## Gestionar tu Perfil
+
+### **Editar tu Perfil**
+
+1. Haz clic en tu **nombre** (arriba a la derecha)
+2. Selecciona **"Editar Perfil"**
+3. Modifica los campos que desees:
+
+| Campo | Descripción |
+|-------|-------------|
+| **Nombre** | Tu nombre completo |
+| **Email** | Tu correo electrónico |
+| **Idioma** | Tu idioma preferido |
+
+4. Haz clic en **"Guardar Cambios"**
+5. Verás un mensaje de confirmación
+
+### **Cambiar tu Contraseña**
+
+1. Haz clic en tu **nombre** (arriba a la derecha)
+2. Selecciona **"Cambiar Contraseña"**
+3. Completa el formulario:
+
+| Campo | Descripción |
+|-------|-------------|
+| **Contraseña Actual** | Tu contraseña actual |
+| **Nueva Contraseña** | Mínimo 8 caracteres |
+| **Confirmar Contraseña** | Repite la nueva contraseña |
+
+4. Haz clic en **"Cambiar Contraseña"**
+5. La próxima vez que inicies sesión, usa tu nueva contraseña
+
+### **Eliminar tu Cuenta**
+
+⚠️ **Advertencia**: Esta acción es **irreversible** y eliminará:
+- Tu cuenta de tutor
+- Todas las cuentas dependientes asociadas
+- Todos los pictogramas e imágenes
+- Todas las secciones y tableros
+
+1. Haz clic en tu **nombre** (arriba a la derecha)
+2. Selecciona **"Eliminar Cuenta"**
+3. Ingresa tu **contraseña** para confirmar
+4. Haz clic en **"Eliminar mi Cuenta"**
+5. Recibirás un **email de confirmación** de la baja
+
+---
+
+## Crear Usuarios Dependientes
+
+Como **Tutor**, puedes crear cuentas para tus usuarios (alumnos, familiares, etc.) que utilizarán los tableros de comunicación.
+
+### **¿Qué es un Usuario Dependiente?**
+
+Un usuario dependiente es una persona que:
+- Utiliza pictogramas para comunicarse
+- No necesita email para acceder
+- Es gestionado completamente por ti (el tutor)
+- Tiene un límite de **50MB** de almacenamiento para imágenes
+
+### **Crear un Usuario Dependiente**
+
+1. Inicia sesión con tu cuenta de **Tutor**
+2. En el menú, selecciona **"Crear Usuario"** o accede a `https://comunikit.es/create-user`
+3. Completa el formulario:
+
+| Campo | Descripción | Ejemplo |
+|-------|-------------|----------|
+| **Nombre** | Nombre del usuario | María García |
+| **Apellido** | Apellido del usuario | López |
+| **Contraseña** | Contraseña de acceso (mín. 8 caracteres) | MiClave123 |
+| **Confirmar Contraseña** | Repite la contraseña | MiClave123 |
+| **Idioma** | Idioma del tablero | Español |
+
+4. Haz clic en **"Crear Usuario"**
+5. El sistema generará un **nombre de usuario único** automáticamente
+6. Guarda las credenciales en un lugar seguro:
+
+> **Usuario creado exitosamente**
+> 
+> Nombre de usuario: `maria.garcia.123`
+> Contraseña: (la que ingresaste)
+
+---
+
+## Gestionar Usuarios Dependientes
+
+### **Ver tus Usuarios Dependientes**
+
+1. Haz clic en tu **nombre** (arriba a la derecha)
+2. Selecciona **"Mis Dependientes"**
+3. Verás una lista con todos tus usuarios:
+
+| Nombre | Usuario | Acciones |
+|--------|---------|----------|
+| María García | maria.garcia.123 | 👁️ Ver \| ✏️ Editar \| 🗑️ Eliminar |
+| Pedro López | pedro.lopez.456 | 👁️ Ver \| ✏️ Editar \| 🗑️ Eliminar |
+
+### **Ver Detalle de un Dependiente**
+
+Haz clic en **👁️ Ver** para acceder al perfil completo:
+
+- **Información personal**: Nombre, usuario, idioma
+- **Almacenamiento usado**: X MB de 50 MB
+- **Acceso al Gestor**: Botón para gestionar su tablero
+
+### **Editar Datos de un Dependiente**
+
+1. En la lista de dependientes, haz clic en **✏️ Editar**
+2. Modifica los campos necesarios:
+   - Nombre
+   - Idioma
+3. Haz clic en **"Guardar Cambios"**
+
+### **Cambiar Contraseña de un Dependiente**
+
+1. Accede al detalle del dependiente
+2. Haz clic en **"Cambiar Contraseña"**
+3. Ingresa:
+   - Tu contraseña de tutor (para verificar)
+   - Nueva contraseña para el dependiente
+   - Confirmar nueva contraseña
+4. Haz clic en **"Cambiar Contraseña"**
+
+### **Eliminar un Usuario Dependiente**
+
+⚠️ **Advertencia**: Esto eliminará permanentemente:
+- La cuenta del dependiente
+- Todos sus pictogramas e imágenes personalizados
+- Todas sus secciones
+
+1. En la lista de dependientes, haz clic en **🗑️ Eliminar**
+2. Confirma ingresando **tu contraseña de tutor**
+3. Haz clic en **"Eliminar"**
+
+---
+
+## Gestionar Pictogramas
+
+Los pictogramas son las imágenes con texto que los usuarios utilizan para comunicarse.
+
+### **Acceder al Gestor de Pictogramas**
+
+1. Ve a **"Mis Dependientes"**
+2. Selecciona el dependiente
+3. Haz clic en **"Gestionar Tablero"** o el botón de acceso al gestor
+4. En el gestor, selecciona la pestaña **"Pictogramas"**
+
+### **Subir una Imagen**
+
+Antes de crear un pictograma, necesitas subir la imagen:
+
+1. En la pestaña **"Pictogramas"**, haz clic en **"Subir Imagen"**
+2. Se abrirá un modal para seleccionar archivo
+3. Selecciona una imagen de tu dispositivo
+
+**Requisitos de la imagen**:
+| Requisito | Valor |
+|-----------|-------|
+| **Formatos** | PNG, JPG, JPEG |
+| **Tamaño máximo** | 5 MB |
+| **Recomendación** | Imágenes cuadradas, fondo claro |
+
+4. Haz clic en **"Subir"**
+5. La imagen se guardará y estará disponible para crear pictogramas
+
+### **Crear un Pictograma**
+
+1. En la pestaña **"Pictogramas"**, haz clic en **"Crear Pictograma"**
+2. Completa el formulario:
+
+| Campo | Descripción | Ejemplo |
+|-------|-------------|----------|
+| **Nombre** | Texto que representa el pictograma | Casa |
+| **Idioma** | Idioma del texto | Español |
+| **Imagen** | Selecciona de tus imágenes subidas | 🏠 |
+
+3. Haz clic en **"Crear"**
+4. El pictograma aparecerá en tu lista
+
+### **Editar un Pictograma**
+
+1. En la lista de pictogramas, haz clic en **✏️ Editar**
+2. Modifica:
+   - Nombre/texto
+   - Idioma
+   - Imagen asociada
+3. Haz clic en **"Guardar"**
+
+### **Eliminar un Pictograma**
+
+1. En la lista de pictogramas, haz clic en **🗑️ Eliminar**
+2. Confirma la eliminación
+
+> **Nota**: Eliminar un pictograma NO elimina la imagen. La imagen sigue disponible para otros pictogramas.
+
+### **Eliminar una Imagen**
+
+⚠️ **Advertencia**: Eliminar una imagen también eliminará todos los pictogramas que la usen.
+
+1. En el selector de imágenes, localiza la imagen
+2. Haz clic en **🗑️ Eliminar**
+3. Confirma la eliminación
+
+### **Control de Almacenamiento**
+
+Cada cuenta dependiente tiene un límite de **50 MB** para imágenes.
+
+- Puedes ver el **espacio usado** en el perfil del dependiente
+- Si alcanzas el límite, deberás eliminar imágenes antes de subir nuevas
+- Los pictogramas públicos (del sistema) no cuentan para tu cuota
+
+---
+
+## Gestionar Secciones
+
+Las secciones organizan los pictogramas en categorías dentro del tablero.
+
+### **¿Qué es una Sección?**
+
+Una sección es un grupo de pictogramas relacionados. Por ejemplo:
+- 🍎 **Comida**: manzana, pan, agua, leche...
+- 👤 **Cuerpo**: mano, cabeza, pie, ojo...
+- 🏠 **Lugares**: casa, escuela, parque...
+- 😊 **Emociones**: feliz, triste, enfadado...
+
+### **Acceder al Gestor de Secciones**
+
+1. Ve a **"Mis Dependientes"**
+2. Selecciona el dependiente
+3. Haz clic en **"Gestionar Tablero"**
+4. Selecciona la pestaña **"Secciones"**
+
+### **Crear una Sección**
+
+1. En la pestaña **"Secciones"**, haz clic en **"Crear Sección"**
+2. Completa el formulario:
+
+| Campo | Descripción | Ejemplo |
+|-------|-------------|----------|
+| **Nombre** | Nombre de la categoría | Comida |
+| **Idioma** | Idioma de la sección | Español |
+| **Imagen de portada** | Imagen representativa | 🍎 |
+
+3. Haz clic en **"Crear"**
+4. La sección se abrirá automáticamente para que añadas pictogramas
+
+### **Añadir Pictogramas a una Sección**
+
+1. Abre la sección que quieres editar (haz clic en **✏️ Editar**)
+2. Verás una cuadrícula con **30 posiciones** disponibles
+3. Haz clic en una posición vacía
+4. Selecciona el pictograma que quieres añadir
+5. El pictograma aparecerá en esa posición
+6. Repite para añadir más pictogramas
+7. Haz clic en **"Guardar"** cuando termines
+
+### **Reorganizar Pictogramas en una Sección**
+
+1. Abre la sección en modo edición
+2. Arrastra los pictogramas a las posiciones deseadas
+3. Haz clic en **"Guardar"**
+
+### **Quitar un Pictograma de una Sección**
+
+1. Abre la sección en modo edición
+2. Haz clic en el pictograma que quieres quitar
+3. Selecciona **"Quitar de sección"**
+4. El pictograma se quitará de la sección (pero NO se elimina)
+
+### **Editar una Sección**
+
+1. En la lista de secciones, haz clic en **✏️ Editar**
+2. Puedes modificar:
+   - Nombre
+   - Idioma
+   - Imagen de portada
+   - Pictogramas incluidos
+3. Haz clic en **"Guardar"**
+
+### **Eliminar una Sección**
+
+1. En la lista de secciones, haz clic en **🗑️ Eliminar**
+2. Confirma la eliminación
+
+> **Nota**: Eliminar una sección NO elimina los pictogramas. Solo se elimina la organización.
 
 ---
 
@@ -244,7 +540,35 @@ Haz clic en tu **nombre** (arriba a la derecha) para ver:
 
 ### **P: ¿Puedo cambiar mi email después de registrarme?**
 
-**R**: Actualmente no. Contacta al soporte si necesitas cambiar tu email registrado.
+**R**: Sí, ahora puedes cambiar tu email desde **Editar Perfil** en el menú de usuario.
+
+### **P: ¿Cuántos usuarios dependientes puedo crear?**
+
+**R**: No hay límite en la cantidad de usuarios dependientes que puedes crear.
+
+### **P: ¿Cuánto espacio tiene cada usuario dependiente?**
+
+**R**: Cada usuario dependiente tiene **50 MB** de almacenamiento para imágenes personalizadas.
+
+### **P: ¿Qué formatos de imagen puedo subir?**
+
+**R**: Puedes subir imágenes en formato **PNG, JPG o JPEG**. El tamaño máximo por imagen es **5 MB**.
+
+### **P: ¿Los pictogramas públicos ocupan espacio de mi cuota?**
+
+**R**: No. Los pictogramas públicos del sistema (comida, cuerpo, etc.) no cuentan para tu límite de almacenamiento.
+
+### **P: ¿Cuántos pictogramas caben en una sección?**
+
+**R**: Cada sección puede tener hasta **30 pictogramas** organizados en una cuadrícula.
+
+### **P: ¿Puedo usar el mismo pictograma en varias secciones?**
+
+**R**: Sí. Un pictograma puede estar en múltiples secciones a la vez.
+
+### **P: ¿Qué pasa si elimino mi cuenta de tutor?**
+
+**R**: Se eliminarán permanentemente tu cuenta, todas las cuentas dependientes asociadas y todo su contenido (pictogramas, imágenes, secciones).
 
 ### **P: ¿Es segura mi contraseña?**
 
@@ -292,6 +616,20 @@ Recomendamos una **pantalla de al menos 320px** de ancho.
 
 ---
 
-**Última actualización**: 17 de noviembre de 2025
+## Resumen de Límites y Restricciones
+
+| Concepto | Límite |
+|----------|--------|
+| Usuarios dependientes por tutor | Sin límite |
+| Almacenamiento por dependiente | 50 MB |
+| Tamaño máximo por imagen | 5 MB |
+| Formatos de imagen | PNG, JPG, JPEG |
+| Pictogramas por sección | 30 |
+| Duración de sesión | 24 horas |
+| Longitud mínima de contraseña | 8 caracteres |
+
+---
+
+**Última actualización**: 26 de enero de 2026
 
 ¿Necesitas ayuda? Contacta al soporte: **jurrilo.25.22.github@gmail.com**
