@@ -43,7 +43,7 @@ Al finalizar este Sprint, debería tener:
 ---
 
 ### HU02 - Creación de Usuario final
-**Estado**: ⏳ To Do  
+**Estado**: FINISHED 
 **Dependencias**: HU01
 
 **Como** Tutor o Educador  
@@ -53,8 +53,8 @@ Al finalizar este Sprint, debería tener:
 #### Criterios de Aceptación
 - [x] **AC1**: Existe un formulario de creación con campos: nombre, idioma
 - ~~[x] **AC2**: El sistema genera automáticamente una contraseña segura~~
-- [ ] **AC3**: Se crea un tablero personal asociado al usuario
-- [ ] **AC4**: El tablero se clona del tablero público del idioma seleccionado
+- [x] **AC3**: Se crea un tablero personal asociado al usuario
+- [x] **AC4**: El tablero se clona del tablero público del idioma seleccionado
 - [x] **AC5**: El tutor que crea el usuario queda asignado automáticamente
 - [x] **AC6**: Se asigna un límite de 50MB de almacenamiento (campo `storage_used` inicializado a 0)
 - [x] **AC7**: Solo usuarios con rol TUTOR pueden acceder a este endpoint

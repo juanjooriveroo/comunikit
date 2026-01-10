@@ -9,9 +9,11 @@ import authservice.dto.StorageValidationResponseDto;
 import authservice.entity.Language;
 import authservice.entity.User;
 import authservice.entity.UserRelation;
+import authservice.event.DependentCreatedEvent;
 import authservice.exception.StorageLimitExceededException;
 import authservice.exception.UserNotFoundException;
 import authservice.exception.UserNotTutorException;
+import authservice.kafka.KafkaEventPublisher;
 import authservice.mapper.UserMapper;
 import authservice.repository.LanguageRepository;
 import authservice.repository.UserRelationRepository;
@@ -20,6 +22,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -31,6 +34,7 @@ public class UserService {
     private final UserRelationRepository userRelationRepository;
     private final UserMapper userMapper;
     private final LanguageRepository languageRepository;
+    private final KafkaEventPublisher kafkaEventPublisher;
 
     private float storageLimitMb = 50f;
 
@@ -138,6 +142,16 @@ public class UserService {
                 .tutor(currentUser)
                 .build();
         userRelationRepository.save(relation);
+
+        // Publicar evento para que board-service cree el tablero del dependiente
+        DependentCreatedEvent event = DependentCreatedEvent.builder()
+                .eventId(UUID.randomUUID().toString())
+                .dependentId(savedUser.getId().toString())
+                .tutorId(currentUser.getId().toString())
+                .languageCode(request.language())
+                .timestamp(LocalDateTime.now())
+                .build();
+        kafkaEventPublisher.publishDependentCreated(event);
 
         return CreateUserResponseDto.builder()
                 .username(savedUser.getUsername())

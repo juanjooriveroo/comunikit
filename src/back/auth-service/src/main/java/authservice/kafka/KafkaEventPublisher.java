@@ -1,5 +1,6 @@
 package authservice.kafka;
 
+import authservice.event.DependentCreatedEvent;
 import authservice.event.UserDeleteRequestEvent;
 import authservice.event.UserRecoveryAccountEvent;
 import authservice.event.UserRegisteredEvent;
@@ -34,5 +35,13 @@ public class KafkaEventPublisher {
      */
     public void publishDeleteRequest(UserDeleteRequestEvent event) {
         kafkaTemplate.send("user.delete", event.getUserId(), event);
+    }
+    
+    /**
+     * Publica evento de creación de usuario dependiente.
+     * Board-service consume este evento para crear el tablero del dependiente.
+     */
+    public void publishDependentCreated(DependentCreatedEvent event) {
+        kafkaTemplate.send("dependent.created", event.getDependentId(), event);
     }
 }

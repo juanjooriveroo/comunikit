@@ -2,7 +2,7 @@
 
 **Fecha de inicio**: 12 de noviembre de 2025  
 **Fecha de fin estimada**: 28 de enero de 2026  
-**Duración total**: 3 Sprints (12 semanas)
+**Duración total**: 3 Sprints (11 semanas)
 
 ---
 
@@ -62,21 +62,24 @@
 **Historias relacionadas**:
 - HU03: Subida de pictogramas
 - HU04: Creación de secciones privadas
-- HU05: Composición de frases
-- HU06: Tablero público para invitados
+- HU05: Gestión de tablero
+- HU06: Composición de frases
+- HU07: Tablero público para invitados
 - Integración TTS (Text-to-Speech)
 
 ---
 
-### Epic 4: Administración y Soporte
+### Epic 4: Administración y Soporte (Futuro)
 **Descripción**: Sistema de tickets, moderación de contenido y auditoría.
 
 **Valor de negocio**: Mantenimiento y soporte post-lanzamiento.
 
+**Estado**: Pospuesto para futuras versiones
+
 **Historias relacionadas**:
-- HU07: Gestión de tickets
+- Gestión de tickets
 - Panel de administración
-- Sistema de notificaciones por email
+- Sistema de notificaciones avanzado
 
 ---
 
@@ -123,10 +126,8 @@
 **Dependencias**: H01
 
 **Tareas técnicas**:
-- [ ] Endpoint POST `/api/users`
-- [ ] Lógica de clonación de tablero público
-- [ ] Generación de contraseña aleatoria segura
-- [ ] Validación de límite de usuarios por tutor
+- [x] Endpoint POST `/api/users`
+- [x] Lógica de clonación de tablero público
 - [x] Componente Angular de creación de usuario
 - [x] Guard de autorización (TUTOR)
 
@@ -149,11 +150,11 @@
 **Dependencias**: HU02
 
 **Tareas técnicas**:
-- [ ] Endpoint POST `/api/pictogramas`
-- [ ] Validación de MIME type (Java)
-- [ ] Almacenamiento en PostgreSQL (BYTEA)
-- [ ] Cálculo de espacio utilizado
-- [ ] Componente Angular de upload
+- [x] Endpoint POST `/api/pictogramas`
+- [x] Validación de MIME type (Java)
+- [x] Almacenamiento en PostgreSQL (BYTEA)
+- [x] Cálculo de espacio utilizado
+- [x] Componente Angular de upload
 
 ---
 
@@ -171,13 +172,38 @@
 **Dependencias**: HU02
 
 **Tareas técnicas**:
-- [ ] Endpoint POST `/api/tablero/secciones`
-- [ ] Lógica de asociación
-- [ ] Componente Angular de creación de sección
+- [x] Endpoint POST `/api/tablero/secciones`
+- [x] Lógica de asociación
+- [x] Componente Angular de creación de sección
 
 ---
 
-#### HU05 - Composición de frases
+#### HU05 - Gestión de tablero
+**Como** Usuario final  
+**Quiero** ver mi tablero con todas las secciones y pictogramas organizados  
+**Para** poder navegar y comunicarme de forma intuitiva
+
+**Criterios de aceptación**:
+- Visualización del tablero con secciones en formato grid
+- Navegación entre secciones (click para entrar, botón para volver)
+- Visualización de pictogramas dentro de cada sección
+- Reordenación de secciones mediante drag & drop
+- Persistencia del orden personalizado
+- Interfaz adaptada a tablets (touch-friendly)
+ 
+**Sprint**: Sprint 3  
+**Dependencias**: HU03, HU04
+
+**Tareas técnicas**:
+- [x] Endpoint GET `/board/{userId}` para tablero completo
+- [x] Endpoint PUT `/board/{userId}` para guardar orden
+- [ ] Componente Angular de visualización de tablero
+- [ ] Componente Angular de visualización de sección
+- [ ] Drag & drop para reordenar
+
+---
+
+#### HU06 - Composición de frases
 **Como** Usuario final  
 **Quiero** seleccionar pictogramas y reproducir la frase por voz  
 **Para** comunicar mis ideas
@@ -186,12 +212,13 @@
 - Click en pictogramas los añade a la barra de composición
 - Botón de reproducir genera audio con TTS
 - Botón de limpiar borra la composición
+- Botón de borrar último pictograma
 - TTS generado en el cliente (Web Speech API)
 - Funciona sin conexión una vez cargado
 - Soporte de idiomas (ES, EN, FR, DE, PT)
  
 **Sprint**: Sprint 3  
-**Dependencias**: HU03, HU04
+**Dependencias**: HU05
 
 **Tareas técnicas**:
 - [ ] Servicio Angular de TTS
@@ -201,50 +228,28 @@
 
 ---
 
-#### HU06 - Tablero público para invitados
+#### HU07 - Tablero público para invitados
 **Como** Invitado  
 **Quiero** acceder a un tablero público según idioma elegido  
-**Para** probar la aplicación
+**Para** probar la aplicación sin registrarme
 
 **Criterios de aceptación**:
-- Acceso sin login
-- Selector de idioma en landing page
+- Acceso sin login desde landing page
+- Selector de idioma visible
 - Tablero genérico con secciones predefinidas
 - Solo lectura (no editable)
 - TTS funcional
 - No se guardan datos
+- Botón para registrarse
  
 **Sprint**: Sprint 3  
-**Dependencias**: HU05
+**Dependencias**: HU05, HU06
 
 **Tareas técnicas**:
 - [ ] Endpoint GET `/api/public/tablero/{idioma}`
-- [ ] UUID de tableros públicos en BD
-- [ ] Componente Angular de landing page
-- [ ] Guard para permitir acceso público
-
----
-
-#### HU07 - Gestión de tickets
-**Como** Admin  
-**Quiero** gestionar los tickets enviados por tutores y educadores  
-**Para** resolver incidencias
-
-**Criterios de aceptación**:
-- Listado de tickets ordenados por fecha
-- Filtros: pendiente, en progreso, cerrado
-- Respuesta a tickets por email
-- Cambio de estado
-- Notificación por email al cerrar ticket
- 
-**Sprint**: Sprint 3  
-**Dependencias**: HU01
-
-**Tareas técnicas**:
-- [ ] Endpoints CRUD en admin-service
-- [ ] Modelo de datos Ticket
-- [ ] Publicación de evento Kafka `ticket.closed`
-- [ ] Panel de administración en Angular
+- [ ] Tableros públicos predefinidos en BD
+- [ ] Componente Angular de landing con selector
+- [ ] Ruta pública sin AuthGuard
 
 ## Diseño y UX
 
@@ -333,19 +338,20 @@ User (id, name, email, password, rol_id, language_id, storage_used)
 
 ---
 
-### Sprint 3: Admin + Polish (8/1 - 28/1)
-**Objetivo**: Tablero y Sys.Admin funcionando
+### Sprint 3: Tablero + TTS + Público (8/1 - 28/1)
+**Objetivo**: Tablero funcional con TTS y acceso público
 
 **Historias**:
-- HU05: Composición de frases 
-- HU06: Tablero público para invitados 
-- HU07: Gestión de tickets 
+- HU05: Gestión de tablero
+- HU06: Composición de frases
+- HU07: Tablero público para invitados
 
 **Tareas adicionales**:
-- Board-service completo
-- Admin-service
-- Notification-service
-- Bug fixes y optimizaciones
+- Board-service endpoints de visualización
+- Servicio TTS con Web Speech API
+- Tableros públicos predefinidos
+- Optimización para tablets
+- Bug fixes y polish final
 
 ---
 
@@ -380,4 +386,4 @@ Una historia se considera terminada cuando:
 
 ---
 
-**Última actualización**: 17 de noviembre de 2025
+**Última actualización**: 26 de enero de 2026

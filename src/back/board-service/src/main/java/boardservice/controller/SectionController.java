@@ -157,4 +157,31 @@ public class SectionController {
         SectionDto response = sectionService.updateSection(userId, id, request);
         return ResponseEntity.ok(response);
     }
+    
+    @Operation(
+            summary = "Obtener secciones públicas",
+            description = "Obtiene todas las secciones públicas disponibles. Opcionalmente se puede filtrar por idioma.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Obtención exitosa de secciones públicas"
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Error interno del servidor"
+                    )
+            }
+    )
+    @GetMapping("/sections-publics")
+    public ResponseEntity<List<SectionDto>> getPublicSections(
+            @RequestParam(value = "language", required = false) String languageCode
+    ) {
+        List<SectionDto> response;
+        if (languageCode != null && !languageCode.isBlank()) {
+            response = sectionService.getPublicSectionsByLanguage(languageCode);
+        } else {
+            response = sectionService.getPublicSections();
+        }
+        return ResponseEntity.ok(response);
+    }
 }

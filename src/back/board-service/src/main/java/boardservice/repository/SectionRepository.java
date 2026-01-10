@@ -11,4 +11,14 @@ public interface SectionRepository extends JpaRepository<Section, UUID> {
     List<Section> findAllByOwnerId(UUID ownerId);
 
     Optional<Section> findByIdAndOwnerId(UUID id, UUID ownerId);
+    
+    /**
+     * Obtiene todas las secciones públicas
+     */
+    List<Section> findAllByIsPublicTrue();
+    
+    /**
+     * Obtiene todas las secciones públicas por idioma
+     */
+    List<Section> findAllByIsPublicTrueAndLanguageCode(String languageCode);
 }

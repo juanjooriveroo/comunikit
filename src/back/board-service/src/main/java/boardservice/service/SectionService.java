@@ -112,4 +112,31 @@ public class SectionService {
         sectionRepository.save(section);
         return sectionMapper.toDto(section);
     }
+    
+    /**
+     * Obtiene todas las secciones públicas.
+     * No requiere autenticación.
+     *
+     * @return Lista de secciones públicas
+     */
+    public List<SectionDto> getPublicSections() {
+        List<SectionDto> response = new ArrayList<>();
+        sectionRepository.findAllByIsPublicTrue()
+                .forEach(section -> response.add(sectionMapper.toDto(section)));
+        return response;
+    }
+    
+    /**
+     * Obtiene todas las secciones públicas de un idioma.
+     * No requiere autenticación.
+     *
+     * @param languageCode Código del idioma
+     * @return Lista de secciones públicas del idioma
+     */
+    public List<SectionDto> getPublicSectionsByLanguage(String languageCode) {
+        List<SectionDto> response = new ArrayList<>();
+        sectionRepository.findAllByIsPublicTrueAndLanguageCode(languageCode)
+                .forEach(section -> response.add(sectionMapper.toDto(section)));
+        return response;
+    }
 }
