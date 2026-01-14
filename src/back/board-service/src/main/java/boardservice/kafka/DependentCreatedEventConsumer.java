@@ -2,6 +2,7 @@ package boardservice.kafka;
 
 import boardservice.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.util.UUID;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class DependentCreatedEventConsumer {
     
     private final BoardService boardService;
@@ -30,8 +32,12 @@ public class DependentCreatedEventConsumer {
             UUID dependentId = UUID.fromString(event.getDependentId());
             String languageCode = event.getLanguageCode();
             
+            log.info("Creando tablero para dependiente {} con idioma {}", dependentId, languageCode);
             boardService.createBoardForUser(dependentId, languageCode);
+            log.info("Tablero creado exitosamente para dependiente {}", dependentId);
         } catch (Exception e) {
+            log.error("Error al crear tablero para dependiente {}: {}", 
+                    event.getDependentId(), e.getMessage(), e);
         }
     }
 }

@@ -57,8 +57,7 @@ CREATE TABLE board (
     id UUID PRIMARY KEY,
     owner_id UUID NOT NULL,
     language_code CHAR(2) NOT NULL REFERENCES language(code),
-    is_public BOOLEAN NOT NULL DEFAULT FALSE,
-    UNIQUE (owner_id)
+    is_public BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 -- Relación tablero-sección con posición (grid 5x6 = 30 posiciones editables)

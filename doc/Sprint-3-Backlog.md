@@ -33,10 +33,10 @@ Al finalizar este Sprint, debería tener:
 - [ ] **AC1**: Visualización del tablero con secciones en formato grid
 - [ ] **AC2**: Navegación entre secciones (click para entrar, botón para volver)
 - [ ] **AC3**: Visualización de pictogramas dentro de cada sección
-- [ ] **AC4**: Reordenación de secciones mediante drag & drop o botones
-- [ ] **AC5**: Persistencia del orden personalizado en base de datos
-- [ ] **AC6**: Interfaz adaptada a tablets (touch-friendly)
-- [ ] **AC7**: Componentes Angular para visualización y edición del tablero
+- [x] **AC4**: Reordenación de secciones mediante drag & drop o botones
+- [x] **AC5**: Persistencia del orden personalizado en base de datos
+- [x] **AC6**: Interfaz adaptada a tablets (touch-friendly)
+- [x] **AC7**: Componentes Angular para visualización y edición del tablero
 
 ---
 
@@ -62,7 +62,7 @@ Al finalizar este Sprint, debería tener:
 
 ### HU07 - Tablero público para invitados
 **Estado**: ⏳ To Do  
-**Dependencias**: HU05, HU06
+**Dependencias**: HU05
 
 **Como** Invitado  
 **Quiero** acceder a un tablero público según idioma elegido  
@@ -82,9 +82,9 @@ Al finalizar este Sprint, debería tener:
 ## Tareas generales
 
 ### Board-Service
-- [ ] **G01**: Endpoint GET `/board/{userId}` para obtener tablero completo
-- [ ] **G02**: Endpoint GET `/board/public/{language}` para tablero público
-- [ ] **G03**: Crear tableros públicos predefinidos por idioma en BD
+- [x] **G01**: Endpoint GET `/board/{userId}` para obtener tablero completo
+- [x] **G02**: Endpoint GET `/board/public/{language}` para tablero público
+- [x] **G03**: Crear tableros públicos predefinidos por idioma en BD
 - [ ] **G04**: Tests de nuevos endpoints
 
 ### Frontend - Tablero
@@ -92,7 +92,7 @@ Al finalizar este Sprint, debería tener:
 - [ ] **G06**: Componente `seccion-view` para ver pictogramas de sección
 - [ ] **G07**: Componente `barra-composicion` para frases
 - [ ] **G08**: Servicio Angular de TTS (`tts.service.ts`)
-- [ ] **G09**: Drag & drop para reordenar secciones
+- [x] **G09**: Drag & drop para reordenar secciones
 
 ### Frontend - Público
 - [ ] **G10**: Nuevo Front con Astro para mayor velocidad de la aplicación
@@ -106,14 +106,14 @@ Al finalizar este Sprint, debería tener:
 - [ ] **DS1**: Diseño del tablero optimizado para tablets (mínimo 768px)
 - [ ] **DS2**: Pictogramas con tamaño mínimo de 80x80px para touch
 - [ ] **DS3**: Barra de composición con altura fija (100px)
-- [ ] **DS4**: Colores de la guía existente:
+- [x] **DS4**: Colores de la guía existente:
   - Primario: #3B82F6 (azul)
   - Secundario: #10B981 (verde)
   - Error: #EF4444 (rojo)
   - Fondo: #FFFFFF
   - Texto: #1F2937
   
-- [ ] **DS5**: Tipografía consistente:
+- [x] **DS5**: Tipografía consistente:
   - Fuente: Inter (Google Fonts)
   - Tamaños: 14px (body), 16px (inputs), 24px (h1)
   
@@ -143,6 +143,10 @@ Una historia se considera DONE cuando:
 - Creación de tablas de board-service.sql
 - Creación de tablero al crear usuario dependiente importando la copia del tablero publico del idioma seleccionado
 
+**Día 2 (14/01)**: 
+- Eliminamos la restricción UNIQUE de la tabla board porque daba problemas a la hora de devolver la tabla
+- Ajusto la col de food y body de los sql por errores
+- Ajusto la configuración de kafka en board-service para recibir correctamente la serialización del mensaje de creación de tabla para el usuario pedido
 ---
 
 ## Métricas de Éxito

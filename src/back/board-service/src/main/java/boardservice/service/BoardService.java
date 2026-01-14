@@ -159,28 +159,37 @@ public class BoardService {
         // Crear el nuevo tablero
         Board newBoard = boardMapper.createForUser(dependentId, languageCode);
         newBoard = boardRepository.save(newBoard);
+        entityManager.flush();
         
         // Clonar las posiciones de secciones del tablero público si existe
-        if (publicBoard != null && publicBoard.getSectionPositions() != null) {
+        if (publicBoard != null && publicBoard.getSectionPositions() != null 
+                && !publicBoard.getSectionPositions().isEmpty()) {
             List<BoardSection> clonedSections = boardMapper.cloneBoardSections(
                     newBoard.getId(),
                     publicBoard.getSectionPositions()
             );
             boardSectionRepository.saveAll(clonedSections);
-            newBoard.setSectionPositions(clonedSections);
+            entityManager.flush();
         }
         
         // Clonar las posiciones de pictogramas del tablero público si existe
-        if (publicBoard != null && publicBoard.getPictogramPositions() != null) {
+        if (publicBoard != null && publicBoard.getPictogramPositions() != null 
+                && !publicBoard.getPictogramPositions().isEmpty()) {
             List<BoardPictogram> clonedPictograms = boardMapper.cloneBoardPictograms(
                     newBoard.getId(),
                     publicBoard.getPictogramPositions()
             );
             boardPictogramRepository.saveAll(clonedPictograms);
-            newBoard.setPictogramPositions(clonedPictograms);
+            entityManager.flush();
         }
         
-        return newBoard;
+        // Limpiar la sesión y recargar el tablero con sus relaciones
+        entityManager.clear();
+        return boardRepository.findById(newBoard.getId())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.INTERNAL_SERVER_ERROR,
+                        "Error al crear tablero"
+                ));
     }
     
     /**
