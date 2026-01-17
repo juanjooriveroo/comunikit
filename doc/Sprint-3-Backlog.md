@@ -147,6 +147,12 @@ Una historia se considera DONE cuando:
 - Eliminamos la restricción UNIQUE de la tabla board porque daba problemas a la hora de devolver la tabla
 - Ajusto la col de food y body de los sql por errores
 - Ajusto la configuración de kafka en board-service para recibir correctamente la serialización del mensaje de creación de tabla para el usuario pedido
+
+**Día 3 (17/01)**: 
+- Creación de servicio para peticiones al board
+- Creación de componente de tablero (recibe tablero, muestra, permite reordenar con drag and drop y subir la nueva estructura)
+- Modelo de board y rutas y modulos añadidos
+
 ---
 
 ## Métricas de Éxito

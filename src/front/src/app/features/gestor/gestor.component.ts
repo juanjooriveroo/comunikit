@@ -14,6 +14,7 @@ export class GestorComponent implements OnInit {
   mostrarFormularioPictograma: boolean = false;
   reloadKeySeccion: number = 0;
   reloadKeyPictograma: number = 0;
+  reloadKeyTablero: number = 0;
   seccionEditando: any = null;
   pictogramaEditando: any = null;
 
@@ -23,6 +24,14 @@ export class GestorComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.dependienteId = params['id'];
       console.log('Dependent ID:', this.dependienteId);
+    });
+
+    // Leer pestaña desde query params
+    this.route.queryParams.subscribe(queryParams => {
+      const tab = queryParams['tab'];
+      if (tab === 'tablero' || tab === 'secciones' || tab === 'pictogramas') {
+        this.activeTab = tab;
+      }
     });
   }
 

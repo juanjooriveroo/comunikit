@@ -43,10 +43,10 @@
         [class.show]="activeTab === 'tablero'"
         *ngIf="activeTab === 'tablero'"
       >
-        <div class="alert alert-info text-center py-5">
-          <h4 class="mb-3">Coming Soon</h4>
-          <p class="mb-0">El tablero estará disponible pronto</p>
-        </div>
+        <app-editar-tablero
+          [ownerId]="dependienteId"
+          [key]="reloadKeyTablero"
+        ></app-editar-tablero>
       </div>
 
       <!-- Pestaña de Secciones -->

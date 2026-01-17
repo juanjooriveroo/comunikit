@@ -81,6 +81,11 @@ const routes: Routes = [
     data: { roles: [UserRole.TUTOR] }
   },
   {
+    path: 'tablero/:id',
+    redirectTo: 'gestor/:id',
+    pathMatch: 'full'
+  },
+  {
     path: '**',
     redirectTo: ''
   }

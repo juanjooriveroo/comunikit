@@ -204,13 +204,6 @@ export class DependentDetailComponent implements OnInit {
   }
 
   /**
-   * Abre la pantalla de tablero del dependiente
-   */
-  openDashboard(): void {
-    alert('Funcionalidad de Tablero en desarrollo');
-  }
-
-  /**
    * Abre el gestor del dependiente
    */
   openPictograms(): void {

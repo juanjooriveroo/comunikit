@@ -31,6 +31,7 @@ import { ModalUploadImagenComponent } from './features/gestor/pictogramas/modal-
 import { CrearEditarPictogramaComponent } from './features/gestor/pictogramas/crear-editar-pictograma/crear-editar-pictograma.component';
 import { ListaSectionesComponent } from './features/gestor/secciones/lista-secciones/lista-secciones.component';
 import { CrearEditarSeccionComponent } from './features/gestor/secciones/crear-editar-seccion/crear-editar-seccion.component';
+import { EditarTableroComponent } from './features/gestor/tablero/editar-tablero.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { CrearEditarSeccionComponent } from './features/gestor/secciones/crear-e
     ModalUploadImagenComponent,
     CrearEditarPictogramaComponent,
     ListaSectionesComponent,
-    CrearEditarSeccionComponent
+    CrearEditarSeccionComponent,
+    EditarTableroComponent
   ],
   imports: [
     BrowserModule,
