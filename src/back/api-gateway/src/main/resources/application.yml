@@ -21,12 +21,31 @@ spring:
               uri: http://board-service:${PORT_BOARD}
               predicates:
                 - Path=/board/**
+            - id: board-public-service
+              uri: http://board-service:${PORT_BOARD}
+              predicates:
+                - Path=/board-public/**
+              filters:
+                - RewritePath=/board-public/(?<segment>.*), /board/board-public/${segment}
+            - id: board-public-full-service
+              uri: http://board-service:${PORT_BOARD}
+              predicates:
+                - Path=/board-public-full/**
+              filters:
+                - RewritePath=/board-public-full/(?<segment>.*), /board/board-public-full/${segment}
+            - id: board-full-service
+              uri: http://board-service:${PORT_BOARD}
+              predicates:
+                - Path=/board-full/**
+              filters:
+                - RewritePath=/board-full/(?<segment>.*), /board/board-full/${segment}
             - id: admin-service
               uri: http://admin-service:${PORT_ADMIN}
               predicates:
                 - Path=/admin/**
 app:
   fqdn: ${FQDN}
+  play-fqdn: ${PLAY_FQDN:}
   jwt:
     secret: ${JWT_SECRET}
 

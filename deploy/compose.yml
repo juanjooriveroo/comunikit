@@ -43,6 +43,22 @@ services:
 #    ports:          #LOCAL TESTING  (COMENTAR PARA DEPLOY EN NUBE)
 #      - 50000:80       #LOCAL TESTING  (COMENTAR PARA DEPLOY EN NUBE)
 
+  # PLAY ES LA APLICACIÓN SIMPLIFICADA PARA USUARIOS CON DISCAPACIDAD (ASTRO)
+  play:
+    build:
+      context: ../src/play
+      args:
+        PUBLIC_API_URL: https://${BACK_FQDN}
+    container_name: play
+    restart: unless-stopped
+    labels:
+      caddy: play.${FQDN}
+      caddy.reverse_proxy: "play:80"
+    networks:
+      - internal
+#    ports:          #LOCAL TESTING  (COMENTAR PARA DEPLOY EN NUBE)
+#      - 50002:80       #LOCAL TESTING  (COMENTAR PARA DEPLOY EN NUBE)
+
   # ZOOKEEPER ES NECESARIO PARA LA COORDINACIÓN Y GESTIÓN DE KAFKA
   zookeeper:
     image: confluentinc/cp-zookeeper:7.4.0
@@ -86,6 +102,7 @@ services:
       - PORT_ADMIN=${PORT_ADMIN}
       - JWT_SECRET=${JWT_SECRET}
       - FQDN=${FQDN}
+      - PLAY_FQDN=https://play.${FQDN}
     labels:
       caddy: ${BACK_FQDN}
       caddy.reverse_proxy: "gateway:${PORT_GATEWAY}"

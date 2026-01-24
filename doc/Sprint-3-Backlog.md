@@ -153,6 +153,12 @@ Una historia se considera DONE cuando:
 - Creación de componente de tablero (recibe tablero, muestra, permite reordenar con drag and drop y subir la nueva estructura)
 - Modelo de board y rutas y modulos añadidos
 
+**Día 4 (24/01)**: 
+- Creación de front nuevo (ASTRO) para la visualización de tableros y funcionalidades.
+- Implementado modo invitado en diferentes idiomas
+- Creación de pictogramas default estáticos
+- Creación de endpoint para pedir el tablero default del idioma seleccionado y se le gestiona permisos en el gateway
+
 ---
 
 ## Métricas de Éxito

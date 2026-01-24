@@ -1,9 +1,14 @@
 package boardservice.mapper;
 
 import boardservice.dto.BoardDto;
+import boardservice.dto.BoardFullDto;
+import boardservice.dto.ImageSimpleDto;
 import boardservice.dto.PictogramPositionBoardDto;
 import boardservice.dto.PictogramPositionBoardRequestDto;
+import boardservice.dto.PictogramPositionFullDto;
+import boardservice.dto.PictogramSimpleDto;
 import boardservice.dto.SectionPositionDto;
+import boardservice.dto.SectionPositionFullDto;
 import boardservice.dto.SectionPositionRequestDto;
 import boardservice.entity.Board;
 import boardservice.entity.BoardPictogram;
@@ -11,6 +16,7 @@ import boardservice.entity.BoardSection;
 import boardservice.entity.Language;
 import boardservice.entity.Pictogram;
 import boardservice.entity.Section;
+import boardservice.entity.SectionPictogram;
 import boardservice.repository.LanguageRepository;
 import boardservice.repository.PictogramRepository;
 import boardservice.repository.SectionRepository;
@@ -208,5 +214,79 @@ public class BoardMapper {
                     return clone;
                 })
                 .toList();
+    }
+    
+    /**
+     * Convierte una entidad Board a BoardFullDto (con pictogramas de secciones incluidos)
+     * Este DTO se usa para la vista de "play" donde necesitamos todos los pictogramas.
+     */
+    public BoardFullDto toFullDto(Board board) {
+        List<SectionPositionFullDto> sectionDtos = board.getSectionPositions().stream()
+                .map(this::toSectionPositionFullDto)
+                .toList();
+        
+        List<PictogramPositionBoardDto> pictogramDtos = board.getPictogramPositions().stream()
+                .map(this::toPictogramPositionBoardDto)
+                .toList();
+        
+        return new BoardFullDto(
+                board.getId(),
+                board.getOwnerId(),
+                board.getLanguage() != null ? board.getLanguage().getCode() : null,
+                board.isPublic(),
+                sectionDtos,
+                pictogramDtos
+        );
+    }
+    
+    /**
+     * Convierte un BoardSection a SectionPositionFullDto (con pictogramas incluidos)
+     */
+    private SectionPositionFullDto toSectionPositionFullDto(BoardSection boardSection) {
+        Section section = boardSection.getSection();
+        String imageUrl = buildImageUrl(section);
+        
+        // Obtener pictogramas de la sección
+        List<PictogramPositionFullDto> pictogramPositions = section.getPictogramPositions().stream()
+                .map(this::toPictogramPositionFullDto)
+                .toList();
+        
+        return new SectionPositionFullDto(
+                section.getId(),
+                section.getName(),
+                boardSection.getCol(),
+                boardSection.getRow(),
+                imageUrl,
+                pictogramPositions
+        );
+    }
+    
+    /**
+     * Convierte un SectionPictogram a PictogramPositionFullDto
+     */
+    private PictogramPositionFullDto toPictogramPositionFullDto(SectionPictogram sectionPictogram) {
+        Pictogram pictogram = sectionPictogram.getPictogram();
+        return new PictogramPositionFullDto(
+                sectionPictogram.getCol(),
+                sectionPictogram.getRow(),
+                toPictogramSimpleDto(pictogram)
+        );
+    }
+    
+    /**
+     * Convierte un Pictogram a PictogramSimpleDto (solo id, name e imagen)
+     */
+    private PictogramSimpleDto toPictogramSimpleDto(Pictogram pictogram) {
+        ImageSimpleDto imageDto = null;
+        if (pictogram.getImage() != null) {
+            String imageUrl = buildPictogramImageUrl(pictogram);
+            imageDto = new ImageSimpleDto(pictogram.getImage().getId(), imageUrl);
+        }
+        
+        return new PictogramSimpleDto(
+                pictogram.getId(),
+                pictogram.getName(),
+                imageDto
+        );
     }
 }

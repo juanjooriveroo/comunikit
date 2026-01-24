@@ -1,0 +1,172 @@
+---
+// Componente del grid del tablero
+---
+
+<div class="board-container">
+  <!-- Loading state -->
+  <div id="board-loading" class="board-loading">
+    <div class="loading-spinner" aria-hidden="true"></div>
+    <p>Cargando tu tablero...</p>
+  </div>
+
+  <!-- Error state -->
+  <div id="board-error" class="board-error" aria-hidden="true">
+    <span class="error-icon" aria-hidden="true">😕</span>
+    <p>No se pudo cargar el tablero</p>
+    <a href="/" class="error-back-btn">Volver al inicio</a>
+  </div>
+
+  <!-- Grid del tablero 5x10 (más cuadrado) -->
+  <div id="board-grid" class="board-grid" aria-hidden="true">
+    <!-- Se generará dinámicamente -->
+  </div>
+</div>
+
+<style>
+  .board-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  /* Loading */
+  .board-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .board-loading p {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+
+  /* Error */
+  .board-error {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .board-error[aria-hidden="false"] {
+    display: flex;
+  }
+
+  .error-icon {
+    font-size: 3rem;
+  }
+
+  .board-error p {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+
+  .error-back-btn {
+    padding: 0.6rem 1.5rem;
+    background: white;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #667eea;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease;
+  }
+
+  .error-back-btn:hover {
+    transform: scale(1.05);
+  }
+
+  /* Board Grid - Grid de 12 columnas x 7 filas */
+  .board-grid {
+    display: none;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(7, 1fr);
+    gap: 4px;
+    width: 100%;
+    height: 100%;
+    max-height: calc(100vh - 75px);
+    padding: 6px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+
+  .board-grid[aria-hidden="false"] {
+    display: grid;
+  }
+
+  /* Responsive - Pantallas muy grandes */
+  @media (min-width: 1400px) {
+    .board-grid {
+      gap: 5px;
+      padding: 8px;
+    }
+  }
+
+  /* Responsive - Tablets */
+  @media (max-width: 768px) {
+    .board-container {
+      padding: 0.3rem;
+    }
+
+    .board-grid {
+      gap: 3px;
+      padding: 4px;
+      border-radius: 10px;
+    }
+  }
+
+  /* Responsive - Móviles */
+  @media (max-width: 480px) {
+    .board-container {
+      padding: 0.2rem;
+    }
+
+    .board-grid {
+      gap: 2px;
+      padding: 3px;
+      border-radius: 8px;
+    }
+  }
+
+  /* Landscape on small devices: use full viewport height so user doesn't need to scroll */
+  @media (orientation: landscape) and (max-width: 1024px) {
+    .board-container {
+      height: 100vh;
+      align-items: stretch;
+      justify-content: center;
+      padding: 0;
+    }
+
+    .board-grid {
+      max-height: 100vh;
+      height: 100vh;
+      border-radius: 0;
+      padding: 6px;
+    }
+  }
+</style>

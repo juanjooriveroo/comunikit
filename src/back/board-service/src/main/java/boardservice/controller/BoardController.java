@@ -1,6 +1,7 @@
 package boardservice.controller;
 
 import boardservice.dto.BoardDto;
+import boardservice.dto.BoardFullDto;
 import boardservice.dto.BoardUpdateRequestDto;
 import boardservice.service.BoardService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -57,9 +58,40 @@ public class BoardController {
     }
     
     @Operation(
+            summary = "Obtener tablero completo de usuario para Play",
+            description = "Obtiene el tablero completo con todos los pictogramas de las secciones. " +
+                    "Se usa para la vista de 'play' donde se necesitan todos los pictogramas."
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Tablero completo obtenido correctamente",
+                    content = @Content(schema = @Schema(implementation = BoardFullDto.class))
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Sin permiso para acceder al tablero del dependiente"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Tablero no encontrado"
+            )
+    })
+    @GetMapping("/board-full/{dependentId}")
+    public ResponseEntity<BoardFullDto> getBoardFull(
+            @Parameter(description = "ID del usuario dependiente", required = true)
+            @PathVariable UUID dependentId,
+            @Parameter(description = "ID del tutor autenticado", required = true)
+            @RequestHeader("X-User-Id") UUID tutorId
+    ) {
+        BoardFullDto response = boardService.getBoardFullByDependentId(dependentId, tutorId);
+        return ResponseEntity.ok(response);
+    }
+    
+    @Operation(
             summary = "Obtener tablero público",
             description = "Obtiene el tablero público (plantilla) de un idioma específico. " +
-                    "No requiere autenticación."
+                    "No requiere autenticación. Solo devuelve información básica de secciones."
     )
     @ApiResponses({
             @ApiResponse(
@@ -78,6 +110,32 @@ public class BoardController {
             @PathVariable String languageCode
     ) {
         BoardDto response = boardService.getPublicBoard(languageCode);
+        return ResponseEntity.ok(response);
+    }
+    
+    @Operation(
+            summary = "Obtener tablero público completo para Play",
+            description = "Obtiene el tablero público completo con todos los pictogramas de las secciones. " +
+                    "Se usa para la vista de 'play' de invitados donde se necesitan todos los pictogramas. " +
+                    "No requiere autenticación."
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Tablero público completo obtenido correctamente",
+                    content = @Content(schema = @Schema(implementation = BoardFullDto.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "No existe tablero público para el idioma especificado"
+            )
+    })
+    @GetMapping("/board-public-full/{languageCode}")
+    public ResponseEntity<BoardFullDto> getPublicBoardFull(
+            @Parameter(description = "Código del idioma (es, en, fr, de, pt)", required = true)
+            @PathVariable String languageCode
+    ) {
+        BoardFullDto response = boardService.getPublicBoardFull(languageCode);
         return ResponseEntity.ok(response);
     }
     

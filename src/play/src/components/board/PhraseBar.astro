@@ -1,0 +1,116 @@
+---
+// Componente de la barra de frase construida
+---
+
+<div class="phrase-bar">
+  <div class="phrase-content" id="phrase-content">
+    <p class="phrase-placeholder">Toca los pictogramas para comunicarte</p>
+  </div>
+  <div class="phrase-actions">
+    <button id="btn-speak" class="action-btn speak-btn" aria-label="Reproducir frase" disabled>
+      <span aria-hidden="true">🔊</span>
+    </button>
+    <button id="btn-clear" class="action-btn clear-btn" aria-label="Borrar frase" disabled>
+      <span aria-hidden="true">🗑️</span>
+    </button>
+  </div>
+</div>
+
+<style>
+  .phrase-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+    flex-shrink: 0;
+  }
+
+  .phrase-content {
+    flex: 1;
+    min-height: 44px;
+    padding: 0.4rem 0.75rem;
+    background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    overflow-x: auto;
+    border: 2px solid #e0e8ff;
+  }
+
+  .phrase-content:global(.pulse) {
+    animation: pulse-animation 0.2s ease;
+  }
+
+  @keyframes pulse-animation {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+  }
+
+  .phrase-placeholder {
+    color: #999;
+    font-style: italic;
+    margin: 0;
+    font-size: 0.9rem;
+  }
+
+  .phrase-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .action-btn {
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+
+  .action-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+
+  .speak-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+  }
+
+  .speak-btn:not(:disabled):hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
+  }
+
+  .clear-btn {
+    background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+    color: white;
+  }
+
+  .clear-btn:not(:disabled):hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(245, 87, 108, 0.5);
+  }
+
+  @media (max-width: 480px) {
+    .phrase-bar {
+      padding: 0.4rem 0.5rem;
+    }
+
+    .action-btn {
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+    }
+  }
+</style>

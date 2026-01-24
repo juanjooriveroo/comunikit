@@ -1,6 +1,7 @@
 package boardservice.service;
 
 import boardservice.dto.BoardDto;
+import boardservice.dto.BoardFullDto;
 import boardservice.dto.BoardUpdateRequestDto;
 import boardservice.entity.Board;
 import boardservice.entity.BoardPictogram;
@@ -74,6 +75,44 @@ public class BoardService {
                 ));
         
         return boardMapper.toDto(board);
+    }
+    
+    /**
+     * Obtiene un tablero público completo con todos los pictogramas de las secciones.
+     * Este método se usa para la vista de "play" donde se necesitan todos los pictogramas.
+     *
+     * @param languageCode Código del idioma (es, en, fr, etc.)
+     * @return DTO del tablero público completo con pictogramas
+     */
+    public BoardFullDto getPublicBoardFull(String languageCode) {
+        Board board = boardRepository.findByLanguageCodeAndIsPublicTrue(languageCode)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "No se encontró tablero público para el idioma: " + languageCode
+                ));
+        
+        return boardMapper.toFullDto(board);
+    }
+    
+    /**
+     * Obtiene el tablero completo de un usuario dependiente con todos los pictogramas.
+     * Este método se usa para la vista de "play" donde se necesitan todos los pictogramas.
+     * Valida que el tutor tenga permiso sobre el dependiente.
+     *
+     * @param dependentId ID del usuario dependiente
+     * @param tutorId ID del tutor que realiza la petición
+     * @return DTO del tablero completo con pictogramas
+     */
+    @Transactional
+    public BoardFullDto getBoardFullByDependentId(UUID dependentId, UUID tutorId) {
+        userValidator.validateUserAccess(tutorId.toString(), dependentId);
+        
+        Board board = boardRepository.findByOwnerId(dependentId)
+                .orElseGet(() -> {
+                    return createBoardForUserInternal(dependentId, "es");
+                });
+        
+        return boardMapper.toFullDto(board);
     }
     
     /**

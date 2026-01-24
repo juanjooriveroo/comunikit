@@ -1,0 +1,168 @@
+---
+// Componente del modal de sección expandida
+---
+
+<div id="section-modal" class="section-modal" aria-hidden="true">
+  <div class="modal-backdrop"></div>
+  <div class="modal-content">
+    <button id="modal-close" class="modal-close" aria-label="Cerrar">
+      <span>✕</span>
+    </button>
+    <div class="modal-header">
+      <div class="modal-section-image" id="modal-section-image"></div>
+      <h2 id="section-title" class="section-title">Sección</h2>
+    </div>
+    <div id="section-grid" class="section-grid">
+      <!-- Pictogramas de la sección - Grid 5x6 -->
+    </div>
+  </div>
+</div>
+
+<style>
+  .section-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .section-modal[aria-hidden="false"] {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .section-modal .modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+  }
+
+  .section-modal .modal-content {
+    position: relative;
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    width: 85%;
+    max-width: 1200px;
+    height: 80vh;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    transform: scale(0.9) translateY(20px);
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .section-modal[aria-hidden="false"] .modal-content {
+    transform: scale(1) translateY(0);
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, #f44336 0%, #e53935 100%);
+    border: none;
+    border-radius: 50%;
+    font-size: 1.3rem;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(244, 67, 54, 0.4);
+    z-index: 10;
+  }
+
+  .modal-close:hover {
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 6px 16px rgba(244, 67, 54, 0.6);
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 3px solid #4CAF50;
+    flex-shrink: 0;
+  }
+
+  .modal-section-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #4CAF50, #66BB6A);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+  }
+
+  .modal-section-image :global(img) {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    padding: 4px;
+  }
+
+  .section-title {
+    font-family: 'Comic Neue', cursive;
+    font-size: 1.5rem;
+    color: #2E7D32;
+    margin: 0;
+    flex: 1;
+  }
+
+  /* Section Grid - 5x6 centrado y más grande */
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    gap: 15px;
+    flex: 1;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 15px;
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .section-modal .modal-content {
+      width: 85%;
+      height: 75vh;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .section-modal .modal-content {
+      width: 95%;
+      height: 80vh;
+      padding: 1rem;
+    }
+
+    .section-grid {
+      gap: 6px;
+    }
+
+    .section-title {
+      font-size: 1.3rem;
+    }
+  }
+</style>

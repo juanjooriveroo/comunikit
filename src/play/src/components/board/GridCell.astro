@@ -1,0 +1,300 @@
+---
+// Estilos compartidos para las celdas del grid
+// Este componente solo exporta los estilos globales para las celdas
+---
+
+<style is:global>
+  /* Celda del grid principal */
+  .grid-cell {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    overflow: hidden;
+    padding: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .grid-cell:hover {
+    transform: scale(1.06);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    z-index: 10;
+  }
+
+  .grid-cell:active {
+    transform: scale(0.95);
+  }
+
+  .grid-cell.empty {
+    background: rgba(200, 230, 201, 0.3);
+    cursor: default;
+    box-shadow: none;
+    border: 2px dashed rgba(76, 175, 80, 0.3);
+  }
+
+  .grid-cell.empty:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .grid-cell.section {
+    background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+    border: 3px solid rgba(255,255,255,0.6);
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.5);
+  }
+
+  .grid-cell.section:hover {
+    box-shadow: 0 8px 25px rgba(76, 175, 80, 0.7);
+  }
+
+  .grid-cell.pictogram {
+    background: linear-gradient(135deg, #ffffff 0%, #e8f5e9 100%);
+    border: 3px solid #c8e6c9;
+  }
+
+  .grid-cell.pictogram:hover {
+    border-color: #4CAF50;
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+  }
+
+  /* Imagen de la celda */
+  .cell-image {
+    width: 100%;
+    height: 70%;
+    max-width: 100%;
+    max-height: 70%;
+    object-fit: contain;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  /* Etiqueta de texto */
+  .cell-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.1;
+    margin-top: 2px;
+    color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    padding: 0 2px;
+  }
+
+  /* Texto más grande para pictogramas solo texto (sin imagen) */
+  .grid-cell:not(:has(.cell-image)) .cell-label {
+    font-size: 1rem;
+    margin-top: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .grid-cell.text-only .cell-label {
+    font-size: 1.1rem;
+    margin-top: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+  }
+
+  .grid-cell.section .cell-label {
+    color: white;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    font-size: 0.65rem;
+  }
+
+  /* Celdas del modal de sección */
+  .section-cell {
+    background: linear-gradient(135deg, #ffffff 0%, #e8f5e9 100%);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 3px solid transparent;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+    min-height: 120px;
+  }
+
+  .section-cell:hover {
+    transform: scale(1.05);
+    border-color: #4CAF50;
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
+  }
+
+  .section-cell:active {
+    transform: scale(0.95);
+  }
+
+  .section-cell.empty {
+    background: rgba(200, 230, 201, 0.2);
+    cursor: default;
+    box-shadow: none;
+  }
+
+  .section-cell.empty:hover {
+    transform: none;
+    border-color: transparent;
+    box-shadow: none;
+  }
+
+  /* Imagen del pictograma en modal */
+  .section-cell-image {
+    width: 100%;
+    height: 60%;
+    max-width: 100%;
+    max-height: 60%;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  .section-cell-label {
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-align: center;
+    color: #333;
+    margin-top: 8px;
+    line-height: 1.3;
+    width: 100%;
+    padding: 0 4px;
+    word-wrap: break-word;
+    hyphens: auto;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Palabra en la barra de frase */
+  .phrase-word {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.6rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+    flex-shrink: 0;
+  }
+
+  .phrase-word:hover {
+    background: #ffe0e0;
+    border-color: #f5576c;
+    transform: scale(1.05);
+  }
+
+  .phrase-word img {
+    width: 32px;
+    height: 32px;
+    max-width: 32px;
+    max-height: 32px;
+    object-fit: contain;
+  }
+
+  .phrase-word span {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #333;
+  }
+
+  /* Responsive - Pantallas muy grandes */
+  @media (min-width: 1400px) {
+    .grid-cell {
+      border-radius: 10px;
+      padding: 6px;
+    }
+
+    .cell-label {
+      font-size: 0.75rem;
+      margin-top: 3px;
+    }
+
+    .grid-cell.section .cell-label {
+      font-size: 0.8rem;
+    }
+
+    .section-cell-label {
+      font-size: 1rem;
+    }
+  }
+
+  /* Responsive - Tablets */
+  @media (max-width: 768px) {
+    .grid-cell {
+      border-radius: 6px;
+      padding: 3px;
+    }
+
+    .cell-label {
+      font-size: 0.5rem;
+      margin-top: 1px;
+    }
+
+    .grid-cell.section .cell-label {
+      font-size: 0.55rem;
+    }
+
+    .section-cell-label {
+      font-size: 0.8rem;
+    }
+
+    .phrase-word img {
+      width: 26px;
+      height: 26px;
+    }
+
+    .phrase-word span {
+      font-size: 0.8rem;
+    }
+  }
+
+  /* Responsive - Móviles */
+  @media (max-width: 480px) {
+    .grid-cell {
+      border-radius: 5px;
+      padding: 2px;
+      border-width: 2px;
+    }
+
+    .cell-label {
+      font-size: 0.4rem;
+      margin-top: 1px;
+    }
+
+    .grid-cell.section .cell-label {
+      font-size: 0.45rem;
+    }
+
+    .section-cell-label {
+      font-size: 0.7rem;
+    }
+
+    .phrase-word img {
+      width: 22px;
+      height: 22px;
+    }
+
+    .phrase-word span {
+      font-size: 0.75rem;
+    }
+  }
+</style>

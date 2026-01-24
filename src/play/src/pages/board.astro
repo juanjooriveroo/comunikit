@@ -1,0 +1,41 @@
+---
+import Layout from '../layouts/Layout.astro';
+import BoardHeader from '../components/board/BoardHeader.astro';
+import BoardGrid from '../components/board/BoardGrid.astro';
+import SectionModal from '../components/board/SectionModal.astro';
+import GridCell from '../components/board/GridCell.astro';
+---
+
+<Layout title="Mi Tablero - ComuniKit Play">
+  <main class="board-page">
+    <!-- Header con barra de frase integrada -->
+    <BoardHeader />
+
+    <!-- Contenedor principal del tablero -->
+    <BoardGrid />
+
+    <!-- Modal de sección expandida -->
+    <SectionModal />
+  </main>
+  
+  <!-- Estilos globales para las celdas -->
+  <GridCell />
+</Layout>
+
+<style>
+  .board-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 50%, #a5d6a7 100%);
+  }
+</style>
+
+<script>
+  import { initBoard } from '../scripts/board';
+  
+  // Iniciar el tablero cuando el DOM esté listo
+  initBoard();
+</script>

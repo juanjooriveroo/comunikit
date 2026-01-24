@@ -1,0 +1,726 @@
+---
+// MainMenu.astro - Componente del menú principal
+---
+
+<div class="main-menu">
+  <!-- Decoraciones flotantes -->
+  <div class="floating-decorations" aria-hidden="true">
+    <div class="shape shape-1">⭐</div>
+    <div class="shape shape-2">🌈</div>
+    <div class="shape shape-3">☁️</div>
+    <div class="shape shape-4">🎈</div>
+    <div class="shape shape-5">✨</div>
+    <div class="shape shape-6">🦋</div>
+  </div>
+
+  <!-- Logo y título -->
+  <header class="menu-header">
+    <div class="logo-container">
+      <img src="/logo.png" alt="ComuniKit Logo" class="logo-img-large" />
+    </div>
+    <p class="app-description">
+      ¡Comunícate de forma divertida y fácil!
+    </p>
+  </header>
+
+  <!-- Botones principales -->
+  <nav class="menu-buttons" role="navigation" aria-label="Menú principal">
+    <button 
+      id="btn-login" 
+      class="menu-btn btn-login"
+      aria-label="Iniciar sesión con tu cuenta"
+      disabled
+    >
+      <span class="btn-icon" aria-hidden="true">🔐</span>
+      <span class="btn-text">Iniciar Sesión</span>
+      <span class="btn-hint">Próximamente</span>
+    </button>
+
+    <button 
+      id="btn-guest" 
+      class="menu-btn btn-guest"
+      aria-label="Probar la aplicación como invitado"
+    >
+      <span class="btn-icon" aria-hidden="true">🎮</span>
+      <span class="btn-text">Probar como Invitado</span>
+      <span class="btn-hint">¡Sin registro!</span>
+    </button>
+  </nav>
+
+  <!-- Mascota decorativa -->
+  <div class="mascot" aria-hidden="true">
+    <div class="mascot-character">🐻</div>
+    <div class="speech-bubble">
+      <p>¡Hola! ¿Listo para comunicarte?</p>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de selección de idioma -->
+<div id="language-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
+  <div class="modal-backdrop"></div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-icon" aria-hidden="true">🌍</div>
+      <h2 id="modal-title" class="modal-title">¡Elige tu idioma!</h2>
+      <p class="modal-subtitle">Selecciona el idioma con el que quieres comunicarte</p>
+    </div>
+    
+    <div class="language-grid" role="listbox" aria-label="Lista de idiomas disponibles">
+      <button 
+        class="language-btn" 
+        data-lang="es"
+        role="option"
+        aria-label="Español"
+      >
+        <span class="lang-flag" aria-hidden="true">🇪🇸</span>
+        <span class="lang-name">Español</span>
+      </button>
+      
+      <button 
+        class="language-btn" 
+        data-lang="en"
+        role="option"
+        aria-label="Inglés"
+      >
+        <span class="lang-flag" aria-hidden="true">🇬🇧</span>
+        <span class="lang-name">English</span>
+      </button>
+      
+      <button 
+        class="language-btn" 
+        data-lang="fr"
+        role="option"
+        aria-label="Francés"
+      >
+        <span class="lang-flag" aria-hidden="true">🇫🇷</span>
+        <span class="lang-name">Français</span>
+      </button>
+      
+      <button 
+        class="language-btn" 
+        data-lang="de"
+        role="option"
+        aria-label="Alemán"
+      >
+        <span class="lang-flag" aria-hidden="true">🇩🇪</span>
+        <span class="lang-name">Deutsch</span>
+      </button>
+      
+      <button 
+        class="language-btn" 
+        data-lang="pt"
+        role="option"
+        aria-label="Portugués"
+      >
+        <span class="lang-flag" aria-hidden="true">🇵🇹</span>
+        <span class="lang-name">Português</span>
+      </button>
+    </div>
+
+    <button id="modal-close" class="modal-close-btn" aria-label="Cerrar ventana">
+      <span aria-hidden="true">✕</span>
+      <span class="close-text">Volver</span>
+    </button>
+
+    <!-- Loading state -->
+    <div id="loading-state" class="loading-state" aria-hidden="true">
+      <div class="loading-spinner" aria-hidden="true"></div>
+      <p class="loading-text">Cargando tu tablero...</p>
+    </div>
+
+    <!-- Error state -->
+    <div id="error-state" class="error-state" aria-hidden="true">
+      <span class="error-icon" aria-hidden="true">😕</span>
+      <p class="error-text">¡Ups! Algo salió mal</p>
+      <button id="error-retry" class="retry-btn">Intentar de nuevo</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .main-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Decoraciones flotantes */
+  .floating-decorations {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .shape {
+    position: absolute;
+    font-size: 2rem;
+    animation: float 6s ease-in-out infinite;
+    opacity: 0.7;
+  }
+
+  .shape-1 { top: 10%; left: 10%; animation-delay: 0s; }
+  .shape-2 { top: 20%; right: 15%; animation-delay: 1s; font-size: 2.5rem; }
+  .shape-3 { top: 60%; left: 5%; animation-delay: 2s; font-size: 3rem; }
+  .shape-4 { top: 75%; right: 10%; animation-delay: 0.5s; }
+  .shape-5 { top: 40%; right: 5%; animation-delay: 1.5s; }
+  .shape-6 { bottom: 15%; left: 15%; animation-delay: 2.5s; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(10deg); }
+  }
+
+  /* Header */
+  .menu-header {
+    text-align: center;
+    z-index: 1;
+    margin-bottom: 2rem;
+  }
+
+  .logo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .logo-img-large {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    animation: pulse 2s ease-in-out infinite;
+    filter: drop-shadow(0 8px 16px rgba(0,0,0,0.2));
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  .app-description {
+    font-size: 1.25rem;
+    color: var(--color-text-secondary);
+    font-weight: 600;
+  }
+
+  /* Botones del menú */
+  .menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    z-index: 1;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .menu-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1.5rem 2rem;
+    border: none;
+    border-radius: var(--radius-xl);
+    font-family: 'Nunito', sans-serif;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .menu-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .btn-icon {
+    font-size: 3rem;
+    line-height: 1;
+  }
+
+  .btn-text {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+  }
+
+  .btn-hint {
+    font-size: 0.9rem;
+    font-weight: 600;
+    opacity: 0.9;
+    color: white;
+  }
+
+  /* Botón Login */
+  .btn-login {
+    background: linear-gradient(135deg, #A0A0A0, #808080);
+    box-shadow: 0 6px 0 #606060, var(--shadow-md);
+  }
+
+  .btn-login:disabled {
+    cursor: not-allowed;
+    opacity: 0.8;
+  }
+
+  /* Botón Guest */
+  .btn-guest {
+    background: linear-gradient(135deg, var(--color-accent-green), #4CAF50);
+    box-shadow: 0 6px 0 #388E3C, var(--shadow-md);
+  }
+
+  .btn-guest:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 0 #388E3C, var(--shadow-lg);
+  }
+
+  .btn-guest:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #388E3C, var(--shadow-sm);
+  }
+
+  /* Mascota */
+  .mascot {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1;
+  }
+
+  .mascot-character {
+    font-size: 4rem;
+    animation: bounce 2s ease-in-out infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .speech-bubble {
+    background: white;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    position: relative;
+    max-width: 200px;
+    margin-bottom: 0.5rem;
+  }
+
+  .speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 10px solid transparent;
+    border-top-color: white;
+  }
+
+  .speech-bubble p {
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
+    color: var(--color-text-primary);
+  }
+
+  /* Modal */
+  .modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-normal);
+  }
+
+  .modal[aria-hidden="false"] {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-content {
+    position: relative;
+    background: linear-gradient(180deg, #FFFFFF 0%, #F8F9FF 100%);
+    border-radius: var(--radius-xl);
+    padding: 2rem;
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+    transform: scale(0.9) translateY(20px);
+    transition: transform var(--transition-normal);
+  }
+
+  .modal[aria-hidden="false"] .modal-content {
+    transform: scale(1) translateY(0);
+  }
+
+  .modal-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .modal-icon {
+    font-size: 4rem;
+    margin-bottom: 0.5rem;
+    animation: spin 10s linear infinite;
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .modal-title {
+    font-family: 'Comic Neue', cursive;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .modal-subtitle {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+  }
+
+  /* Grid de idiomas */
+  .language-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .language-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1.5rem 1rem;
+    background: white;
+    border: 3px solid transparent;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .language-btn:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-md);
+  }
+
+  .language-btn:active {
+    transform: translateY(0);
+  }
+
+  .language-btn:focus-visible {
+    border-color: var(--color-primary);
+  }
+
+  .lang-flag {
+    font-size: 3rem;
+  }
+
+  .lang-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+  }
+
+  /* Botón cerrar modal */
+  .modal-close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 1rem;
+    background: var(--color-bg-primary);
+    border: 2px solid var(--color-text-light);
+    border-radius: var(--radius-lg);
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .modal-close-btn:hover {
+    background: var(--color-text-light);
+    color: white;
+  }
+
+  /* Loading state */
+  .loading-state,
+  .error-state {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--radius-xl);
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-fast);
+  }
+
+  .loading-state[aria-hidden="false"],
+  .error-state[aria-hidden="false"] {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .loading-spinner {
+    width: 60px;
+    height: 60px;
+    border: 6px solid var(--color-bg-secondary);
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: spinner 1s linear infinite;
+    margin-bottom: 1rem;
+  }
+
+  @keyframes spinner {
+    to { transform: rotate(360deg); }
+  }
+
+  .loading-text {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+  }
+
+  /* Error state */
+  .error-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+  }
+
+  .error-text {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin-bottom: 1rem;
+  }
+
+  .retry-btn {
+    padding: 0.75rem 2rem;
+    background: var(--color-primary);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: white;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .retry-btn:hover {
+    background: var(--color-primary-dark);
+    transform: scale(1.05);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .title-main {
+      font-size: 2.2rem;
+    }
+
+    .title-sub {
+      font-size: 1.2rem;
+    }
+
+    .logo {
+      width: 60px;
+      height: 60px;
+    }
+
+    .logo-icon {
+      font-size: 2rem;
+    }
+
+    .mascot {
+      display: none;
+    }
+
+    .modal-content {
+      padding: 1.5rem;
+    }
+
+    .language-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .lang-flag {
+      font-size: 2.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .menu-btn {
+      padding: 1.25rem 1.5rem;
+    }
+
+    .btn-icon {
+      font-size: 2.5rem;
+    }
+
+    .btn-text {
+      font-size: 1.25rem;
+    }
+  }
+</style>
+
+<script>
+  // API URL desde variables de entorno
+  const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:8080';
+
+  // Elementos del DOM
+  const btnGuest = document.getElementById('btn-guest') as HTMLButtonElement;
+  const modal = document.getElementById('language-modal') as HTMLDivElement;
+  const modalClose = document.getElementById('modal-close') as HTMLButtonElement;
+  const languageBtns = document.querySelectorAll('.language-btn') as NodeListOf<HTMLButtonElement>;
+  const loadingState = document.getElementById('loading-state') as HTMLDivElement;
+  const errorState = document.getElementById('error-state') as HTMLDivElement;
+  const errorRetry = document.getElementById('error-retry') as HTMLButtonElement;
+
+  let selectedLanguage: string | null = null;
+
+  // Abrir modal
+  function openModal(): void {
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    // Focus en el primer botón de idioma
+    languageBtns[0]?.focus();
+  }
+
+  // Cerrar modal
+  function closeModal(): void {
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    hideLoading();
+    hideError();
+    btnGuest.focus();
+  }
+
+  // Mostrar loading
+  function showLoading(): void {
+    loadingState.setAttribute('aria-hidden', 'false');
+  }
+
+  // Ocultar loading
+  function hideLoading(): void {
+    loadingState.setAttribute('aria-hidden', 'true');
+  }
+
+  // Mostrar error
+  function showError(): void {
+    errorState.setAttribute('aria-hidden', 'false');
+  }
+
+  // Ocultar error
+  function hideError(): void {
+    errorState.setAttribute('aria-hidden', 'true');
+  }
+
+  // Fetch del tablero público completo (con pictogramas de secciones)
+  async function fetchPublicBoard(languageCode: string): Promise<void> {
+    showLoading();
+    hideError();
+
+    try {
+      // Usar el nuevo endpoint que incluye pictogramas de secciones
+      const response = await fetch(`${API_URL}/board-public-full/${languageCode}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error ${response.status}: ${response.statusText}`);
+      }
+
+      const boardData = await response.json();
+      
+      // Guardar datos en localStorage para usar en la página del tablero
+      localStorage.setItem('guestBoard', JSON.stringify(boardData));
+      localStorage.setItem('guestLanguage', languageCode);
+      
+      // Redirigir a la página del tablero
+      window.location.href = '/board';
+      
+    } catch (error) {
+      console.error('Error fetching public board:', error);
+      hideLoading();
+      showError();
+    }
+  }
+
+  // Event Listeners
+  btnGuest.addEventListener('click', openModal);
+
+  modalClose.addEventListener('click', closeModal);
+
+  // Cerrar modal con backdrop
+  modal.querySelector('.modal-backdrop')?.addEventListener('click', closeModal);
+
+  // Cerrar modal con Escape
+  document.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') {
+      closeModal();
+    }
+  });
+
+  // Selección de idioma
+  languageBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const lang = btn.dataset.lang;
+      if (lang) {
+        selectedLanguage = lang;
+        fetchPublicBoard(lang);
+      }
+    });
+  });
+
+  // Reintentar
+  errorRetry.addEventListener('click', () => {
+    if (selectedLanguage) {
+      fetchPublicBoard(selectedLanguage);
+    }
+  });
+</script>

@@ -22,6 +22,9 @@ public class SecurityConfig {
     @Value("${app.fqdn}")
     private String front;
 
+    @Value("${app.play-fqdn:#{null}}")
+    private String playFqdn;
+
     private final JwtAuthenticationManager jwtAuthenticationManager;
     private final JwtServerAuthenticationConverter jwtServerAuthenticationConverter;
 
@@ -51,6 +54,8 @@ public class SecurityConfig {
 
                         .pathMatchers("/board/api-docs/**", "/board/api-docs/").permitAll()
                         .pathMatchers("/board/swagger-ui.html", "/board/swagger-ui/**").permitAll()
+                        .pathMatchers("/board-public-full/**").permitAll()
+                        .pathMatchers("/board-public/**").permitAll()
                         .pathMatchers("/board/**").authenticated()
 
                         .pathMatchers("/actuator/health", "/actuator/info").permitAll()
@@ -82,6 +87,12 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.addAllowedOrigin(front);
+        
+        // Permitir origen de Play si está configurado
+        if (playFqdn != null && !playFqdn.isEmpty()) {
+            config.addAllowedOrigin(playFqdn);
+        }
+        
         config.addAllowedHeader("*");
         config.addAllowedMethod("GET");
         config.addAllowedMethod("POST");
