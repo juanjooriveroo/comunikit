@@ -29,11 +29,11 @@
       id="btn-login" 
       class="menu-btn btn-login"
       aria-label="Iniciar sesión con tu cuenta"
-      disabled
+      
     >
       <span class="btn-icon" aria-hidden="true">🔐</span>
       <span class="btn-text">Iniciar Sesión</span>
-      <span class="btn-hint">Próximamente</span>
+      <span class="btn-hint">Accede a tu tablero</span>
     </button>
 
     <button 
@@ -46,6 +46,30 @@
       <span class="btn-hint">¡Sin registro!</span>
     </button>
   </nav>
+
+  <!-- Login Modal -->
+  <div id="login-modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-icon" aria-hidden="true">🗝️</div>
+        <h2 class="modal-title">Iniciar Sesión</h2>
+        <p class="modal-subtitle">Introduce tu usuario y contraseña</p>
+      </div>
+
+      <div class="login-form">
+        <label for="login-username">Usuario</label>
+        <input id="login-username" type="text" />
+        <label for="login-password">Contraseña</label>
+        <input id="login-password" type="password" />
+        <div style="display:flex;gap:8px;margin-top:1rem;">
+          <button id="login-submit" class="login-submit">Entrar</button>
+          <button id="login-cancel" class="retry-btn">Cancelar</button>
+        </div>
+        <p id="login-error" class="error-text" style="display:none;margin-top:0.5rem;">Error al iniciar sesión</p>
+      </div>
+    </div>
+  </div>
 
   <!-- Mascota decorativa -->
   <div class="mascot" aria-hidden="true">
@@ -265,13 +289,19 @@
 
   /* Botón Login */
   .btn-login {
-    background: linear-gradient(135deg, #A0A0A0, #808080);
-    box-shadow: 0 6px 0 #606060, var(--shadow-md);
+    background: linear-gradient(135deg, #4caf50, #388e3c);
+    box-shadow: 0 6px 0 #2e7d32, var(--shadow-md);
+    color: #fff;
   }
 
-  .btn-login:disabled {
-    cursor: not-allowed;
-    opacity: 0.8;
+  .btn-login:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 0 #2e7d32, var(--shadow-lg);
+  }
+
+  .btn-login:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #2e7d32, var(--shadow-sm);
   }
 
   /* Botón Guest */
@@ -366,16 +396,16 @@
 
   .modal-content {
     position: relative;
-    background: linear-gradient(180deg, #FFFFFF 0%, #F8F9FF 100%);
-    border-radius: var(--radius-xl);
+    background: linear-gradient(180deg, #FFFFFF 0%, #F4FFF4 100%);
+    border-radius: 20px;
     padding: 2rem;
-    max-width: 600px;
+    max-width: 520px;
     width: 100%;
-    max-height: 90vh;
+    max-height: 85vh;
     overflow-y: auto;
-    box-shadow: var(--shadow-lg);
-    transform: scale(0.9) translateY(20px);
-    transition: transform var(--transition-normal);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.18);
+    transform: scale(0.96) translateY(8px);
+    transition: transform 180ms ease;
   }
 
   .modal[aria-hidden="false"] .modal-content {
@@ -385,6 +415,19 @@
   .modal-header {
     text-align: center;
     margin-bottom: 2rem;
+  }
+
+  .modal-icon {
+    font-size: 4.5rem;
+    display: inline-block;
+    width: 96px;
+    height: 96px;
+    line-height: 96px;
+    border-radius: 24px;
+    background: linear-gradient(135deg,#66bb6a,#2e7d32);
+    color: white;
+    box-shadow: 0 8px 20px rgba(46,125,50,0.25);
+    margin: 0 auto 0.5rem auto;
   }
 
   .modal-icon {
@@ -549,6 +592,37 @@
     transition: all var(--transition-fast);
   }
 
+  /* Login form */
+  .login-form label {
+    display: block;
+    margin-top: 0.75rem;
+    font-weight: 700;
+    color: #2e7d32;
+  }
+
+  .login-form input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    margin-top: 0.25rem;
+    border-radius: 12px;
+    border: 2px solid #e6f4ea;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.03);
+    font-size: 1rem;
+  }
+
+  .login-submit {
+    padding: 0.9rem 1.25rem;
+    background: linear-gradient(135deg,#4caf50,#2e7d32);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(46,125,50,0.18);
+  }
+
+  .login-submit:disabled { opacity: 0.6; cursor: not-allowed }
+
   .retry-btn:hover {
     background: var(--color-primary-dark);
     transform: scale(1.05);
@@ -611,7 +685,14 @@
 
   // Elementos del DOM
   const btnGuest = document.getElementById('btn-guest') as HTMLButtonElement;
+  const btnLogin = document.getElementById('btn-login') as HTMLButtonElement;
   const modal = document.getElementById('language-modal') as HTMLDivElement;
+  const loginModal = document.getElementById('login-modal') as HTMLDivElement;
+  const loginUsername = document.getElementById('login-username') as HTMLInputElement;
+  const loginPassword = document.getElementById('login-password') as HTMLInputElement;
+  const loginSubmit = document.getElementById('login-submit') as HTMLButtonElement;
+  const loginCancel = document.getElementById('login-cancel') as HTMLButtonElement;
+  const loginError = document.getElementById('login-error') as HTMLParagraphElement;
   const modalClose = document.getElementById('modal-close') as HTMLButtonElement;
   const languageBtns = document.querySelectorAll('.language-btn') as NodeListOf<HTMLButtonElement>;
   const loadingState = document.getElementById('loading-state') as HTMLDivElement;
@@ -716,6 +797,184 @@
       }
     });
   });
+
+  // Inicializar estado de sesión
+  function isLoggedIn(): boolean {
+    // Consider logged in when token exists (uuid may be extracted later)
+    return !!localStorage.getItem('authToken');
+  }
+
+  function updateMenuAuthUI(): void {
+    if (isLoggedIn()) {
+      btnLogin.querySelector('.btn-text')!.textContent = 'Entrar a tu tablero';
+      // cambiar icono a algo más claro cuando está logueado
+      btnLogin.querySelector('.btn-icon')!.textContent = '➡️';
+      btnGuest.querySelector('.btn-text')!.textContent = 'Cerrar Sesión';
+      btnGuest.querySelector('.btn-hint')!.textContent = 'Salir de tu cuenta';
+      btnGuest.querySelector('.btn-icon')!.textContent = '🚪';
+    } else {
+      btnLogin.querySelector('.btn-text')!.textContent = 'Iniciar Sesión';
+      btnLogin.querySelector('.btn-icon')!.textContent = '🔐';
+      btnGuest.querySelector('.btn-text')!.textContent = 'Probar como Invitado';
+      btnGuest.querySelector('.btn-hint')!.textContent = '¡Sin registro!';
+      btnGuest.querySelector('.btn-icon')!.textContent = '🎮';
+    }
+  }
+
+  // Abrir modal de login
+  function openLoginModal(): void {
+    loginModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    loginUsername.focus();
+  }
+
+  function closeLoginModal(): void {
+    loginModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    loginError.style.display = 'none';
+  }
+
+  async function handleLoginSubmit(): Promise<void> {
+    const user = loginUsername.value.trim();
+    const pass = loginPassword.value;
+    if (!user || !pass) {
+      loginError.textContent = 'Usuario y contraseña requeridos';
+      loginError.style.display = 'block';
+      return;
+    }
+    loginError.style.display = 'none';
+    loginSubmit.disabled = true;
+    try {
+      const res = await fetch(`${API_URL}/auth/login/user`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: user, password: pass })
+      });
+      if (!res.ok) {
+        throw new Error(`${res.status}`);
+      }
+      const data = await res.json();
+      // Esperamos { token, uuid } o { token, user: { uuid } } o solo { token }
+      const token = data.token || data.accessToken || data.authToken;
+      let uuid = data.uuid || (data.user && data.user.uuid) || data.boardUuid;
+      if (!token) throw new Error('Token no recibido');
+      // Guardar token
+      localStorage.setItem('authToken', token);
+      // Si no viene uuid en la respuesta, intentar extraerlo del JWT (claim 'sub')
+      if (!uuid) {
+        try {
+          const parts = token.split('.');
+          if (parts.length === 3) {
+            const payload = parts[1];
+            const jsonPayload = JSON.parse(decodeURIComponent(escape(window.atob(payload.replace(/-/g, '+').replace(/_/g, '/')))));
+            uuid = jsonPayload.sub || jsonPayload.userId || jsonPayload.uuid || jsonPayload.id;
+            if (uuid) localStorage.setItem('userUuid', uuid);
+          }
+        } catch (e) {
+          // noop - si no se puede extraer, seguiremos sin uuid
+          console.warn('No se pudo extraer UUID del token', e);
+        }
+      } else {
+        localStorage.setItem('userUuid', uuid);
+      }
+      closeLoginModal();
+      updateMenuAuthUI();
+    } catch (err) {
+      console.error('Login failed', err);
+      loginError.textContent = 'Error al iniciar sesión';
+      loginError.style.display = 'block';
+    } finally {
+      loginSubmit.disabled = false;
+    }
+  }
+
+  function handleLogout(): void {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('userUuid');
+    // keep guestBoard/language if any
+    updateMenuAuthUI();
+  }
+
+  async function fetchPrivateBoard(languageCode: string): Promise<void> {
+    showLoading();
+    hideError();
+    const token = localStorage.getItem('authToken');
+    let uuid = localStorage.getItem('userUuid');
+    if (!token) {
+      openLoginModal();
+      hideLoading();
+      return;
+    }
+
+    // Si no tenemos uuid, intentar extraerlo del JWT
+    if (!uuid) {
+      try {
+        const parts = token.split('.');
+        if (parts.length === 3) {
+          const payload = parts[1];
+          const jsonPayload = JSON.parse(decodeURIComponent(escape(window.atob(payload.replace(/-/g, '+').replace(/_/g, '/')))));
+          uuid = jsonPayload.sub || jsonPayload.userId || jsonPayload.uuid || jsonPayload.id;
+          if (uuid) localStorage.setItem('userUuid', uuid);
+        }
+      } catch (e) {
+        console.warn('No se pudo extraer UUID del token al pedir tablero', e);
+      }
+    }
+
+    if (!uuid) {
+      // No podemos resolver el tablero privado sin uuid
+      openLoginModal();
+      hideLoading();
+      return;
+    }
+
+    try {
+      const url = `${API_URL}/board-full/${uuid}`;
+      const res = await fetch(url, { method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` } });
+      if (!res.ok) throw new Error(`${res.status}`);
+      const boardData = await res.json();
+      localStorage.setItem('guestBoard', JSON.stringify(boardData));
+      localStorage.setItem('guestLanguage', languageCode);
+      window.location.href = '/board';
+    } catch (err) {
+      console.error('Error fetching private board:', err);
+      hideLoading();
+      showError();
+    }
+  }
+
+  // Event wiring for auth UI
+  btnLogin.addEventListener('click', () => {
+    if (isLoggedIn()) {
+      // entrar a tu tablero: mostrar loading inmediato y lanzar la petición
+      showLoading();
+      const lang = localStorage.getItem('guestLanguage') || 'es';
+      // fetchPrivateBoard también gestiona show/hide internamente en errores
+      fetchPrivateBoard(lang);
+    } else {
+      openLoginModal();
+    }
+  });
+
+  // btnGuest becomes logout when logged
+  btnGuest.addEventListener('click', () => {
+    if (isLoggedIn()) {
+      handleLogout();
+      // tras cerrar sesión, abrir inmediatamente modal de invitado para seguir probando
+      openModal();
+    } else {
+      openModal();
+    }
+  });
+
+  // Login modal wiring
+  loginCancel.addEventListener('click', () => closeLoginModal());
+  loginModal.querySelector('.modal-backdrop')?.addEventListener('click', () => closeLoginModal());
+  loginSubmit.addEventListener('click', (e) => { e.preventDefault(); handleLoginSubmit(); });
+  document.addEventListener('keydown', (e: KeyboardEvent) => { if (e.key === 'Escape' && loginModal.getAttribute('aria-hidden') === 'false') closeLoginModal(); });
+
+  // Inicializar UI según estado
+  updateMenuAuthUI();
 
   // Reintentar
   errorRetry.addEventListener('click', () => {

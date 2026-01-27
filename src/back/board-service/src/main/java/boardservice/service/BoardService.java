@@ -104,9 +104,7 @@ public class BoardService {
      * @return DTO del tablero completo con pictogramas
      */
     @Transactional
-    public BoardFullDto getBoardFullByDependentId(UUID dependentId, UUID tutorId) {
-        userValidator.validateUserAccess(tutorId.toString(), dependentId);
-        
+    public BoardFullDto getBoardFullByDependentId(UUID dependentId) {
         Board board = boardRepository.findByOwnerId(dependentId)
                 .orElseGet(() -> {
                     return createBoardForUserInternal(dependentId, "es");

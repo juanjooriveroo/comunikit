@@ -8,6 +8,7 @@ import authservice.dto.RecoveryAccountRequestDto;
 import authservice.dto.RegisterRequestDto;
 import authservice.dto.RegisterResponseDto;
 import authservice.dto.TokenResponseDto;
+import authservice.dto.LoginByUsernameRequestDto;
 import authservice.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -68,6 +69,21 @@ public class AuthController {
         TokenResponseDto response = authService.login(request);
         return ResponseEntity.ok(response);
     }
+
+        @Operation(
+                        summary = "Login de usuario por username (rol USER)",
+                        description = "Autentica un usuario por su username y sólo emite token si su rol es de tipo user",
+                        responses = {
+                                        @ApiResponse(responseCode = "200", description = "Logueo exitoso, devuelve token"),
+                                        @ApiResponse(responseCode = "401", description = "No autenticado o credenciales inválidas"),
+                                        @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
+                        }
+        )
+        @PostMapping("/login/user")
+        public ResponseEntity<?> loginByUsername(@Valid @RequestBody LoginByUsernameRequestDto request) {
+                TokenResponseDto response = authService.loginByUsername(request);
+                return ResponseEntity.ok(response);
+        }
 
     @Operation(
             summary = "Registro de usuario",

@@ -22,7 +22,7 @@ Al finalizar este Sprint, debería tener:
 ## Historias de Usuario
 
 ### HU05 - Gestión de tablero
-**Estado**: ⏳ To Do  
+**Estado**: FINISHED
 **Dependencias**: HU03, HU04
 
 **Como** Usuario final  
@@ -30,9 +30,9 @@ Al finalizar este Sprint, debería tener:
 **Para** poder navegar y comunicarme de forma intuitiva
 
 #### Criterios de Aceptación
-- [ ] **AC1**: Visualización del tablero con secciones en formato grid
-- [ ] **AC2**: Navegación entre secciones (click para entrar, botón para volver)
-- [ ] **AC3**: Visualización de pictogramas dentro de cada sección
+- [X] **AC1**: Visualización del tablero con secciones en formato grid
+- [X] **AC2**: Navegación entre secciones (click para entrar, botón para volver)
+- [X] **AC3**: Visualización de pictogramas dentro de cada sección
 - [x] **AC4**: Reordenación de secciones mediante drag & drop o botones
 - [x] **AC5**: Persistencia del orden personalizado en base de datos
 - [x] **AC6**: Interfaz adaptada a tablets (touch-friendly)
@@ -41,7 +41,7 @@ Al finalizar este Sprint, debería tener:
 ---
 
 ### HU06 - Composición de frases
-**Estado**: ⏳ To Do  
+**Estado**: FINISHED  
 **Dependencias**: HU05
 
 **Como** Usuario final  
@@ -49,19 +49,19 @@ Al finalizar este Sprint, debería tener:
 **Para** comunicar mis ideas
 
 #### Criterios de Aceptación
-- [ ] **AC1**: Click en pictogramas los añade a la barra de composición
-- [ ] **AC2**: Barra de composición visible en la parte superior/inferior del tablero
-- [ ] **AC3**: Botón de reproducir genera audio con TTS (Web Speech API)
-- [ ] **AC4**: Botón de limpiar borra la composición actual
-- [ ] **AC5**: Botón de borrar último pictograma añadido
-- [ ] **AC6**: TTS generado en el cliente (sin servidor)
-- [ ] **AC7**: Soporte de idiomas (ES, EN, FR, DE, PT)
-- [ ] **AC8**: Funciona sin conexión una vez cargado el tablero
+- [X] **AC1**: Click en pictogramas los añade a la barra de composición
+- [X] **AC2**: Barra de composición visible en la parte superior/inferior del tablero
+- [X] **AC3**: Botón de reproducir genera audio con TTS (Web Speech API)
+- [X] **AC4**: Botón de limpiar borra la composición actual
+- [X] **AC5**: Botón de borrar último pictograma añadido
+- [X] **AC6**: TTS generado en el cliente (sin servidor)
+- [X] **AC7**: Soporte de idiomas (ES, EN, FR, DE, PT)
+- [X] **AC8**: Funciona sin conexión una vez cargado el tablero
 
 ---
 
 ### HU07 - Tablero público para invitados
-**Estado**: ⏳ To Do  
+**Estado**: FINISHED 
 **Dependencias**: HU05
 
 **Como** Invitado  
@@ -69,13 +69,12 @@ Al finalizar este Sprint, debería tener:
 **Para** probar la aplicación sin registrarme
 
 #### Criterios de Aceptación
-- [ ] **AC1**: Acceso sin login desde la landing page
-- [ ] **AC2**: Selector de idioma visible en página de inicio
-- [ ] **AC3**: Tablero genérico con secciones predefinidas (comida, cuerpo, etc.)
-- [ ] **AC4**: Solo lectura (no editable)
-- [ ] **AC5**: TTS funcional igual que en tableros privados
-- [ ] **AC6**: No se guardan datos del invitado
-- [ ] **AC7**: Botón claro para registrarse si le gusta la experiencia
+- [x] **AC1**: Acceso sin login desde la landing page
+- [x] **AC2**: Selector de idioma visible en página de inicio
+- [x] **AC3**: Tablero genérico con secciones predefinidas (comida, cuerpo, etc.)
+- [x] **AC4**: Solo lectura (no editable)
+- [x] **AC5**: TTS funcional igual que en tableros privados
+- [x] **AC6**: No se guardan datos del invitado
 
 ---
 
@@ -85,27 +84,27 @@ Al finalizar este Sprint, debería tener:
 - [x] **G01**: Endpoint GET `/board/{userId}` para obtener tablero completo
 - [x] **G02**: Endpoint GET `/board/public/{language}` para tablero público
 - [x] **G03**: Crear tableros públicos predefinidos por idioma en BD
-- [ ] **G04**: Tests de nuevos endpoints
+- [x] **G04**: Tests de nuevos endpoints
 
 ### Frontend - Tablero
-- [ ] **G05**: Componente `tablero-view` para visualización
-- [ ] **G06**: Componente `seccion-view` para ver pictogramas de sección
-- [ ] **G07**: Componente `barra-composicion` para frases
-- [ ] **G08**: Servicio Angular de TTS (`tts.service.ts`)
+- [x] **G05**: Componente `tablero-view` para visualización
+- [x] **G06**: Componente `seccion-view` para ver pictogramas de sección
+- [x] **G07**: Componente `barra-composicion` para frases
+- [x] **G08**: Servicio Angular de TTS (`tts.service.ts`)
 - [x] **G09**: Drag & drop para reordenar secciones
 
 ### Frontend - Público
-- [ ] **G10**: Nuevo Front con Astro para mayor velocidad de la aplicación
-- [ ] **G11**: Componente de tablero público (read-only)
+- [x] **G10**: Nuevo Front con Astro para mayor velocidad de la aplicación
+- [x] **G11**: Componente de tablero público (read-only)
 
 ---
 
 ## Diseño y Accesibilidad
 
 ### Guía de Estilo (continuación)
-- [ ] **DS1**: Diseño del tablero optimizado para tablets (mínimo 768px)
-- [ ] **DS2**: Pictogramas con tamaño mínimo de 80x80px para touch
-- [ ] **DS3**: Barra de composición con altura fija (100px)
+- [x] **DS1**: Diseño del tablero optimizado para tablets (mínimo 768px)
+- [x] **DS2**: Pictogramas con tamaño mínimo de 80x80px para touch
+- [x] **DS3**: Barra de composición con altura fija (100px)
 - [x] **DS4**: Colores de la guía existente:
   - Primario: #3B82F6 (azul)
   - Secundario: #10B981 (verde)
@@ -158,6 +157,11 @@ Una historia se considera DONE cuando:
 - Implementado modo invitado en diferentes idiomas
 - Creación de pictogramas default estáticos
 - Creación de endpoint para pedir el tablero default del idioma seleccionado y se le gestiona permisos en el gateway
+
+**Día 5 (27/01)**: 
+- Creación de endpoint de login de usuarios dependientes publico
+- Desarrollo completo de login en Astro, permitiendo acceder a tu cuenta y tableros por tu user y contraseña
+- Creación de endpoint de obtención de tablero personal
 
 ---
 

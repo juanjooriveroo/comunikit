@@ -80,11 +80,9 @@ public class BoardController {
     @GetMapping("/board-full/{dependentId}")
     public ResponseEntity<BoardFullDto> getBoardFull(
             @Parameter(description = "ID del usuario dependiente", required = true)
-            @PathVariable UUID dependentId,
-            @Parameter(description = "ID del tutor autenticado", required = true)
-            @RequestHeader("X-User-Id") UUID tutorId
+            @PathVariable UUID dependentId
     ) {
-        BoardFullDto response = boardService.getBoardFullByDependentId(dependentId, tutorId);
+        BoardFullDto response = boardService.getBoardFullByDependentId(dependentId);
         return ResponseEntity.ok(response);
     }
     

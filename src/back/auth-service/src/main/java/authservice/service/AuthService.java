@@ -64,6 +64,47 @@ public class AuthService {
     }
 
     /**
+     * Autentica usuario por username y comprueba que su rol sea de tipo 'user' antes de emitir token.
+     */
+    @Transactional
+    public TokenResponseDto loginByUsername(LoginByUsernameRequestDto request) {
+        var users = userRepository.findByUsername(request.username());
+        if (users == null || users.isEmpty()) {
+            throw new UserNotFoundException("Usuario no encontrado");
+        }
+
+        // Buscar el usuario activado cuyo rol sea de tipo 'USUARIO' o 'USER'
+        User matched = null;
+        for (User u : users) {
+            if (u.getUsername().equalsIgnoreCase(request.username())) {
+                matched = u;
+                break;
+            }
+        }
+
+        if (matched == null) {
+            matched = users.get(0);
+        }
+
+        if (!passwordEncoder.matches(request.password(), matched.getPassword())) {
+            throw new PasswordNotCorrectException("La contraseña introducida no es correcta");
+        }
+
+        if (!matched.getActivated()) {
+            throw new AccountNotActivatedException("La cuenta no ha sido activada. Recibirás un mail para la activación");
+        }
+
+        String roleName = matched.getRol() != null ? matched.getRol().getName() : null;
+        if (roleName == null || (!roleName.equalsIgnoreCase("USUARIO") && !roleName.equalsIgnoreCase("USER"))) {
+            throw new PasswordNotCorrectException("Usuario no tiene rol de usuario permitido");
+        }
+
+        return TokenResponseDto.builder()
+                .token(jwtUtils.generateToken(matched))
+                .build();
+    }
+
+    /**
      * Registra nuevo usuario y publica evento
      */
     @Transactional
