@@ -147,6 +147,12 @@ Ingresa:
 - Podrás acceder a todas las funciones de la aplicación
 - Tu sesión permanecerá activa durante 24 horas
 
+### **Login con nombre de usuario (username)**
+
+- Además del login por email, la aplicación permite iniciar sesión con el *nombre de usuario* (username). Este flujo está pensado para cuentas de tipo `USUARIO` (dependientes).
+- El endpoint usado por la aplicación para este caso es `/auth/login/user`. Tras un login exitoso el frontend guarda el token JWT en `localStorage` como `authToken`. Si la respuesta del servidor incluye sólo el token, la aplicación extrae el claim `sub` (UUID) y lo guarda en `localStorage` como `userUuid` para identificar el tablero privado.
+- Cuando estés logueado, el menú cambiará sus textos/iconos y aparecerá la opción **Entrar a tu tablero** para cargar tu tablero privado.
+
 ---
 
 ## Recuperar Contraseña
@@ -232,6 +238,15 @@ Haz clic en tu **nombre** (arriba a la derecha) para ver:
 - Cambiar Contraseña
 - Mis Dependientes
 - Cerrar Sesión
+
+### **Reproducción de pictogramas y TTS**
+
+- En la interfaz Play, al tocar un pictograma se reproduce su texto mediante síntesis de voz (TTS).
+- Se han mejorado selectores de voz y el desbloqueo del `AudioContext` para móviles; aun así, en algunos dispositivos es necesario un toque previo a la reproducción para permitir audio automático.
+- Recomendaciones si no se oye audio:
+   - Comprueba que el dispositivo no esté en modo silencio y el volumen activado.
+   - En Android usa preferentemente Chrome para mejor compatibilidad de voces.
+   - Si no suena, pulsa una vez en la pantalla y vuelve a tocar el pictograma.
 
 ---
 
@@ -492,6 +507,11 @@ Una sección es un grupo de pictogramas relacionados. Por ejemplo:
 6. Repite para añadir más pictogramas
 7. Haz clic en **"Guardar"** cuando termines
 
+**Posicionamiento entre Editor y Play**
+
+- Los pictogramas y posiciones que se definen en el editor (formato interno 5x6) se muestran en Play sobre un grid distinto (12x7). Para evitar solapamientos y respetar las secciones definidas, los pictogramas importados desde el editor se colocan por defecto en la esquina inferior derecha del tablero Play.
+- El sistema evita sobrescribir posiciones ya ocupadas por `sections` y aplica una asignación determinista para resolver colisiones cuando varias entradas compiten por la misma casilla.
+
 ### **Reorganizar Pictogramas en una Sección**
 
 1. Abre la sección en modo edición
@@ -591,6 +611,14 @@ Si encuentras un error:
    - Descripción del problema
    - Captura de pantalla
    - Navegador y versión
+
+---
+
+## Solución rápida de problemas (novedades del sprint)
+
+- Login por username falla: revisa la respuesta HTTP de `/auth/login/user`. Si el servidor devuelve un token, comprueba en https://jwt.io que el claim `sub` contiene el UUID; la app guarda ese UUID en `localStorage.userUuid`.
+- Tablero privado no carga: confirma que `localStorage.authToken` y `localStorage.userUuid` existen y que la petición a `/board-full/{userUuid}` se envía con el header `Authorization: Bearer {token}`.
+- No se oye TTS en móviles: prueba un toque previo en la página, usa Chrome en Android o Safari en iOS, y comprueba que el volumen/dispositivo no esté en silencio.
 
 ---
 

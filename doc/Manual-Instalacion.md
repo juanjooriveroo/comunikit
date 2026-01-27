@@ -562,7 +562,7 @@ docker compose up -d --build
 Si tienes problemas:
 
 1. **Revisa los logs**: `docker compose logs -f`
-2. **Verifica la documentación API**: `https://back.comunikit.duckdns.org/documentacion`
+2. **Verifica la documentación API**: `https://back.comunikit.es/documentacion`
 3. **Consulta el README**: `README.md` en la raíz del proyecto
 4. **Abre un issue** en el repositorio
 

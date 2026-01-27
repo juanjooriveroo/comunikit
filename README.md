@@ -35,13 +35,13 @@ La plataforma implementa una **arquitectura de microservicios** con comunicació
 ## Arquitectura
 
 ```
-┌──────────────────────────────────────────────────────────┐
-│                    FRONTEND (Angular 15)                 │
-│  - WCAG 2.1 AA   - i18n  - TTS Client-side   - Guards    │
-└──────────────────────────────────────────────────────────┘
-                            │
-                            │ HTTPS/REST
-                            ▼
+┌──────────────────────────┐ ┌────────────────────────────┐
+│   FRONTEND (Angular 15)  │ │        FRONT (Astro)       │
+│  - WCAG 2.1 AA   - i18n  │ │     - TTS Client-side      │
+└──────────────────────────┘ └────────────────────────────┘
+            │                              │
+            │ HTTPS/REST.                  │ HTTPS/REST
+            ▼                              ▼
 ┌──────────────────────────────────────────────────────────┐
 │              API GATEWAY (Spring Cloud Gateway)          │
 │  - Routing  - Rate Limiting  - JWT Validation  - CORS    │
@@ -51,11 +51,12 @@ La plataforma implementa una **arquitectura de microservicios** con comunicació
         │                   │                   │
         ▼                   ▼                   ▼
 ┌──────────────┐   ┌───────────────┐   ┌───────────────┐
-│ AUTH-SERVICE │   │ BOARD-SERVICE │   │ ADMIN-SERVICE │
+│ AUTH-SERVICE │   │ BOARD-SERVICE │   │ NOTIFICATION  │
+│              │   │               │   │    SERVICE    │
 ├──────────────┤   ├───────────────┤   ├───────────────┤
-│ - Login/JWT  │   │ - Tableros    │   │ - Tickets     │
-│ - Register   │   │ - Secciones   │   │ - Moderación  │
-│ - Users CRUD │   │ - Pictogramas │   │ - Auditoría   │
+│ - Login/JWT  │   │ - Tableros    │   │ - Email Sender│
+│ - Register   │   │ - Secciones   │   │               │
+│ - Users CRUD │   │ - Pictogramas │   │               │
 │ - Roles      │   │ - Imágenes    │   │               │
 └──────────────┘   └───────────────┘   └───────────────┘
         │                   │                   │
@@ -70,10 +71,6 @@ La plataforma implementa una **arquitectura de microservicios** con comunicació
                 │ • email.notifications │
                 └───────────────────────┘
                             │
-                ┌───────────▼───────────┐
-                │  NOTIFICATION-SERVICE │
-                │ (Email Sender - Async)│
-                └───────────────────────┘
                             │
                 ┌───────────▼───────────┐
                 │   PostgreSQL 15       │
@@ -87,6 +84,7 @@ La plataforma implementa una **arquitectura de microservicios** con comunicació
 
 ### **Frontend**
 - Angular 15
+- Astro
 - TypeScript
 - Bootstrap CSS
 - Web Speech API (TTS)
@@ -131,6 +129,10 @@ comunikit/
     │   ├── src/
     │   ├── angular.json
     │   └── package.json
+    ├── play/                      # Astro
+    │   ├── src/
+    │   ├── public
+    │   └── package.json
     ├── back/
     │   ├── api-gateway/            # Spring Cloud Gateway
     │   ├── auth-service/           # Microservicio de autenticación
@@ -174,7 +176,6 @@ La aplicación estará disponible en:
 |-----|-------------|----------|
 | **USUARIO** | Persona con necesidades de comunicación | Solo lectura de su tablero |
 | **TUTOR** | Padre/Tutor legal | CRUD tableros y pictogramas de sus usuarios |
-| **ADMIN** | Administrador del sistema | Control global, moderación |
 | **INVITADO** | Acceso público anónimo | Solo lectura de tableros públicos |
 
 ---

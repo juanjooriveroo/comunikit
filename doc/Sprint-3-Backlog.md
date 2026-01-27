@@ -162,7 +162,7 @@ Una historia se considera DONE cuando:
 - Creación de endpoint de login de usuarios dependientes publico
 - Desarrollo completo de login en Astro, permitiendo acceder a tu cuenta y tableros por tu user y contraseña
 - Creación de endpoint de obtención de tablero personal
-
+- Creacion de documentacion final de los manuales y modificación del readme
 ---
 
 ## Métricas de Éxito

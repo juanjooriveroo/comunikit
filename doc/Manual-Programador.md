@@ -294,6 +294,29 @@ export class LoginComponent implements OnInit {
 }
 ```
 
+### **Frontend - Astro (Play)**
+
+Nota: además del frontend Angular, el proyecto incluye una interfaz "Play" construida con Astro + TypeScript destinada a la vista de tablero/kiosk.
+
+- Ubicación: `src/play/` (contiene `package.json`, `Dockerfile`, `astro.config.mjs`, `src/` y `public/`).
+- Archivos clave:
+    - `src/play/src/components/MainMenu.astro` — menú principal y modal de login/invitado.
+    - `src/play/src/scripts/board/boardController.ts` — lógica de carga y mapeo del tablero, colocación de pictogramas y handlers de UI.
+    - `src/play/src/scripts/board/speechService.ts` — utilidades TTS, selección de voz y desbloqueo de `AudioContext` para móviles.
+    - `src/play/src/components/board/BoardGrid.astro` — plantilla y estilos del grid de Play.
+- Build / desarrollo:
+    - Instalar dependencias: `cd src/play && npm install`
+    - Desarrollo (hot reload): `npm run dev` (dentro de `src/play`)
+    - Compilar para producción: `npm run build`
+    - El contenedor Docker se genera usando `src/play/Dockerfile`.
+- Integración con backend:
+    - Play consume los endpoints públicos: `/board-public-full/{languageCode}` (invitado) y `/board-full/{dependentId}` (privado).
+    - El login por `username` usa `/auth/login/user`; el token se guarda en `localStorage.authToken` y el `sub` (UUID) en `localStorage.userUuid` si procede.
+- Notas técnicas:
+    - Grid mapping: el editor interno usa formato 5x6; Play usa 12x7 — el frontend mapea las coordenadas y evita sobrescribir `sections` existentes, posicionando pictogramas entrantes en la esquina inferior derecha cuando procede.
+    - TTS: la implementación en `speechService.ts` incluye reintentos de selección de voz y una heurística para desbloquear `AudioContext` en dispositivos móviles antes de reproducir audio.
+
+
 ### **Rutas Disponibles**
 
 ```typescript
